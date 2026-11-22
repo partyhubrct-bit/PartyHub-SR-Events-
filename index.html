@@ -2,2711 +2,890 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PartyHub -SR Events | Mobile App</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PartyHub - SR Events | Rayachoti &amp; Madanapalle</title>
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body {
-      max-width: 100vw;
-      overflow-x: hidden;
+    :root {
+      --bg-grad: linear-gradient(135deg, #eef7ff 0%, #dbeeff 55%, #f7fbff 100%);
+      --glass: rgba(255, 255, 255, 0.82);
+      --glass-border: rgba(255, 255, 255, 0.95);
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #bae6fd;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --success: #047857;
+      --success-bg: #ecfdf5;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 45%, #FFFFFF 100%);
-      color: #0F172A;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
       min-height: 100vh;
+      background: var(--bg-grad);
+      color: var(--text);
+      padding: 14px;
+      overflow-x: hidden;
     }
-    .brand-font { font-family: 'Cinzel', serif; }
+
+    .container {
+      max-width: 1020px;
+      margin: 0 auto;
+    }
+
     .glass-card {
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1.5px solid rgba(255, 255, 255, 0.95);
-      box-shadow: 0 12px 32px rgba(2, 132, 199, 0.08);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 28px rgba(2, 132, 199, 0.08);
+      margin-bottom: 16px;
     }
-    .glass-blue {
-      background: linear-gradient(135deg, rgba(224, 242, 254, 0.88) 0%, rgba(255, 255, 255, 0.90) 100%);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1.5px solid rgba(186, 230, 253, 0.95);
-      box-shadow: 0 10px 28px rgba(14, 165, 233, 0.10);
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
-    .glass-header {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1.5px solid rgba(186, 230, 253, 0.85);
+
+    .brand-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary-dark);
     }
-    .btn-sky {
-      background: linear-gradient(135deg, #0284C7 0%, #0EA5E9 100%);
-      color: #FFFFFF;
-      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.25);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    .brand-sub {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.4;
     }
-    .btn-sky:active { transform: scale(0.98); }
-    .input-glass {
-      background: rgba(255, 255, 255, 0.94);
-      border: 1.5px solid #BAE6FD;
-      color: #0F172A;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s ease;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
     }
-    .input-glass:focus {
-      outline: none;
-      border-color: #0284C7;
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
     }
-    canvas#sigPad {
-      touch-action: none;
-      background: #FFFFFF;
-      border: 1.5px dashed #7DD3FC;
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+
+    .notice {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      margin-top: 12px;
+      line-height: 1.45;
+    }
+
+    .helpdesk-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.84rem;
+      color: var(--primary-dark);
+      align-items: center;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: rgba(255, 255, 255, 0.96);
+      font-size: 0.92rem;
+      margin-bottom: 12px;
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .slot-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .package-card {
+      background: #fff;
+      border: 1px solid var(--border);
       border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .package-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .package-body {
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .price-tag {
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 1.08rem;
+      margin: 6px 0;
+    }
+
+    .details-list {
+      font-size: 0.84rem;
+      color: var(--muted);
+      white-space: pre-line;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e0f2fe;
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
+    .customer-link {
+      color: var(--primary-dark);
+      font-weight: 700;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      background: #e0f2fe;
+      color: var(--primary-dark);
+    }
+
+    /* Full-size Event Photo Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 880px;
+      width: 100%;
+      max-height: 94vh;
+      overflow-y: auto;
+      padding: 18px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .modal-img {
+      width: 100%;
+      max-height: 68vh;
+      object-fit: contain;
+      background: #0f172a;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
-<body class="pb-24">
-
-  <!-- TOP HEADER -->
-  <header class="glass-header sticky top-0 z-40 px-3 py-2.5">
-    <div class="max-w-lg mx-auto flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <!-- Custom Brand Logo Emblem (Editable via Admin) -->
-        <div id="headerLogoWrap" class="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 p-0.5 shadow-md flex-shrink-0 flex items-center justify-center overflow-hidden">
-          <img id="headerLogoImg" src="" alt="Brand Logo" class="hidden w-full h-full object-cover rounded-2xl" />
-          <svg id="headerLogoSvg" viewBox="0 0 48 48" class="w-8 h-8 text-white" fill="none">
-            <path d="M8 33L11 16L19 23L24 11L29 23L37 16L40 33H8Z" fill="#FFFFFF" fill-opacity="0.95"/>
-            <circle cx="24" cy="8" r="2.5" fill="#FDE047"/>
-            <circle cx="10.5" cy="13.5" r="2" fill="#FDE047"/>
-            <circle cx="37.5" cy="13.5" r="2" fill="#FDE047"/>
-            <rect x="9" y="35.5" width="30" height="4" rx="2" fill="#BAE6FD"/>
-          </svg>
-        </div>
-        <div class="min-w-0">
-          <h1 id="headerBrandName" class="brand-font text-base sm:text-lg font-extrabold text-slate-900 tracking-tight leading-tight truncate">
-            PartyHub -SR Events
-          </h1>
-          <p id="headerBrandSub" class="text-[11px] font-semibold text-sky-700 truncate">
-            Rayachoti • Madanapalle • Annamayya & Kadapa
-          </p>
-        </div>
+<body>
+  <div class="container">
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div>
+        <div class="brand-title">PartyHub - SR Events</div>
+        <div class="brand-sub">Event Planning, Balloon &amp; Theme Decorations, Grand Entries &amp; Party Rentals</div>
       </div>
-
-      <div class="flex items-center gap-1.5 flex-shrink-0">
-        <button onclick="openHelpDesk()" aria-label="Help Desk" class="px-2.5 py-2 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95">
-          <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
-          </svg>
-          <span>Help</span>
-        </button>
-
-        <!-- Admin Button: Automatically hidden when Customer is logged in -->
-        <button id="topAdminBtn" onclick="openAdminView()" class="px-2.5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95">
-          <svg class="w-3.5 h-3.5 text-sky-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-          </svg>
-          <span id="topAdminBtnLabel">Admin</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- ========================================================= -->
-  <!-- VIEW A: MAIN CUSTOMER & HOME PORTAL                       -->
-  <!-- ========================================================= -->
-  <main id="customerMainView" class="max-w-lg mx-auto px-3.5 pt-3.5 space-y-4">
-
-    <!-- SECURITY CAUTION MESSAGE -->
-    <div class="rounded-2xl bg-amber-50/95 border border-amber-300 px-3.5 py-2.5 shadow-sm flex items-start gap-2.5">
-      <div class="w-7 h-7 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0 mt-0.5 font-extrabold text-sm">
-        !
-      </div>
-      <div class="text-xs leading-relaxed text-amber-950">
-        <span class="font-extrabold uppercase tracking-wide text-amber-800 block">Payment Caution Notice</span>
-        Never pay to any unauthorised person or external number. Make all bookings and milestone payments <strong>through this official application only</strong>.
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button id="adminLoginBtn" class="btn btn-outline btn-sm" onclick="openAdminLogin()">Admin Login</button>
+        <button id="logoutBtn" class="btn btn-outline btn-sm hidden" onclick="logoutAll()">Logout</button>
       </div>
     </div>
 
-    <!-- MIDDLE CARD: CUSTOMER OTP LOGIN (When Logged Out) -->
-    <section id="customerLoginCard" class="glass-card rounded-3xl p-5">
-      <div class="flex items-center justify-between mb-3">
-        <div>
-          <span class="inline-block px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 text-[10px] font-extrabold uppercase tracking-wider mb-1">
-            Customer Portal
-          </span>
-          <h2 class="text-lg font-extrabold text-slate-900">Mobile OTP Login</h2>
-          <p class="text-xs text-slate-600">Sign in to unlock custom event packages, live gallery & booking.</p>
-        </div>
-        <div class="w-11 h-11 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center flex-shrink-0">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-          </svg>
-        </div>
+    <!-- Home / Customer Login Card -->
+    <div id="customerLoginCard" class="glass-card" style="max-width: 560px; margin: 18px auto;">
+      <h2 style="margin-bottom: 12px; text-align:center;">Customer Mobile Login</h2>
+      <div>
+        <label for="custName">Customer Name</label>
+        <input id="custName" type="text" placeholder="Enter your full name" />
+      </div>
+      <div>
+        <label for="custPhone">Mobile Number</label>
+        <input id="custPhone" type="tel" maxlength="10" placeholder="Enter 10-digit mobile number" />
+      </div>
+      <div id="otpSection" class="hidden">
+        <label for="custOtp">Enter 4-Digit OTP</label>
+        <input id="custOtp" type="text" maxlength="4" placeholder="1234" />
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button id="sendOtpBtn" class="btn btn-primary" style="width:100%;" onclick="sendOtp()">Send OTP</button>
+        <button id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;" onclick="verifyOtp()">Verify OTP &amp; View Events</button>
       </div>
 
-      <div id="otpStep1" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Customer Full Name</label>
-          <input id="custNameInput" type="text" placeholder="Enter your full name" class="input-glass w-full rounded-xl px-3.5 py-2.5 text-sm font-medium" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Mobile Number (+91)</label>
-          <input id="custPhoneInput" type="tel" maxlength="10" placeholder="Enter 10-digit mobile number" class="input-glass w-full rounded-xl px-3.5 py-2.5 text-sm font-semibold tracking-wide" />
-        </div>
-        <button onclick="sendCustomerOtp()" class="btn-sky w-full py-3 rounded-xl font-bold text-sm">
-          Send 4-Digit OTP
-        </button>
+      <!-- Branches shown on Home Login Screen -->
+      <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border); font-size:0.84rem; color:var(--muted);">
+        <strong style="color:var(--primary-dark);">Our Branches:</strong><br />
+        &bull; <strong>Rayachoti:</strong> PartyHub - SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269<br />
+        &bull; <strong>Madanapalle:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325
       </div>
 
-      <div id="otpStep2" class="hidden space-y-3">
-        <div class="rounded-xl bg-sky-50 border border-sky-200 p-2.5 text-xs text-sky-900 flex items-center justify-between">
-          <span>OTP sent to <strong id="displayPhoneOtp"></strong></span>
-          <span class="px-2 py-0.5 rounded bg-sky-600 text-white font-mono font-bold" id="demoOtpHint">OTP: 4829</span>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Enter 4-Digit OTP</label>
-          <input id="custOtpInput" type="tel" maxlength="4" placeholder="• • • •" class="input-glass w-full rounded-xl px-3.5 py-2.5 text-center text-lg font-extrabold tracking-[0.5em]" />
-        </div>
-        <div class="flex gap-2">
-          <button onclick="resetOtpStep()" class="w-1/3 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">
-            Change No.
-          </button>
-          <button onclick="verifyCustomerOtp()" class="btn-sky w-2/3 py-2.5 rounded-xl font-bold text-sm">
-            Verify & Unlock Portal
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- LOGGED-IN CUSTOMER PROFILE BAR (Persists Until Explicit Logout) -->
-    <section id="customerProfileCard" class="hidden glass-blue rounded-3xl p-4">
-      <div class="flex items-center justify-between gap-2">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="w-11 h-11 rounded-2xl bg-sky-600 text-white font-extrabold text-base flex items-center justify-center flex-shrink-0 shadow">
-            <span id="profileInitial">C</span>
-          </div>
-          <div class="min-w-0">
-            <div class="flex items-center gap-1.5">
-              <h2 id="profileName" class="text-sm font-extrabold text-slate-900 truncate">Customer</h2>
-              <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">Session Active</span>
-            </div>
-            <p id="profilePhone" class="text-xs font-semibold text-sky-800">+91 0000000000</p>
-          </div>
-        </div>
-        <button onclick="logoutCustomer()" class="px-3.5 py-2 rounded-xl bg-rose-600 text-white text-xs font-extrabold shadow-sm active:scale-95 flex-shrink-0">
-          Logout
-        </button>
-      </div>
-    </section>
-
-    <!-- BRAND & OFFICIAL BRANCHES SHOWCASE (Displayed ONLY on Home Before Login) -->
-    <section id="brandBranchesCard" class="glass-card rounded-3xl p-4 space-y-3">
-      <div class="flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-sky-700">Official Event Houses</span>
-          <h3 id="showcaseBrandTitle" class="brand-font text-base font-extrabold text-slate-900">PartyHub -SR Events</h3>
-        </div>
-        <span class="px-2.5 py-1 rounded-xl bg-sky-100 text-sky-800 text-[11px] font-bold">
-          20% • 70% • 10% Pay
-        </span>
+      <div class="helpdesk-strip">
+        <strong>Help Desk:</strong>
+        <a href="tel:9398934021" class="btn btn-outline btn-sm">Call: 9398934021</a>
+        <a href="https://wa.me/919398934021" target="_blank" rel="noopener" class="btn btn-outline btn-sm">WhatsApp</a>
+        <a href="mailto:partyhubsrevents@gmail.com" class="btn btn-outline btn-sm">Email</a>
       </div>
 
-      <p class="text-xs text-slate-600 leading-relaxed">
-        Complete 2D & 3D theme stage decorations, grand special entries, live activities, photography, makeup & mehndi artists across <strong>Annamayya</strong> & <strong>Kadapa</strong> districts.
-      </p>
-
-      <div class="grid grid-cols-1 gap-2.5">
-        <!-- Rayachoti HQ -->
-        <div class="rounded-2xl bg-white/90 border border-sky-100 p-3">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-extrabold text-sky-800">Branch 1: Rayachoti Headquarters</span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700">Main Office</span>
-          </div>
-          <p class="text-[11px] text-slate-600 leading-snug">
-            PartyHub -SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti, Annamayya Dist. - 516269
-          </p>
-        </div>
-
-        <!-- Madanapalle Branch -->
-        <div class="rounded-2xl bg-white/90 border border-sky-100 p-3">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-extrabold text-sky-800">Branch 2: Madanapalle Branch</span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700">Dildar & SR Events</span>
-          </div>
-          <p class="text-[11px] text-slate-600 leading-snug">
-            Room No. 2, Sameera Complex, Opp. ZP High School, RTC Bus Stand Road, Madanapalle, Annamayya Dist. - 517325
-          </p>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between pt-1 text-[11px] font-bold text-slate-700">
-        <span>Helpline: <span id="cardPhoneDisplay" class="text-sky-700">9398934021</span></span>
-        <span class="text-sky-700">Annamayya & Kadapa Service</span>
-      </div>
-    </section>
-
-    <!-- LOCKED PORTAL NOTICE (Shown Only Before Customer OTP Login) -->
-    <section id="lockedNoticeCard" class="rounded-3xl border border-dashed border-sky-300 bg-white/60 p-5 text-center space-y-2">
-      <div class="w-10 h-10 rounded-2xl bg-sky-100 text-sky-700 mx-auto flex items-center justify-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-        </svg>
-      </div>
-      <h4 class="text-sm font-extrabold text-slate-800">Event Configurator & Gallery Locked</h4>
-      <p class="text-xs text-slate-600">
-        Complete your mobile OTP login above to select your city in Annamayya or Kadapa, browse decoration & service photos, sign your digital agreement, and book with 20% / 70% / 10% milestone payments.
-      </p>
-    </section>
-
-    <!-- ========================================================= -->
-    <!-- UNLOCKED CUSTOMER PORTAL (Hidden Until Customer Logs In)  -->
-    <!-- ========================================================= -->
-    <div id="unlockedCustomerPortal" class="hidden space-y-4">
-
-      <!-- 1. CUSTOMIZE YOUR EVENT DETAILS -->
-      <section class="glass-card rounded-3xl p-4 space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-extrabold text-slate-900">1. Customize Event Details</h3>
-          <span class="text-[11px] font-bold text-sky-700 bg-sky-100 px-2.5 py-0.5 rounded-full">AP Service Zone</span>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">State</label>
-            <select id="stateSelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-              <option value="Andhra Pradesh" selected>Andhra Pradesh</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">District (Only 2)</label>
-            <select id="districtSelect" onchange="populateCities()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-              <option value="Annamayya">Annamayya District</option>
-              <option value="Kadapa">Kadapa (YSR) District</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">City / Mandal</label>
-            <select id="citySelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold"></select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Occasion</label>
-            <select id="occasionSelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-              <option value="Birthday Party">Birthday Party</option>
-              <option value="Wedding / Reception">Wedding / Reception</option>
-              <option value="Engagement / Nischayathartham">Engagement</option>
-              <option value="Half Saree / Dhoti Ceremony">Half Saree / Dhoti Function</option>
-              <option value="Cradle / Naming Ceremony">Cradle / Naming Ceremony</option>
-              <option value="Baby Shower / Seemantham">Baby Shower / Seemantham</option>
-              <option value="Anniversary Celebration">Anniversary Celebration</option>
-              <option value="House Warming / Griha Pravesh">House Warming</option>
-              <option value="Corporate / School Event">Corporate / School Event</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Venue Type</label>
-            <select id="venueTypeSelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-              <option value="Indoor (Banquet / Home)">Indoor (Hall / Home)</option>
-              <option value="Outdoor (Open Lawn / Ground)">Outdoor (Lawn / Open)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Event Date</label>
-            <input id="eventDateInput" type="date" onchange="updateSlotAvailability()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-        </div>
-
-        <div class="rounded-2xl bg-sky-50/90 border border-sky-200 p-2.5 space-y-1">
-          <div class="flex items-center justify-between">
-            <label class="block text-[11px] font-extrabold text-slate-800">Event Time Slot (Max 2 Bookings / Date)</label>
-            <span id="slotStatusBadge" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">2 Slots Open</span>
-          </div>
-          <select id="eventSlotSelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-            <option value="Morning">Morning Slot (6:00 AM – 1:00 PM)</option>
-            <option value="Afternoon">Afternoon Slot (2:00 PM – 10:00 PM)</option>
-          </select>
-          <p id="slotHelperMsg" class="text-[10px] font-semibold text-sky-800">Both Morning & Afternoon slots are available for this date.</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">All Services Dropdown</label>
-            <select id="serviceQuickSelect" onchange="filterByDropdown(this.value)" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-              <option value="ALL">All Event Services</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Price Range Filter</label>
-            <select id="priceRangeSelect" onchange="renderCatalog()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-              <option value="ALL">All Budgets</option>
-              <option value="UNDER_5K">Under ₹5,000</option>
-              <option value="5K_15K">₹5,000 – ₹15,000</option>
-              <option value="15K_35K">₹15,000 – ₹35,000</option>
-              <option value="ABOVE_35K">Above ₹35,000</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <!-- 2. CATEGORIZED SERVICES WITH UNIQUE LOGOS -->
-      <section class="glass-card rounded-3xl p-4 space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-extrabold text-slate-900">2. Select Service Category</h3>
-          <span class="text-[11px] font-semibold text-slate-500">Tap to filter</span>
-        </div>
-
-        <div id="categoryGrid" class="grid grid-cols-3 gap-2"></div>
-      </section>
-
-      <!-- 3. DECORATION & SERVICE GALLERY -->
-      <section class="space-y-2.5">
-        <div class="flex items-center justify-between px-1">
-          <h3 class="text-base font-extrabold text-slate-900">3. Decorations & Packages</h3>
-          <span id="itemCountBadge" class="text-xs font-bold text-sky-700">0 Items</span>
-        </div>
-        <div id="catalogGrid" class="grid grid-cols-1 gap-3"></div>
-      </section>
-
-      <!-- 3B. BALANCE PAYMENT SCHEDULE & TIME-TO-TIME REMINDERS (AFTER 20% ADVANCE) -->
-      <section id="customerBalanceScheduleCard" class="glass-blue rounded-3xl p-4 space-y-3">
-        <div class="flex items-center justify-between">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-sky-700">Milestone Balance Tracker</span>
-            <h3 class="text-sm font-extrabold text-slate-900">Balance Payment Dues & Time-to-Time Reminders</h3>
-          </div>
-          <span id="balanceAlertBadge" class="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 text-[10px] font-extrabold">Live Sync</span>
-        </div>
-        <p id="balanceReminderTicker" class="text-[11px] font-semibold text-sky-900 bg-white/85 border border-sky-200 rounded-xl px-3 py-2">
-          Checking your active bookings and upcoming 70% setup & 10% handover balance milestones...
-        </p>
-        <div id="customerBalanceCardsList" class="space-y-2.5 text-xs"></div>
-      </section>
-
-      <!-- 4. CUSTOMER'S SENT PAYMENTS HISTORY -->
-      <section class="glass-card rounded-3xl p-4 space-y-2.5">
-        <div class="flex items-center justify-between">
-          <h3 class="text-sm font-extrabold text-slate-900">My Sent Payments & Bookings</h3>
-          <span id="custTxCount" class="text-[11px] font-bold text-sky-700">0 Records</span>
-        </div>
-        <div id="customerPaymentsList" class="space-y-2 text-xs"></div>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- ========================================================= -->
-  <!-- VIEW B: DEDICATED ADMIN PORTAL (Persists Until Logout)    -->
-  <!-- ========================================================= -->
-  <section id="adminFullView" class="hidden max-w-lg mx-auto px-3.5 pt-3.5 space-y-4">
-
-    <!-- Admin Login Screen (Shown only if Admin is NOT logged in) -->
-    <div id="adminLoginCard" class="glass-card rounded-3xl p-5 space-y-3">
-      <div class="flex items-center justify-between">
-        <div>
-          <span class="inline-block px-2.5 py-0.5 rounded-full bg-slate-900 text-sky-300 text-[10px] font-extrabold uppercase tracking-wider mb-1">
-            Restricted Access
-          </span>
-          <h2 class="text-lg font-extrabold text-slate-900">Admin Portal Login</h2>
-          <p class="text-xs text-slate-600">Sign in to manage services, prices, photos, cloud storage, help desk, payment settings & analytics.</p>
-        </div>
-        <button onclick="backToCustomerHome()" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">
-          ← Home
-        </button>
-      </div>
-
-      <div class="space-y-3 pt-1">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Admin Username</label>
-          <input id="adminUserInput" type="text" placeholder="admin" class="input-glass w-full rounded-xl px-3.5 py-2.5 text-xs font-bold" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Admin Password</label>
-          <input id="adminPassInput" type="password" placeholder="••••••••" class="input-glass w-full rounded-xl px-3.5 py-2.5 text-xs font-bold" />
-        </div>
-        <button onclick="loginAdmin()" class="btn-sky w-full py-3 rounded-xl font-extrabold text-sm">
-          Sign In to Admin Dashboard
-        </button>
+      <div class="notice">
+        <strong>Payment Caution:</strong> Pay only to official PartyHub - SR Events accounts after booking confirmation. We are not affiliated with Balloons Unlimited in Rayachoti or Madanapalle.
       </div>
     </div>
 
-    <!-- Admin Authenticated Workspace (Stays active across reloads until Logout) -->
-    <div id="adminWorkspace" class="hidden space-y-4">
-
-      <!-- Sticky Admin Session Banner -->
-      <div class="glass-blue rounded-3xl p-4 flex items-center justify-between gap-2">
-        <div>
-          <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <h2 class="text-sm font-extrabold text-slate-900">Admin Control Center</h2>
-          </div>
-          <p class="text-[11px] font-semibold text-sky-800">Stays logged in on refresh • Logs out only after 15 mins unused or manual Logout</p>
+    <!-- Customer Booking View (Hidden until OTP login) -->
+    <div id="customerView" class="hidden">
+      <div class="glass-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <h3>Welcome, <span id="activeCustomerLabel"></span></h3>
+          <span class="badge">Annamayya &amp; Kadapa Districts Service</span>
         </div>
-        <button onclick="logoutAdmin()" class="px-3.5 py-2 rounded-xl bg-rose-600 text-white text-xs font-extrabold shadow-sm active:scale-95">
-          Logout Admin
-        </button>
+
+        <div class="grid-2">
+          <div>
+            <label for="bookingCity">Select Event City / Town</label>
+            <select id="bookingCity">
+              <option value="Rayachoti">Rayachoti</option>
+              <option value="Madanapalle">Madanapalle</option>
+              <option value="Pileru">Pileru</option>
+              <option value="Galiveedu">Galiveedu</option>
+              <option value="Guvvalacheruvu">Guvvalacheruvu</option>
+              <option value="Rajampeta">Rajampeta</option>
+              <option value="Kadapa">Kadapa</option>
+            </select>
+          </div>
+          <div>
+            <label for="bookingDate">Select Event Date</label>
+            <input id="bookingDate" type="date" />
+          </div>
+        </div>
+
+        <label>Select Event Slot</label>
+        <div class="slot-group">
+          <button type="button" id="slotMorningBtn" class="btn btn-outline" onclick="selectSlot('Morning')">Morning</button>
+          <button type="button" id="slotAfternoonBtn" class="btn btn-outline" onclick="selectSlot('Afternoon')">Afternoon</button>
+        </div>
+
+        <div id="customTimeBox" class="hidden">
+          <label id="customTimeLabel" for="customExactTime">Customize Exact Timing</label>
+          <input id="customExactTime" type="time" />
+        </div>
       </div>
 
-      <!-- Admin Navigation Tabs -->
-      <div class="glass-card rounded-2xl p-1.5 grid grid-cols-4 gap-1 text-center">
-        <button onclick="switchAdminTab('analytics')" id="tabBtnAnalytics" class="py-2 px-1 rounded-xl bg-sky-600 text-white text-[11px] font-extrabold shadow-sm">
-          Payments & Graphs
-        </button>
-        <button onclick="switchAdminTab('services')" id="tabBtnServices" class="py-2 px-1 rounded-xl text-slate-700 text-[11px] font-bold">
-          Services & Photos
-        </button>
-        <button onclick="switchAdminTab('payment')" id="tabBtnPayment" class="py-2 px-1 rounded-xl text-slate-700 text-[11px] font-bold">
-          Pay & Help Desk
-        </button>
-        <button onclick="switchAdminTab('cloud')" id="tabBtnCloud" class="py-2 px-1 rounded-xl text-slate-700 text-[11px] font-bold">
-          Cloud & Logo
-        </button>
+      <div class="glass-card">
+        <h3 style="margin-bottom: 12px;">Event Packages &amp; Complete Inclusions</h3>
+        <div id="customerPackagesGrid" class="grid-2"></div>
       </div>
 
-      <!-- ======================================================= -->
-      <!-- ADMIN TAB 1: CUSTOMER PAYMENTS + DAILY & MONTHLY GRAPHS -->
-      <!-- ======================================================= -->
-      <div id="adminTabAnalytics" class="space-y-4">
+      <div class="glass-card">
+        <h3 style="margin-bottom: 10px;">Your Submitted Bookings</h3>
+        <div id="customerMyBookings" class="brand-sub">No bookings yet.</div>
+      </div>
+    </div>
 
-        <!-- KPI Summary Cards -->
-        <div class="grid grid-cols-3 gap-2">
-          <div class="glass-card rounded-2xl p-3 text-center">
-            <div class="text-[10px] font-bold text-slate-500 uppercase">Today's Pay</div>
-            <div id="kpiTodayAmt" class="text-sm font-extrabold text-sky-700 mt-0.5">₹0</div>
-          </div>
-          <div class="glass-card rounded-2xl p-3 text-center">
-            <div class="text-[10px] font-bold text-slate-500 uppercase">This Month</div>
-            <div id="kpiMonthAmt" class="text-sm font-extrabold text-emerald-700 mt-0.5">₹0</div>
-          </div>
-          <div class="glass-card rounded-2xl p-3 text-center">
-            <div class="text-[10px] font-bold text-slate-500 uppercase">Total Received</div>
-            <div id="kpiTotalAmt" class="text-sm font-extrabold text-slate-900 mt-0.5">₹0</div>
-          </div>
-        </div>
+    <!-- Admin Login Card -->
+    <div id="adminLoginCard" class="glass-card hidden" style="max-width: 440px; margin: 18px auto;">
+      <h2 style="margin-bottom: 12px;">Admin Login</h2>
+      <label for="adminPin">Admin Passcode (Default: 2026)</label>
+      <input id="adminPin" type="password" placeholder="Enter admin passcode" />
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" onclick="loginAdmin()">Login</button>
+        <button class="btn btn-outline" onclick="backToCustomerLogin()">Back</button>
+      </div>
+    </div>
 
-        <!-- Daily Payment Graph -->
-        <div class="glass-card rounded-3xl p-4 space-y-2">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">Daily Payment Collection Graph (Last 7 Days)</h3>
-            <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold">Daily ₹</span>
-          </div>
-          <div class="h-44 w-full">
-            <canvas id="dailyPaymentChart"></canvas>
-          </div>
-        </div>
-
-        <!-- Monthly Payment Graph -->
-        <div class="glass-card rounded-3xl p-4 space-y-2">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">Monthly Payment Revenue Graph (2026)</h3>
-            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Monthly ₹</span>
-          </div>
-          <div class="h-44 w-full">
-            <canvas id="monthlyPaymentChart"></canvas>
-          </div>
-        </div>
-
-        <!-- Customer Bookings & Remaining Balance Ledger with Date-Wise Filter -->
-        <div class="glass-card rounded-3xl p-4 space-y-3">
-          <div class="flex items-center justify-between">
+    <!-- Admin Dashboard View -->
+    <div id="adminView" class="hidden">
+      <!-- 1. Manage Services & Photos with Event Details Column -->
+      <div class="glass-card">
+        <h2 style="margin-bottom: 12px;">Admin: Services, Photos &amp; Event Details</h2>
+        <form onsubmit="addService(event)">
+          <div class="grid-2">
             <div>
-              <span class="text-[10px] font-extrabold uppercase tracking-wider text-sky-700">Date-Wise Booking Tracker</span>
-              <h3 class="text-sm font-extrabold text-slate-900">Customer Bookings, Service Photos & Payment Details</h3>
+              <label for="srvTitle">Service / Theme Name</label>
+              <input id="srvTitle" type="text" required placeholder="e.g., 3D Jungle Theme Balloon Setup" />
             </div>
-            <span id="adminTxCountBadge" class="text-[11px] font-extrabold text-sky-700">0 Bookings</span>
-          </div>
-
-          <!-- Admin Date Selector Bar -->
-          <div class="rounded-2xl bg-sky-50/90 border border-sky-200 p-2.5 space-y-2">
-            <div class="flex items-center gap-2">
-              <div class="flex-1">
-                <label class="block text-[10px] font-extrabold text-slate-700 uppercase mb-1">Select Event Date to Track</label>
-                <input id="adminFilterDateInput" type="date" onchange="renderAdminPaymentsAndCharts()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-extrabold text-slate-900" />
-              </div>
-              <div class="flex flex-col gap-1 pt-4">
-                <button type="button" onclick="setAdminDateFilterToday()" class="px-2.5 py-1.5 rounded-lg bg-sky-600 text-white text-[10px] font-extrabold shadow-sm">
-                  Today
-                </button>
-                <button type="button" onclick="clearAdminDateFilter()" class="px-2.5 py-1.5 rounded-lg bg-white border border-sky-200 text-slate-700 text-[10px] font-bold">
-                  Show All
-                </button>
-              </div>
-            </div>
-            <div id="adminDateSummaryBar" class="text-[11px] font-bold text-sky-900 flex items-center justify-between pt-0.5">
-              <span>Showing all scheduled event dates</span>
+            <div>
+              <label for="srvPrice">Price (₹)</label>
+              <input id="srvPrice" type="number" min="0" required placeholder="e.g., 6500" />
             </div>
           </div>
 
-          <div id="adminPaymentsLedger" class="space-y-3 max-h-[34rem] overflow-y-auto"></div>
+          <div class="grid-2">
+            <div>
+              <label for="srvPhoto">Event Photo URL</label>
+              <input id="srvPhoto" type="url" placeholder="https://example.com/photo.jpg" />
+            </div>
+            <div>
+              <label for="srvPhotoFile">Or Upload Photo From Device</label>
+              <input id="srvPhotoFile" type="file" accept="image/*" />
+            </div>
+          </div>
+
+          <label for="srvDetails">Event Details (Complete list of what is actually provided with this price)</label>
+          <textarea id="srvDetails" required placeholder="Write exact items provided: balloon count, backdrop size, LED lights, fog/cold pyro, props, setup &amp; dismantling..."></textarea>
+
+          <button type="submit" class="btn btn-primary">Save Service &amp; Event Details</button>
+        </form>
+
+        <div class="table-wrap" style="margin-top: 16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Service Name</th>
+                <th>Price</th>
+                <th>Event Details (What is Provided with Price)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminServicesTableBody"></tbody>
+          </table>
         </div>
       </div>
 
-      <!-- ======================================================= -->
-      <!-- ADMIN TAB 2: SERVICES, PRICE & PHOTOS ADD / UPDATE      -->
-      <!-- ======================================================= -->
-      <div id="adminTabServices" class="hidden space-y-4">
-        <div class="glass-card rounded-3xl p-4 space-y-2.5">
-          <div class="flex items-center justify-between">
-            <h3 id="serviceFormTitle" class="text-sm font-extrabold text-slate-900">Add New Service & Photo</h3>
-            <button id="cancelEditServiceBtn" onclick="resetServiceForm()" class="hidden text-[11px] font-bold text-rose-600 underline">Cancel Edit</button>
-          </div>
-          <input type="hidden" id="editServiceId" value="" />
-
+      <!-- 2. Admin Date Filter & Customer Name -> Full-Size Event Picture -->
+      <div class="glass-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
           <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Service Category</label>
-            <select id="admCatSelect" onchange="toggleCustomCatField()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold"></select>
+            <h2>Booked Events by Date</h2>
+            <div class="brand-sub">Select a date to view events, or click a Customer Name to open the full-size event picture.</div>
           </div>
-          <div id="admCustomCatWrap" class="hidden">
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Custom Service / Category Name</label>
-            <input id="admCustomCatName" type="text" placeholder="e.g., Catering & Live Counters, Return Gifts, DJ & Sound" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Service / Decoration Name</label>
-            <input id="admItemName" type="text" placeholder="e.g., 3D Royal Ring Stage Setup" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Package Price (₹)</label>
-            <input id="admItemPrice" type="number" placeholder="e.g., 14500" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Photo URL (Instagram / Facebook / Google / Cloud)</label>
-            <input id="admItemImgUrl" type="url" placeholder="Paste image URL" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Or Upload Photo From Device Gallery</label>
-            <input id="admItemImgFile" type="file" accept="image/*" class="w-full text-xs text-slate-600" />
-          </div>
-          <button onclick="adminSaveService()" id="saveServiceBtn" class="btn-sky w-full py-2.5 rounded-xl font-extrabold text-xs">
-            Publish Service & Photo
-          </button>
-        </div>
-
-        <div class="glass-card rounded-3xl p-4 space-y-2">
-          <div class="flex items-center justify-between">
-            <h4 class="text-xs font-extrabold text-slate-900">Update Existing Services, Prices & Photos</h4>
-            <span class="text-[10px] font-bold text-sky-700">Tap Edit to modify</span>
-          </div>
-          <div id="adminServicesList" class="space-y-2 max-h-80 overflow-y-auto"></div>
-        </div>
-      </div>
-
-      <!-- ======================================================= -->
-      <!-- ADMIN TAB 3: PAYMENT DETAILS & HELP DESK SETTINGS       -->
-      <!-- ======================================================= -->
-      <div id="adminTabPayment" class="hidden space-y-4">
-        <div class="glass-card rounded-3xl p-4 space-y-2.5">
-          <h3 class="text-sm font-extrabold text-slate-900">Official Payment Details (Shown at Checkout)</h3>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Official UPI ID (GPay / PhonePe / Paytm)</label>
-            <input id="admUpiInput" type="text" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Account Holder / Business Name</label>
-            <input id="admAccHolderInput" type="text" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Bank Name, Account Number & IFSC Code</label>
-            <input id="admBankInput" type="text" placeholder="e.g., SBI • A/C: 1234567890 • IFSC: SBIN0001234" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Payment QR Image URL (Optional)</label>
-            <input id="admQrUrlInput" type="url" placeholder="https://..." class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <button onclick="savePaymentHelpSettings()" class="btn-sky w-full py-2.5 rounded-xl font-extrabold text-xs">
-            Save Payment Details
-          </button>
-        </div>
-
-        <div class="glass-card rounded-3xl p-4 space-y-2.5">
-          <h3 class="text-sm font-extrabold text-slate-900">Help Desk Contact Details</h3>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Help Desk Mobile Number</label>
-            <input id="admPhoneInput" type="text" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">WhatsApp Support Number</label>
-            <input id="admWhatsappInput" type="text" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Official Help Desk Email ID</label>
-            <input id="admEmailInput" type="email" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-          <button onclick="savePaymentHelpSettings()" class="btn-sky w-full py-2.5 rounded-xl font-extrabold text-xs">
-            Save Help Desk Details
-          </button>
-        </div>
-      </div>
-
-      <!-- ======================================================= -->
-      <!-- ADMIN TAB 4: CLOUD STORAGE LINK & BRAND LOGO SETTINGS   -->
-      <!-- ======================================================= -->
-      <div id="adminTabCloud" class="hidden space-y-4">
-        <div class="glass-card rounded-3xl p-4 space-y-2.5">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-extrabold text-slate-900">Cloud Storage Backup & Media Drive</h3>
-            <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-extrabold">Cloud Sync</span>
-          </div>
-          <p class="text-[11px] text-slate-600">
-            Save your Google Drive, Cloudinary, Firebase, or AWS S3 folder link for high-resolution decoration albums, customer E-Sign contracts, and payment receipts.
-          </p>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Cloud Storage Provider / Label</label>
-            <input id="admCloudLabelInput" type="text" placeholder="e.g., Google Drive - PartyHub Media & Backup" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Cloud Storage Link (URL)</label>
-            <input id="admCloudUrlInput" type="url" placeholder="https://drive.google.com/..." class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div class="flex gap-2">
-            <button onclick="saveCloudSettings()" class="btn-sky w-2/3 py-2.5 rounded-xl font-extrabold text-xs">
-              Save Cloud Link
-            </button>
-            <a id="openCloudLinkBtn" href="#" target="_blank" class="w-1/3 py-2.5 rounded-xl bg-slate-900 text-white text-center font-extrabold text-xs flex items-center justify-center">
-              Open Cloud ↗
-            </a>
-          </div>
-          <div class="pt-1 border-t border-sky-100 flex items-center justify-between">
-            <span class="text-[11px] font-semibold text-slate-600">Export JSON Backup to Upload to Cloud:</span>
-            <button onclick="exportJsonBackup()" class="px-3 py-1.5 rounded-lg bg-sky-100 text-sky-800 text-[11px] font-extrabold">
-              Download Backup
-            </button>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input id="adminDateFilter" type="date" style="margin-bottom:0; width:auto;" onchange="renderAdminBookings()" />
+            <button class="btn btn-outline btn-sm" onclick="clearAdminDate()">Show All</button>
           </div>
         </div>
 
-        <div class="glass-card rounded-3xl p-4 space-y-2.5">
-          <h3 class="text-sm font-extrabold text-slate-900">Mobile Application Name & Logo</h3>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">App & Brand Name</label>
-            <input id="admBrandNameInput" type="text" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Subtitle Tagline</label>
-            <input id="admBrandSubInput" type="text" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Logo Image URL</label>
-            <input id="admLogoUrlInput" type="url" placeholder="https://..." class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Or Upload Logo File</label>
-            <input id="admLogoFileInput" type="file" accept="image/*" class="w-full text-xs text-slate-600" />
-          </div>
-          <button onclick="saveBrandSettings()" class="btn-sky w-full py-2.5 rounded-xl font-extrabold text-xs">
-            Update App Name & Logo
-          </button>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Event Date</th>
+                <th>Customer Name (Click for Big Photo)</th>
+                <th>City, Slot &amp; Exact Time</th>
+                <th>Booked Service &amp; Event Details</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody id="adminBookingsTableBody"></tbody>
+          </table>
         </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- FLOATING CART BAR (Visible Only When Customer Logged In & Cart Has Items) -->
-  <div id="floatingCartBar" class="hidden fixed bottom-3 left-0 right-0 z-40 px-3.5">
-    <div class="max-w-lg mx-auto rounded-2xl bg-slate-900/95 backdrop-blur-xl text-white p-3 shadow-2xl border border-sky-400/40 flex items-center justify-between gap-2">
-      <div>
-        <div class="text-[11px] text-sky-300 font-bold"><span id="cartCountText">0</span> Services Selected</div>
-        <div class="text-sm font-extrabold">Total: ₹<span id="cartTotalText">0</span> <span class="text-[10px] font-normal text-slate-300">(20% Adv: ₹<span id="cartAdvText">0</span>)</span></div>
-      </div>
-      <button onclick="openCheckoutModal()" class="btn-sky px-4 py-2.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5">
-        <span>Cart & E-Sign</span>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- ========================================================= -->
-  <!-- MODAL 1: HELP DESK & SUPPORT                              -->
-  <!-- ========================================================= -->
-  <div id="helpDeskModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-3">
-    <div class="glass-card bg-white w-full max-w-md rounded-3xl p-5 max-h-[88vh] overflow-y-auto space-y-4">
-      <div class="flex items-center justify-between border-b border-sky-100 pb-3">
-        <div>
-          <h3 class="text-base font-extrabold text-slate-900">Help Desk & Support</h3>
-          <p class="text-xs text-sky-700 font-semibold" id="helpBrandLabel">PartyHub -SR Events Official Desk</p>
-        </div>
-        <button onclick="closeModal('helpDeskModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-bold">✕</button>
-      </div>
-
-      <div class="space-y-2.5 text-xs">
-        <a id="helpWhatsappLink" href="https://wa.me/919398934021" target="_blank" class="flex items-center justify-between p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 font-bold">
-          <span>WhatsApp Support Desk</span>
-          <span id="helpWhatsappText" class="text-emerald-700">+91 9398934021 →</span>
-        </a>
-        <a id="helpCallLink" href="tel:+919398934021" class="flex items-center justify-between p-3 rounded-2xl bg-sky-50 border border-sky-200 text-sky-950 font-bold">
-          <span>Direct Booking Helpline</span>
-          <span id="helpPhoneText" class="text-sky-700">+91 9398934021 →</span>
-        </a>
-        <a id="helpEmailLink" href="mailto:partyhubsrevents@gmail.com" class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 font-bold">
-          <span>Official Email ID</span>
-          <span id="helpEmailText" class="text-sky-700 truncate max-w-[180px]">partyhubsrevents@gmail.com</span>
-        </a>
       </div>
     </div>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- MODAL 2: CHECKOUT, 20%/70%/10% PLAN & E-SIGN AGREEMENT    -->
-  <!-- ========================================================= -->
-  <div id="checkoutModal" class="hidden fixed inset-0 z-50 bg-slate-900/65 backdrop-blur-sm flex items-end sm:items-center justify-center p-2.5">
-    <div class="bg-white w-full max-w-md rounded-3xl p-4 max-h-[92vh] overflow-y-auto space-y-4 shadow-2xl border border-sky-100">
-      <div class="flex items-center justify-between border-b border-sky-100 pb-2.5">
+  <!-- Full-Size Event Picture Modal -->
+  <div id="photoModal" class="modal-backdrop" onclick="closePhotoModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
         <div>
-          <h3 class="text-base font-extrabold text-slate-900">Cart, Agreement & Payment</h3>
-          <p class="text-[11px] text-sky-700 font-semibold">3-Stage Milestone Plan (20% • 70% • 10%)</p>
+          <h3 id="modalTitle"></h3>
+          <div id="modalMeta" class="brand-sub"></div>
         </div>
-        <button onclick="closeModal('checkoutModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-bold">✕</button>
+        <button class="btn btn-outline btn-sm" onclick="closePhotoModal()">✕ Close</button>
       </div>
-
-      <!-- Cart Items -->
-      <div id="checkoutItemsList" class="space-y-2 max-h-40 overflow-y-auto"></div>
-
-      <!-- 3-STAGE PAYMENT SCHEDULE (20% / 70% / 10%) -->
-      <div class="rounded-2xl bg-gradient-to-br from-sky-50 to-blue-50 border border-sky-200 p-3 space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-extrabold text-slate-900">Mandatory 3-Installment Structure</span>
-          <span class="text-xs font-extrabold text-sky-700">Total: ₹<span id="modalGrandTotal">0</span></span>
-        </div>
-
-        <div class="grid grid-cols-3 gap-1.5 text-center">
-          <div class="rounded-xl bg-white p-2 border-2 border-sky-500 shadow-sm">
-            <div class="text-[10px] font-extrabold text-sky-700 uppercase">1st • 20%</div>
-            <div class="text-xs font-extrabold text-slate-900 mt-0.5">₹<span id="split20Amt">0</span></div>
-            <div class="text-[9px] text-slate-500 font-semibold">Booking Now</div>
-          </div>
-          <div class="rounded-xl bg-white/80 p-2 border border-sky-200">
-            <div class="text-[10px] font-extrabold text-slate-700 uppercase">2nd • 70%</div>
-            <div class="text-xs font-extrabold text-slate-900 mt-0.5">₹<span id="split70Amt">0</span></div>
-            <div class="text-[9px] text-slate-500 font-semibold">Event Setup</div>
-          </div>
-          <div class="rounded-xl bg-white/80 p-2 border border-sky-200">
-            <div class="text-[10px] font-extrabold text-slate-700 uppercase">3rd • 10%</div>
-            <div class="text-xs font-extrabold text-slate-900 mt-0.5">₹<span id="split10Amt">0</span></div>
-            <div class="text-[9px] text-slate-500 font-semibold">Completion</div>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Current Milestone Stage to Pay</label>
-          <select id="milestoneStageSelect" onchange="updatePayableNow()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-            <option value="20">Stage 1: Pay 20% Booking Advance Now</option>
-            <option value="70">Stage 2: Pay 70% Event Execution Milestone</option>
-            <option value="10">Stage 3: Pay 10% Final Handover Balance</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- E-SIGN DIGITAL AGREEMENT -->
-      <div class="rounded-2xl bg-slate-50 border border-slate-200 p-3 space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-extrabold text-slate-900">Digital E-Sign Service Agreement</span>
-          <button type="button" onclick="clearSignature()" class="text-[11px] font-bold text-rose-600 underline">Clear Sign</button>
-        </div>
-        <div id="agreementSummaryText" class="text-[11px] text-slate-600 bg-white p-2.5 rounded-xl border border-slate-200 leading-relaxed max-h-24 overflow-y-auto"></div>
-        <div>
-          <label class="block text-[10px] font-bold text-slate-600 mb-1">Customer Signature (Draw inside box below):</label>
-          <canvas id="sigPad" width="340" height="95" class="w-full h-24"></canvas>
-        </div>
-        <label class="flex items-center gap-2 text-[11px] font-bold text-slate-800 cursor-pointer">
-          <input id="agreeCheckbox" type="checkbox" class="w-4 h-4 accent-sky-600 rounded" />
-          <span>I agree to the 20% / 70% / 10% milestone schedule & terms.</span>
-        </label>
-      </div>
-
-      <!-- PAYMENT METHOD -->
-      <div class="space-y-2">
-        <label class="block text-xs font-extrabold text-slate-900">Select Payment Method (Payable: ₹<span id="payableNowText">0</span>)</label>
-        <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="selectPayMethod('UPI')" id="payBtnUPI" class="pay-method-btn py-2 px-2 rounded-xl border-2 border-sky-600 bg-sky-50 text-sky-900 text-xs font-extrabold">UPI / QR</button>
-          <button type="button" onclick="selectPayMethod('BANK')" id="payBtnBANK" class="pay-method-btn py-2 px-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold">Bank Transfer</button>
-          <button type="button" onclick="selectPayMethod('CARD')" id="payBtnCARD" class="pay-method-btn py-2 px-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold">Card / NetBank</button>
-        </div>
-
-        <div id="paymentDetailsBox" class="rounded-xl bg-sky-50/80 border border-sky-200 p-2.5 text-xs text-slate-800 space-y-1">
-          <div><strong>Official UPI ID:</strong> <span id="checkoutUpiId" class="font-mono text-sky-800 font-bold">9398934021@ybl</span></div>
-          <div><strong>Account Name:</strong> <span id="checkoutAccName">PartyHub -SR Events</span></div>
-          <div id="checkoutBankExtra" class="hidden text-[11px] text-slate-600"></div>
-          <img id="checkoutQrImg" src="" alt="Payment QR" class="hidden w-28 h-28 object-contain rounded-lg border border-sky-200 bg-white p-1 mt-1" />
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 mb-1">Transaction / UTR Reference Number (Optional)</label>
-          <input id="custUtrInput" type="text" placeholder="Enter 12-digit UPI UTR / Ref ID" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-        </div>
-      </div>
-
-      <button onclick="confirmBookingOrder()" class="btn-sky w-full py-3 rounded-xl font-extrabold text-sm">
-        Send Payment & Confirm Booking (₹<span id="confirmPayBtnAmt">0</span>)
-      </button>
-    </div>
-  </div>
-
-  <!-- ========================================================= -->
-  <!-- MODAL 3: BOOKING RECEIPT CONFIRMATION                     -->
-  <!-- ========================================================= -->
-  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="bg-white w-full max-w-md rounded-3xl p-5 space-y-3 shadow-2xl border border-emerald-200">
-      <div class="text-center space-y-1">
-        <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center text-xl font-extrabold">✓</div>
-        <h3 class="text-base font-extrabold text-slate-900">Payment Sent & E-Sign Confirmed!</h3>
-        <p class="text-xs text-slate-500">Order ID: <strong id="receiptOrderId" class="text-slate-800"></strong></p>
-      </div>
-      <div id="receiptBody" class="rounded-2xl bg-slate-50 border border-slate-200 p-3 text-xs space-y-1.5 text-slate-700"></div>
-      <button onclick="closeModal('receiptModal')" class="btn-sky w-full py-2.5 rounded-xl font-bold text-xs">Done</button>
-    </div>
-  </div>
-
-  <!-- ========================================================= -->
-  <!-- MODAL 5: PAY NEXT BALANCE INSTALLMENT (70% / 10% / DUE)   -->
-  <!-- ========================================================= -->
-  <div id="balancePayModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-2.5">
-    <div class="bg-white w-full max-w-md rounded-3xl p-4 max-h-[90vh] overflow-y-auto space-y-3.5 shadow-2xl border border-sky-100">
-      <div class="flex items-center justify-between border-b border-sky-100 pb-2.5">
-        <div>
-          <h3 class="text-base font-extrabold text-slate-900">Settle Balance Installment</h3>
-          <p class="text-[11px] text-sky-700 font-semibold">Order: <span id="balModalOrderId" class="font-mono font-bold"></span></p>
-        </div>
-        <button onclick="closeModal('balancePayModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-bold">✕</button>
-      </div>
-
-      <input type="hidden" id="balModalSourceOrderId" value="" />
-      <div class="rounded-2xl bg-sky-50 border border-sky-200 p-3 text-xs space-y-1">
-        <div class="flex justify-between"><span>Total Contract Value:</span><strong id="balModalTotal">₹0</strong></div>
-        <div class="flex justify-between"><span>Already Paid:</span><strong class="text-emerald-700" id="balModalPaid">₹0</strong></div>
-        <div class="flex justify-between border-t border-sky-200 pt-1"><span>Total Remaining Balance:</span><strong class="text-amber-800" id="balModalRemaining">₹0</strong></div>
-      </div>
-
+      <img id="modalImage" class="modal-img" src="" alt="Full Size Event Picture" />
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Choose Balance Payment Amount</label>
-        <select id="balInstallmentSelect" onchange="syncBalancePayButton()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold"></select>
+        <strong>Complete Event Details (Included with Price):</strong>
+        <p id="modalDetails" class="details-list" style="margin-top:6px;"></p>
       </div>
-
-      <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Payment Mode</label>
-        <select id="balPayModeSelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
-          <option value="UPI">UPI / QR</option>
-          <option value="BANK">Bank Transfer</option>
-          <option value="CARD">Card / NetBank</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">UTR / Transaction Reference (Optional)</label>
-        <input id="balUtrInput" type="text" placeholder="Enter UTR or reference number" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
-      </div>
-
-      <button onclick="submitBalanceInstallment()" class="btn-sky w-full py-3 rounded-xl font-extrabold text-sm">
-        Pay Balance Now (<span id="balConfirmAmtBtn">₹0</span>)
-      </button>
     </div>
   </div>
 
   <script>
-    // =========================================================
-    // 1. DISTRICT & CITY DATA (ONLY ANNAMAYYA & KADAPA DISTRICTS)
-    // =========================================================
-    const DISTRICT_CITIES = {
-      "Annamayya": [
-        "Rayachoti", "Madanapalle", "Rajampeta", "Pileru", "Galiveedu",
-        "Guvvalacheruvu", "Lakkireddipalli", "Chinnamandem", "Sambepalli",
-        "T. Sundupalli", "Veeraballi", "Ramapuram", "Kalakada", "Kambhamvaripalle",
-        "Kalikiri", "Vayalpadu", "Gurramkonda", "Kurabalakota", "Nimmanapalle",
-        "B. Kothakota", "Mulakalacheruvu", "Peddamandyam", "Thamballapalle",
-        "Peddathippasamudram", "Obulavaripalle", "Kodur (Railway Kodur)",
-        "Chitvel", "Pullampeta", "Penagalur", "Nandalur"
-      ],
-      "Kadapa": [
-        "Kadapa City", "Proddatur", "Pulivendula", "Jammalamadugu", "Badvel",
-        "Mydukur", "Kamalapuram", "Yerraguntla", "Vempalli", "Chennur",
-        "Vallur", "Pendlimarri", "Chinthakommadinne", "Sidhout", "Vontimitta",
-        "Atlur", "Gopavaram", "Brahmamgarimatham", "Kalasapadu", "Porumamilla",
-        "Sri Avadhutha Kasinayana", "Khajipet", "Duvvur", "Chapadu",
-        "Rajupalem", "Muddanur", "Kondapuram", "Mylavaram", "Peddamudium",
-        "Simhadripuram", "Lingala", "Thondur", "Veerapunayunipalle", "Chakrayapet"
-      ]
-    };
+    const STORAGE_KEY = 'partyhub_srevents_data_v1';
 
-    // =========================================================
-    // 2. SERVICE CATEGORIES WITH UNIQUE CUSTOM SVG LOGOS
-    // =========================================================
-    const CATEGORIES = [
+    const defaultServices = [
       {
-        id: "decoration",
-        name: "Decorations",
-        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L14.5 8.5L21 9.5L16 14L17.5 21L12 17.5L6.5 21L8 14L3 9.5L9.5 8.5L12 2Z"/></svg>`
-      },
-      {
-        id: "special_entry",
-        name: "Special Entry",
-        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H19M7 17V11L12 6L17 11V17M12 2V4M4 7L6 9M20 7L18 9"/></svg>`
-      },
-      {
-        id: "activities",
-        name: "Activities",
-        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>`
-      },
-      {
-        id: "makeup",
-        name: "Makeup Artist",
-        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6l-1 7h-4L9 3zM8 10h8v9a2 2 0 01-2 2h-4a2 2 0 01-2-2v-9z"/></svg>`
-      },
-      {
-        id: "mehndi",
-        name: "Mehndi Artist",
-        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2.5 4 6 6.5 6 11a6 6 0 11-12 0c0-4.5 3.5-7 6-11z"/><circle cx="12" cy="14" r="2"/></svg>`
-      },
-      {
-        id: "photography",
-        name: "Photo & Video",
-        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>`
-      }
-    ];
-
-    // =========================================================
-    // 3. DEFAULT DATA & PERSISTENT STORAGE (LOCALSTORAGE)
-    // =========================================================
-    const DEFAULT_SERVICES = [
-      {
-        id: "srv-1",
-        category: "decoration",
-        name: "3D Theme Stage & Balloon Arch Setup",
-        price: 12500,
-        source: "PartyHub -SR Events Studio",
-        image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "srv-2",
-        category: "decoration",
-        name: "Royal Wedding & Reception Flower Mandap",
-        price: 38000,
-        source: "Instagram @partyhub_srevents",
-        image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "srv-3",
-        category: "special_entry",
-        name: "Cold Pyro + Low Fog + Helium Balloon Blast Entry",
-        price: 8500,
-        source: "PartyHub Special Effects",
-        image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "srv-4",
-        category: "special_entry",
-        name: "Vintage Bride/Groom Entry Cart & Mirror Walkway",
-        price: 16000,
-        source: "Facebook Gallery",
-        image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "srv-5",
-        category: "activities",
-        name: "Bouncy Castle + Live Mascot + Water Tattoo Stall",
-        price: 6500,
-        source: "Kids Party Zone",
-        image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "srv-6",
-        category: "makeup",
-        name: "HD Bridal & Party Makeover Package",
-        price: 9500,
-        source: "Verified Partner Artist",
-        image: "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "srv-7",
-        category: "mehndi",
-        name: "Bridal & Guest Organic Arabic Mehndi Artists",
+        id: 's1',
+        title: 'Birthday Balloon Arch & Ring Backdrop',
         price: 4500,
-        source: "Verified Partner Artist",
-        image: "https://images.unsplash.com/photo-1595407753234-0882f1e77954?auto=format&fit=crop&w=800&q=80"
+        photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
+        details: '• 220 pastel & chrome balloons
+• 8x8 ft circular ring backdrop stand
+• Happy Birthday neon/foil signage
+• 2 warm LED focus par lights
+• Complete on-site setup & dismantling included'
       },
       {
-        id: "srv-8",
-        category: "photography",
-        name: "Candid Photography + Cinematic Drone Reel",
-        price: 18000,
-        source: "PartyHub Media Team",
-        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80"
+        id: 's2',
+        title: 'Anniversary Floral Stage & Cold Pyro Entry',
+        price: 8500,
+        photo: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85',
+        details: '• Artificial flower & warm fairy-light stage backdrop
+• Couple seating sofa/props styling
+• 4 cold pyro sparklers for grand entry
+• Low-fog cloud effect machine
+• Complete setup & dismantling included'
       }
     ];
 
-    const DEFAULT_CONFIG = {
-      brandName: "PartyHub -SR Events",
-      brandSub: "Rayachoti • Madanapalle • Annamayya & Kadapa",
-      logoUrl: "",
-      phone: "9398934021",
-      whatsapp: "9398934021",
-      email: "partyhubsrevents@gmail.com",
-      upi: "9398934021@ybl",
-      accHolder: "PartyHub -SR Events",
-      bank: "PartyHub -SR Events • Rayachoti Branch",
-      qrUrl: "",
-      cloudLabel: "Google Drive - PartyHub Media & Receipts",
-      cloudUrl: "https://drive.google.com"
+    const defaultBookings = [
+      {
+        id: 'b1',
+        date: '2026-11-25',
+        city: 'Rayachoti',
+        customerName: 'Karthik Reddy',
+        customerPhone: '9848011122',
+        slot: 'Morning',
+        exactTime: '10:15',
+        serviceId: 's1',
+        serviceTitle: 'Birthday Balloon Arch & Ring Backdrop',
+        photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
+        details: '• 220 pastel & chrome balloons
+• 8x8 ft circular ring backdrop stand
+• Happy Birthday neon/foil signage
+• 2 warm LED focus par lights
+• Complete on-site setup & dismantling included',
+        price: 4500
+      }
+    ];
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return {
+            services: Array.isArray(parsed.services) && parsed.services.length ? parsed.services : defaultServices,
+            bookings: Array.isArray(parsed.bookings) ? parsed.bookings : defaultBookings
+          };
+        }
+      } catch (e) {}
+      return { services: defaultServices, bookings: defaultBookings };
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          services: state.services,
+          bookings: state.bookings
+        }));
+      } catch (e) {}
+    }
+
+    const initial = loadData();
+    const state = {
+      role: null,
+      customer: { name: '', phone: '' },
+      selectedSlot: '',
+      services: initial.services,
+      bookings: initial.bookings
     };
 
-    function getSeedPayments() {
-      const today = new Date();
-      const fmt = (daysOffset) => {
-        const d = new Date(today);
-        d.setDate(d.getDate() + daysOffset);
-        return d.toISOString().split("T")[0];
-      };
-      return [
-        {
-          id: "PHSR-841209",
-          customerName: "Karthik Reddy",
-          customerPhone: "9849123456",
-          city: "Rayachoti",
-          district: "Annamayya",
-          occasion: "Birthday Party",
-          venueType: "Indoor (Banquet / Home)",
-          eventDate: fmt(0),
-          eventSlot: "Morning",
-          servicesList: "3D Theme Stage & Balloon Arch Setup (₹12,500), Bouncy Castle + Live Mascot + Water Tattoo Stall (₹6,500)",
-          bookedServices: [
-            { id: "srv-1", name: "3D Theme Stage & Balloon Arch Setup", price: 12500, image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80" },
-            { id: "srv-5", name: "Bouncy Castle + Live Mascot + Water Tattoo Stall", price: 6500, image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80" }
-          ],
-          totalValue: 19000,
-          milestonePct: 20,
-          amountPaid: 3800,
-          method: "UPI",
-          utr: "UTR629104827112",
-          date: fmt(0),
-          status: "Received"
-        },
-        {
-          id: "PHSR-739102",
-          customerName: "Sneha Latha",
-          customerPhone: "9177654321",
-          city: "Madanapalle",
-          district: "Annamayya",
-          occasion: "Half Saree / Dhoti Ceremony",
-          venueType: "Outdoor (Open Lawn / Ground)",
-          eventDate: fmt(2),
-          eventSlot: "Morning",
-          servicesList: "Royal Wedding & Reception Flower Mandap (₹38,000)",
-          bookedServices: [
-            { id: "srv-2", name: "Royal Wedding & Reception Flower Mandap", price: 38000, image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" }
-          ],
-          totalValue: 38000,
-          milestonePct: 70,
-          amountPaid: 26600,
-          method: "BANK",
-          utr: "NEFT9018273645",
-          date: fmt(-2),
-          status: "Received"
-        },
-        {
-          id: "PHSR-612048",
-          customerName: "Ramesh Naidu",
-          customerPhone: "9440112233",
-          city: "Kadapa City",
-          district: "Kadapa",
-          occasion: "Wedding / Reception",
-          venueType: "Indoor (Banquet / Home)",
-          eventDate: fmt(5),
-          eventSlot: "Afternoon",
-          servicesList: "Royal Wedding & Reception Flower Mandap (₹38,000), Vintage Bride/Groom Entry Cart & Mirror Walkway (₹16,000)",
-          bookedServices: [
-            { id: "srv-2", name: "Royal Wedding & Reception Flower Mandap", price: 38000, image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" },
-            { id: "srv-4", name: "Vintage Bride/Groom Entry Cart & Mirror Walkway", price: 16000, image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80" }
-          ],
-          totalValue: 54000,
-          milestonePct: 20,
-          amountPaid: 10800,
-          method: "UPI",
-          utr: "UTR554433221199",
-          date: fmt(-4),
-          status: "Received"
-        }
-      ];
-    }
-
-    let services = JSON.parse(localStorage.getItem("ph_services_v2")) || DEFAULT_SERVICES;
-    let appConfig = Object.assign({}, DEFAULT_CONFIG, JSON.parse(localStorage.getItem("ph_config_v2")) || {});
-    let payments = JSON.parse(localStorage.getItem("ph_payments_v2")) || getSeedPayments();
-
-    // ONLY 2 LOGOUT CONDITIONS (Refresh NEVER logs out):
-    // 1. 15 minutes (900,000 ms) of inactivity
-    // 2. Manual logout button click
-    const INACTIVITY_LIMIT_MS = 15 * 60 * 1000;
-    let inactivityTimer = null;
-
-    function isSessionExpired() {
-      const hasCust = Boolean(localStorage.getItem("ph_customer_session_v2"));
-      const hasAdm = localStorage.getItem("ph_admin_session_v2") === "true";
-      if (!hasCust && !hasAdm) return false;
-      const lastActive = Number(localStorage.getItem("ph_last_active_ts") || 0);
-      if (!lastActive) {
-        localStorage.setItem("ph_last_active_ts", String(Date.now()));
-        return false;
-      }
-      return (Date.now() - lastActive) >= INACTIVITY_LIMIT_MS;
-    }
-
-    if (isSessionExpired()) {
-      localStorage.removeItem("ph_customer_session_v2"); if (!isAdminLoggedIn) localStorage.removeItem("ph_last_active_ts");
-      localStorage.removeItem("ph_admin_session_v2"); if (!currentCustomer) localStorage.removeItem("ph_last_active_ts");
-      localStorage.removeItem("ph_active_screen_v2");
-      localStorage.removeItem("ph_last_active_ts");
-    }
-
-    let currentCustomer = JSON.parse(localStorage.getItem("ph_customer_session_v2")) || null;
-    let isAdminLoggedIn = localStorage.getItem("ph_admin_session_v2") === "true";
-    let activeScreen = localStorage.getItem("ph_active_screen_v2") || (isAdminLoggedIn ? "ADMIN" : "CUSTOMER");
-
-    if (currentCustomer || isAdminLoggedIn) {
-      if (!localStorage.getItem("ph_last_active_ts")) {
-        localStorage.setItem("ph_last_active_ts", String(Date.now()));
-      }
-    }
-
-    let selectedCategory = "ALL";
-    let cart = [];
-    let selectedPayMethod = "UPI";
-    let generatedOtp = "4829";
-    let dailyChartInstance = null;
-    let monthlyChartInstance = null;
-
-    // =========================================================
-    // 4. INITIALIZATION & SESSION ROUTING
-    // =========================================================
-    function initApp() {
-      applyBrandConfig();
-      populateCities();
-      renderCategories();
-      populateServiceDropdown();
-      renderCatalog();
-      initSignaturePad();
-
-      const today = new Date().toISOString().split("T")[0];
-      document.getElementById("eventDateInput").value = today;
-      updateSlotAvailability();
-
-      // Enforce persistent state on reload or revisit
-      if (isAdminLoggedIn) {
-        activeScreen = "ADMIN";
-        showAdminWorkspace();
-      } else if (activeScreen === "ADMIN") {
-        openAdminView();
-      } else {
-        showCustomerView();
-      }
-      syncCustomerAuthUI();
-    }
-
-    function applyBrandConfig() {
-      document.title = appConfig.brandName + " | Mobile App";
-      document.getElementById("headerBrandName").textContent = appConfig.brandName;
-      document.getElementById("headerBrandSub").textContent = appConfig.brandSub;
-      document.getElementById("showcaseBrandTitle").textContent = appConfig.brandName;
-      document.getElementById("helpBrandLabel").textContent = appConfig.brandName + " Official Desk";
-      document.getElementById("cardPhoneDisplay").textContent = appConfig.phone;
-
-      const waNum = (appConfig.whatsapp || appConfig.phone).replace(/\D/g, "");
-      const phNum = appConfig.phone.replace(/\D/g, "");
-      document.getElementById("helpWhatsappText").textContent = "+91 " + waNum + " →";
-      document.getElementById("helpWhatsappLink").href = "https://wa.me/91" + waNum;
-      document.getElementById("helpPhoneText").textContent = "+91 " + phNum + " →";
-      document.getElementById("helpCallLink").href = "tel:+91" + phNum;
-      document.getElementById("helpEmailText").textContent = appConfig.email;
-      document.getElementById("helpEmailLink").href = "mailto:" + appConfig.email;
-
-      document.getElementById("checkoutUpiId").textContent = appConfig.upi;
-      document.getElementById("checkoutAccName").textContent = appConfig.accHolder || appConfig.brandName;
-      document.getElementById("checkoutBankExtra").textContent = appConfig.bank;
-
-      const qrImg = document.getElementById("checkoutQrImg");
-      if (appConfig.qrUrl && appConfig.qrUrl.trim() !== "") {
-        qrImg.src = appConfig.qrUrl;
-        qrImg.classList.remove("hidden");
-      } else {
-        qrImg.classList.add("hidden");
-      }
-
-      const cloudBtn = document.getElementById("openCloudLinkBtn");
-      cloudBtn.href = appConfig.cloudUrl || "https://drive.google.com";
-
-      const logoImg = document.getElementById("headerLogoImg");
-      const logoSvg = document.getElementById("headerLogoSvg");
-      if (appConfig.logoUrl && appConfig.logoUrl.trim() !== "") {
-        logoImg.src = appConfig.logoUrl;
-        logoImg.classList.remove("hidden");
-        logoSvg.classList.add("hidden");
-      } else {
-        logoImg.classList.add("hidden");
-        logoSvg.classList.remove("hidden");
-      }
-    }
-
-    // =========================================================
-    // 5. PERSISTENT CUSTOMER & ADMIN SESSION CONTROLLERS
-    // =========================================================
-    function showCustomerView() {
-      if (isAdminLoggedIn) return; // Prevent leaving Admin without Admin Logout
-      activeScreen = "CUSTOMER";
-      localStorage.setItem("ph_active_screen_v2", "CUSTOMER");
-      document.getElementById("adminFullView").classList.add("hidden");
-      document.getElementById("customerMainView").classList.remove("hidden");
-    }
-
-    function backToCustomerHome() {
-      if (isAdminLoggedIn) {
-        alert("Please click 'Logout Admin' to exit the Admin dashboard.");
+    function sendOtp() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      if (!name || phone.length < 10) {
+        alert('Please enter your name and valid 10-digit mobile number.');
         return;
       }
-      showCustomerView();
+      state.customer = { name, phone };
+      document.getElementById('otpSection').classList.remove('hidden');
+      document.getElementById('sendOtpBtn').classList.add('hidden');
+      document.getElementById('verifyOtpBtn').classList.remove('hidden');
+      document.getElementById('custOtp').value = '1234';
     }
 
-    function openAdminView() {
-      if (currentCustomer) {
-        alert("Please logout from the Customer account first before accessing Admin.");
+    function verifyOtp() {
+      const otp = document.getElementById('custOtp').value.trim();
+      if (otp !== '1234') {
+        alert('Invalid OTP. Enter 1234.');
         return;
       }
-      activeScreen = "ADMIN";
-      localStorage.setItem("ph_active_screen_v2", "ADMIN");
-      document.getElementById("customerMainView").classList.add("hidden");
-      document.getElementById("floatingCartBar").classList.add("hidden");
-      document.getElementById("adminFullView").classList.remove("hidden");
-
-      if (isAdminLoggedIn) {
-        showAdminWorkspace();
-      } else {
-        document.getElementById("adminLoginCard").classList.remove("hidden");
-        document.getElementById("adminWorkspace").classList.add("hidden");
+      state.role = 'customer';
+      document.getElementById('customerLoginCard').classList.add('hidden');
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerView').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.remove('hidden');
+      document.getElementById('adminLoginBtn').classList.add('hidden');
+      document.getElementById('activeCustomerLabel').textContent = `${state.customer.name} (${state.customer.phone})`;
+      if (!document.getElementById('bookingDate').value) {
+        document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
       }
+      renderCustomerPackages();
+      renderCustomerBookings();
+    }
+
+    function selectSlot(slot) {
+      state.selectedSlot = slot;
+      const mBtn = document.getElementById('slotMorningBtn');
+      const aBtn = document.getElementById('slotAfternoonBtn');
+      const timeBox = document.getElementById('customTimeBox');
+      const timeInput = document.getElementById('customExactTime');
+      const timeLabel = document.getElementById('customTimeLabel');
+
+      mBtn.classList.toggle('active', slot === 'Morning');
+      aBtn.classList.toggle('active', slot === 'Afternoon');
+      timeBox.classList.remove('hidden');
+
+      if (slot === 'Morning') {
+        timeLabel.textContent = 'Customize Exact Morning Timing (06:00 AM - 11:59 AM)';
+        timeInput.min = '06:00';
+        timeInput.max = '11:59';
+        timeInput.value = '10:00';
+      } else {
+        timeLabel.textContent = 'Customize Exact Afternoon Timing (12:00 PM - 05:59 PM)';
+        timeInput.min = '12:00';
+        timeInput.max = '17:59';
+        timeInput.value = '14:30';
+      }
+    }
+
+    function renderCustomerPackages() {
+      const grid = document.getElementById('customerPackagesGrid');
+      grid.innerHTML = state.services.map(srv => `
+        <div class="package-card">
+          <img src="${srv.photo}" alt="${escapeHtml(srv.title)}" onclick="openImageOnly('${srv.id}')" title="Click to enlarge" />
+          <div class="package-body">
+            <div>
+              <h4>${escapeHtml(srv.title)}</h4>
+              <div class="price-tag">₹${Number(srv.price).toLocaleString('en-IN')}</div>
+              <div class="details-list">${escapeHtml(srv.details)}</div>
+            </div>
+            <button class="btn btn-primary" onclick="bookService('${srv.id}')">Book This Package</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCustomerBookings() {
+      const mine = state.bookings.filter(b => b.customerPhone === state.customer.phone);
+      const box = document.getElementById('customerMyBookings');
+      if (!mine.length) {
+        box.textContent = 'No bookings submitted yet.';
+        return;
+      }
+      box.innerHTML = mine.map(b => `
+        <div style="padding:10px; border:1px solid var(--border); border-radius:10px; background:#fff; margin-bottom:8px;">
+          <strong>${escapeHtml(b.serviceTitle)}</strong> — ₹${Number(b.price).toLocaleString('en-IN')}<br />
+          Date: <strong>${escapeHtml(b.date)}</strong> | City: ${escapeHtml(b.city)} | Slot: <strong>${escapeHtml(b.slot)} at ${escapeHtml(b.exactTime)}</strong>
+        </div>
+      `).join('');
+    }
+
+    function bookService(serviceId) {
+      const date = document.getElementById('bookingDate').value;
+      const city = document.getElementById('bookingCity').value;
+      const exactTime = document.getElementById('customExactTime').value;
+
+      if (!date) {
+        alert('Please choose an event date.');
+        return;
+      }
+      if (!state.selectedSlot || !exactTime) {
+        alert('Please select Morning or Afternoon slot and customize your exact time.');
+        return;
+      }
+
+      const srv = state.services.find(s => s.id === serviceId);
+      state.bookings.unshift({
+        id: 'b_' + Date.now(),
+        date,
+        city,
+        customerName: state.customer.name,
+        customerPhone: state.customer.phone,
+        slot: state.selectedSlot,
+        exactTime,
+        serviceId: srv.id,
+        serviceTitle: srv.title,
+        photo: srv.photo,
+        details: srv.details,
+        price: srv.price
+      });
+      saveData();
+      renderCustomerBookings();
+      alert(`Booking confirmed for ${state.customer.name} on ${date} (${state.selectedSlot} at ${exactTime}) in ${city}.`);
+    }
+
+    function openAdminLogin() {
+      document.getElementById('customerLoginCard').classList.add('hidden');
+      document.getElementById('adminLoginCard').classList.remove('hidden');
+    }
+
+    function backToCustomerLogin() {
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerLoginCard').classList.remove('hidden');
     }
 
     function loginAdmin() {
-      const u = document.getElementById("adminUserInput").value.trim();
-      const p = document.getElementById("adminPassInput").value.trim();
-      if (u === "admin" && p === "admin123") {
-        isAdminLoggedIn = true;
-        localStorage.setItem("ph_admin_session_v2", "true"); touchSessionActivity();
-        localStorage.setItem("ph_active_screen_v2", "ADMIN");
-        showAdminWorkspace();
-      } else {
-        alert("Invalid Admin credentials. Use admin / admin123");
-      }
-    }
-
-    function logoutAdmin() {
-      isAdminLoggedIn = false;
-      localStorage.removeItem("ph_admin_session_v2"); if (!currentCustomer) localStorage.removeItem("ph_last_active_ts");
-      localStorage.setItem("ph_active_screen_v2", "CUSTOMER");
-      document.getElementById("adminUserInput").value = "";
-      document.getElementById("adminPassInput").value = "";
-      document.getElementById("topAdminBtnLabel").textContent = "Admin";
-      showCustomerView();
-      syncCustomerAuthUI();
-    }
-
-    function showAdminWorkspace() {
-      document.getElementById("customerMainView").classList.add("hidden");
-      document.getElementById("floatingCartBar").classList.add("hidden");
-      document.getElementById("adminFullView").classList.remove("hidden");
-      document.getElementById("adminLoginCard").classList.add("hidden");
-      document.getElementById("adminWorkspace").classList.remove("hidden");
-      document.getElementById("topAdminBtnLabel").textContent = "Admin Active";
-
-      // Populate Admin Forms
-      populateAdminCategoryDropdown();
-
-      document.getElementById("admUpiInput").value = appConfig.upi;
-      document.getElementById("admAccHolderInput").value = appConfig.accHolder || appConfig.brandName;
-      document.getElementById("admBankInput").value = appConfig.bank;
-      document.getElementById("admQrUrlInput").value = appConfig.qrUrl || "";
-
-      document.getElementById("admPhoneInput").value = appConfig.phone;
-      document.getElementById("admWhatsappInput").value = appConfig.whatsapp || appConfig.phone;
-      document.getElementById("admEmailInput").value = appConfig.email;
-
-      document.getElementById("admCloudLabelInput").value = appConfig.cloudLabel || "";
-      document.getElementById("admCloudUrlInput").value = appConfig.cloudUrl || "";
-
-      document.getElementById("admBrandNameInput").value = appConfig.brandName;
-      document.getElementById("admBrandSubInput").value = appConfig.brandSub;
-      document.getElementById("admLogoUrlInput").value = appConfig.logoUrl || "";
-
-      renderAdminServicesList();
-      renderAdminPaymentsAndCharts();
-    }
-
-    // Customer OTP Login & Logout
-    function sendCustomerOtp() {
-      const name = document.getElementById("custNameInput").value.trim();
-      const phone = document.getElementById("custPhoneInput").value.trim();
-      if (!name) {
-        alert("Please enter your full name.");
+      const pin = document.getElementById('adminPin').value.trim();
+      if (pin !== '2026') {
+        alert('Invalid admin passcode. Default is 2026.');
         return;
       }
-      if (!/^\d{10}$/.test(phone)) {
-        alert("Please enter a valid 10-digit mobile number.");
-        return;
-      }
-      generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
-      document.getElementById("displayPhoneOtp").textContent = "+91 " + phone;
-      document.getElementById("demoOtpHint").textContent = "OTP: " + generatedOtp;
-      document.getElementById("otpStep1").classList.add("hidden");
-      document.getElementById("otpStep2").classList.remove("hidden");
+      state.role = 'admin';
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerView').classList.add('hidden');
+      document.getElementById('adminView').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.remove('hidden');
+      document.getElementById('adminLoginBtn').classList.add('hidden');
+      renderAdminServices();
+      renderAdminBookings();
     }
 
-    function resetOtpStep() {
-      document.getElementById("otpStep2").classList.add("hidden");
-      document.getElementById("otpStep1").classList.remove("hidden");
-      document.getElementById("custOtpInput").value = "";
-    }
-
-    function verifyCustomerOtp() {
-      const entered = document.getElementById("custOtpInput").value.trim();
-      if (entered !== generatedOtp && entered !== "1234") {
-        alert("Invalid OTP. Please enter the 4-digit OTP shown.");
-        return;
-      }
-      const name = document.getElementById("custNameInput").value.trim();
-      const phone = document.getElementById("custPhoneInput").value.trim();
-      currentCustomer = { name, phone };
-      localStorage.setItem("ph_customer_session_v2", JSON.stringify(currentCustomer)); touchSessionActivity();
-      syncCustomerAuthUI();
-    }
-
-    function logoutCustomer() {
-      currentCustomer = null;
-      cart = [];
-      localStorage.removeItem("ph_customer_session_v2"); if (!isAdminLoggedIn) localStorage.removeItem("ph_last_active_ts");
-      resetOtpStep();
-      syncCustomerAuthUI();
-      updateCartUI();
-    }
-
-    function syncCustomerAuthUI() {
-      const loginCard = document.getElementById("customerLoginCard");
-      const profileCard = document.getElementById("customerProfileCard");
-      const branchesCard = document.getElementById("brandBranchesCard");
-      const lockedNotice = document.getElementById("lockedNoticeCard");
-      const unlockedPortal = document.getElementById("unlockedCustomerPortal");
-      const topAdminBtn = document.getElementById("topAdminBtn");
-
-      if (currentCustomer) {
-        loginCard.classList.add("hidden");
-        profileCard.classList.remove("hidden");
-        branchesCard.classList.add("hidden");
-        lockedNotice.classList.add("hidden");
-        unlockedPortal.classList.remove("hidden");
-
-        // Hide Admin button while customer is logged in
-        topAdminBtn.classList.add("hidden");
-
-        document.getElementById("profileName").textContent = currentCustomer.name;
-        document.getElementById("profilePhone").textContent = "+91 " + currentCustomer.phone;
-        document.getElementById("profileInitial").textContent = currentCustomer.name.charAt(0).toUpperCase();
-        renderCustomerPaymentsList();
-      } else {
-        loginCard.classList.remove("hidden");
-        profileCard.classList.add("hidden");
-        branchesCard.classList.remove("hidden");
-        lockedNotice.classList.remove("hidden");
-        unlockedPortal.classList.add("hidden");
-
-        topAdminBtn.classList.remove("hidden");
-      }
-    }
-
-    // =========================================================
-    // 6. LOCATION & CATALOG RENDERING
-    // =========================================================
-    function getBookedSlotsForDate(dateStr) {
-      const booked = new Set();
-      payments.forEach(p => {
-        const d = p.eventDate || p.date;
-        if (d === dateStr && p.eventSlot) {
-          booked.add(p.eventSlot);
-        }
-      });
-      return booked;
-    }
-
-    function updateSlotAvailability() {
-      const dateInput = document.getElementById("eventDateInput");
-      const slotSelect = document.getElementById("eventSlotSelect");
-      const badge = document.getElementById("slotStatusBadge");
-      const helper = document.getElementById("slotHelperMsg");
-      if (!dateInput || !slotSelect) return;
-
-      const selectedDate = dateInput.value;
-      const booked = getBookedSlotsForDate(selectedDate);
-      const morningTaken = booked.has("Morning");
-      const afternoonTaken = booked.has("Afternoon");
-
-      slotSelect.innerHTML = "";
-      if (!morningTaken) {
-        const optM = document.createElement("option");
-        optM.value = "Morning";
-        optM.textContent = "Morning Slot (6:00 AM – 1:00 PM)";
-        slotSelect.appendChild(optM);
-      }
-      if (!afternoonTaken) {
-        const optA = document.createElement("option");
-        optA.value = "Afternoon";
-        optA.textContent = "Afternoon Slot (2:00 PM – 10:00 PM)";
-        slotSelect.appendChild(optA);
-      }
-
-      if (morningTaken && afternoonTaken) {
-        const optFull = document.createElement("option");
-        optFull.value = "";
-        optFull.textContent = "No Slots Available (Both Morning & Afternoon Booked)";
-        slotSelect.appendChild(optFull);
-        slotSelect.disabled = true;
-        badge.textContent = "Fully Booked (2/2)";
-        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800";
-        helper.textContent = "Both Morning & Afternoon slots are already booked on " + selectedDate + ". Please choose another date.";
-        helper.className = "text-[10px] font-bold text-rose-700";
-      } else if (morningTaken) {
-        slotSelect.disabled = false;
-        slotSelect.value = "Afternoon";
-        badge.textContent = "1 Slot Left (Afternoon)";
-        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800";
-        helper.textContent = "Morning slot is already booked on this date — only Afternoon booking is available.";
-        helper.className = "text-[10px] font-bold text-amber-800";
-      } else if (afternoonTaken) {
-        slotSelect.disabled = false;
-        slotSelect.value = "Morning";
-        badge.textContent = "1 Slot Left (Morning)";
-        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800";
-        helper.textContent = "Afternoon slot is already booked on this date — only Morning booking is available.";
-        helper.className = "text-[10px] font-bold text-amber-800";
-      } else {
-        slotSelect.disabled = false;
-        slotSelect.value = "Morning";
-        badge.textContent = "2 Slots Open";
-        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
-        helper.textContent = "Both Morning & Afternoon slots are available for this date (Max 2 bookings/day).";
-        helper.className = "text-[10px] font-semibold text-sky-800";
-      }
-    }
-
-    function populateCities() {
-      const dist = document.getElementById("districtSelect").value;
-      const citySelect = document.getElementById("citySelect");
-      citySelect.innerHTML = "";
-      (DISTRICT_CITIES[dist] || []).forEach(city => {
-        const opt = document.createElement("option");
-        opt.value = city;
-        opt.textContent = city;
-        citySelect.appendChild(opt);
-      });
-    }
-
-    function populateServiceDropdown() {
-      const sel = document.getElementById("serviceQuickSelect");
-      sel.innerHTML = `<option value="ALL">All Event Services (${services.length})</option>`;
-      services.forEach(s => {
-        const opt = document.createElement("option");
-        opt.value = s.id;
-        opt.textContent = `${s.name} - ₹${s.price.toLocaleString("en-IN")}`;
-        sel.appendChild(opt);
-      });
-    }
-
-    function renderCategories() {
-      const grid = document.getElementById("categoryGrid");
-      const allBtn = `
-        <button onclick="selectCategory('ALL')" class="p-2.5 rounded-2xl border text-center flex flex-col items-center justify-center gap-1 transition ${selectedCategory === 'ALL' ? 'bg-sky-600 text-white border-sky-600 shadow-md' : 'bg-white/90 text-slate-800 border-sky-100'}">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-          <span class="text-[11px] font-extrabold leading-tight">All Services</span>
-        </button>
-      `;
-
-      const catBtns = getAllCategories().map(cat => {
-        const active = selectedCategory === cat.id;
-        return `
-          <button onclick="selectCategory('${cat.id}')" class="p-2.5 rounded-2xl border text-center flex flex-col items-center justify-center gap-1 transition ${active ? 'bg-sky-600 text-white border-sky-600 shadow-md' : 'bg-white/90 text-slate-800 border-sky-100'}">
-            ${cat.svg}
-            <span class="text-[11px] font-extrabold leading-tight">${cat.name}</span>
-          </button>
-        `;
-      }).join("");
-
-      grid.innerHTML = allBtn + catBtns;
-    }
-
-    function selectCategory(catId) {
-      selectedCategory = catId;
-      document.getElementById("serviceQuickSelect").value = "ALL";
-      renderCategories();
-      renderCatalog();
-    }
-
-    function filterByDropdown(serviceId) {
-      if (serviceId !== "ALL") {
-        selectedCategory = "ALL";
-        renderCategories();
-      }
-      renderCatalog();
-    }
-
-    function renderCatalog() {
-      const grid = document.getElementById("catalogGrid");
-      const quickId = document.getElementById("serviceQuickSelect").value;
-      const priceFilter = document.getElementById("priceRangeSelect").value;
-
-      const filtered = services.filter(item => {
-        if (quickId !== "ALL" && item.id !== quickId) return false;
-        if (selectedCategory !== "ALL" && item.category !== selectedCategory) return false;
-        if (priceFilter === "UNDER_5K" && item.price >= 5000) return false;
-        if (priceFilter === "5K_15K" && (item.price < 5000 || item.price > 15000)) return false;
-        if (priceFilter === "15K_35K" && (item.price < 15000 || item.price > 35000)) return false;
-        if (priceFilter === "ABOVE_35K" && item.price <= 35000) return false;
-        return true;
-      });
-
-      document.getElementById("itemCountBadge").textContent = `${filtered.length} Packages`;
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="glass-card rounded-2xl p-5 text-center text-xs text-slate-600 font-semibold">No services match this filter. Try another category or budget range.</div>`;
-        return;
-      }
-
-      grid.innerHTML = filtered.map(item => {
-        const inCart = cart.find(c => c.id === item.id);
-        const catObj = getAllCategories().find(c => c.id === item.category);
-        const adv20 = Math.round(item.price * 0.20);
-        return `
-          <div class="glass-card rounded-3xl overflow-hidden">
-            <div class="relative h-44 bg-sky-100">
-              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80'" />
-              <span class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-sky-800 text-[10px] font-extrabold shadow-sm">
-                ${catObj ? catObj.name : "Event Service"}
-              </span>
-              <span class="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-xl bg-slate-900/80 text-white text-[10px] font-bold">
-                ${item.source || "Official Gallery"}
-              </span>
-            </div>
-            <div class="p-3.5 space-y-2.5">
-              <div>
-                <h4 class="text-sm font-extrabold text-slate-900 leading-snug">${item.name}</h4>
-                <div class="flex items-center justify-between mt-1">
-                  <span class="text-base font-extrabold text-sky-700">₹${item.price.toLocaleString("en-IN")}</span>
-                  <span class="text-[11px] font-bold text-slate-500">20% Book: ₹${adv20.toLocaleString("en-IN")}</span>
-                </div>
-              </div>
-              <button onclick="toggleCartItem('${item.id}')" class="w-full py-2.5 rounded-xl text-xs font-extrabold transition ${inCart ? 'bg-emerald-600 text-white' : 'btn-sky'}">
-                ${inCart ? '✓ Added to Event Cart (Tap to Remove)' : '+ Add Service to Cart'}
-              </button>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    // =========================================================
-    // 7. CART, 20% / 70% / 10% MILESTONE SPLIT & E-SIGN
-    // =========================================================
-    function toggleCartItem(id) {
-      const idx = cart.findIndex(c => c.id === id);
-      if (idx > -1) {
-        cart.splice(idx, 1);
-      } else {
-        const srv = services.find(s => s.id === id);
-        if (srv) cart.push(srv);
-      }
-      renderCatalog();
-      updateCartUI();
-    }
-
-    function updateCartUI() {
-      const bar = document.getElementById("floatingCartBar");
-      if (!currentCustomer || cart.length === 0 || isAdminLoggedIn) {
-        bar.classList.add("hidden");
-        return;
-      }
-      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
-      const adv20 = Math.round(total * 0.20);
-      document.getElementById("cartCountText").textContent = cart.length;
-      document.getElementById("cartTotalText").textContent = total.toLocaleString("en-IN");
-      document.getElementById("cartAdvText").textContent = adv20.toLocaleString("en-IN");
-      bar.classList.remove("hidden");
-    }
-
-    function openCheckoutModal() {
-      const chosenSlot = document.getElementById("eventSlotSelect").value;
-      const chosenDate = document.getElementById("eventDateInput").value;
-      if (!chosenSlot) {
-        alert("Both Morning & Afternoon bookings are full on " + chosenDate + ". Please select another Event Date.");
-        return;
-      }
-      const list = document.getElementById("checkoutItemsList");
-      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
-      const s20 = Math.round(total * 0.20);
-      const s70 = Math.round(total * 0.70);
-      const s10 = total - s20 - s70;
-
-      list.innerHTML = cart.map(item => `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-sky-50/70 border border-sky-100 text-xs">
-          <span class="font-bold text-slate-800 truncate pr-2">${item.name}</span>
-          <span class="font-extrabold text-sky-800 flex-shrink-0">₹${item.price.toLocaleString("en-IN")}</span>
-        </div>
-      `).join("");
-
-      document.getElementById("modalGrandTotal").textContent = total.toLocaleString("en-IN");
-      document.getElementById("split20Amt").textContent = s20.toLocaleString("en-IN");
-      document.getElementById("split70Amt").textContent = s70.toLocaleString("en-IN");
-      document.getElementById("split10Amt").textContent = s10.toLocaleString("en-IN");
-
-      const dist = document.getElementById("districtSelect").value;
-      const city = document.getElementById("citySelect").value;
-      const occ = document.getElementById("occasionSelect").value;
-      const venue = document.getElementById("venueTypeSelect").value;
-      const dt = document.getElementById("eventDateInput").value;
-      const slot = document.getElementById("eventSlotSelect").value;
-
-      document.getElementById("agreementSummaryText").innerHTML = `
-        <strong>SERVICE AGREEMENT:</strong> Between <strong>${appConfig.brandName}</strong> (Admin) and <strong>${currentCustomer.name}</strong> (+91 ${currentCustomer.phone}) for <strong>${occ}</strong> (${venue}) at <strong>${city}, ${dist} Dist., AP</strong> on <strong>${dt} (${slot} Slot)</strong>. Total Contract Value: <strong>₹${total.toLocaleString("en-IN")}</strong> payable in 3 milestones: <strong>20% (₹${s20.toLocaleString("en-IN")})</strong> booking advance, <strong>70% (₹${s70.toLocaleString("en-IN")})</strong> on event setup, and <strong>10% (₹${s10.toLocaleString("en-IN")})</strong> on completion.
-      `;
-
-      updatePayableNow();
-      document.getElementById("checkoutModal").classList.remove("hidden");
-    }
-
-    function updatePayableNow() {
-      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
-      const pct = Number(document.getElementById("milestoneStageSelect").value);
-      const s20 = Math.round(total * 0.20);
-      const s70 = Math.round(total * 0.70);
-      const s10 = total - s20 - s70;
-      const amt = pct === 20 ? s20 : (pct === 70 ? s70 : s10);
-
-      document.getElementById("payableNowText").textContent = amt.toLocaleString("en-IN");
-      document.getElementById("confirmPayBtnAmt").textContent = amt.toLocaleString("en-IN");
-      return amt;
-    }
-
-    function selectPayMethod(method) {
-      selectedPayMethod = method;
-      ["UPI", "BANK", "CARD"].forEach(m => {
-        const btn = document.getElementById("payBtn" + m);
-        if (m === method) {
-          btn.className = "pay-method-btn py-2 px-2 rounded-xl border-2 border-sky-600 bg-sky-50 text-sky-900 text-xs font-extrabold";
-        } else {
-          btn.className = "pay-method-btn py-2 px-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold";
-        }
-      });
-
-      const extra = document.getElementById("checkoutBankExtra");
-      if (method === "BANK") {
-        extra.textContent = "Bank Details: " + appConfig.bank;
-        extra.classList.remove("hidden");
-      } else if (method === "CARD") {
-        extra.textContent = "Instant Debit/Credit Card & NetBanking Gateway Enabled";
-        extra.classList.remove("hidden");
-      } else {
-        extra.classList.add("hidden");
-      }
-    }
-
-    // Interactive Signature Pad
-    let hasSigned = false;
-    function initSignaturePad() {
-      const canvas = document.getElementById("sigPad");
-      const ctx = canvas.getContext("2d");
-      ctx.strokeStyle = "#0284C7";
-      ctx.lineWidth = 2.4;
-      ctx.lineCap = "round";
-      let drawing = false;
-
-      const getPos = (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        return {
-          x: (clientX - rect.left) * (canvas.width / rect.width),
-          y: (clientY - rect.top) * (canvas.height / rect.height)
-        };
-      };
-
-      const start = (e) => { drawing = true; hasSigned = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
-      const move = (e) => { if (!drawing) return; e.preventDefault(); const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
-      const end = () => { drawing = false; };
-
-      canvas.addEventListener("mousedown", start);
-      canvas.addEventListener("mousemove", move);
-      window.addEventListener("mouseup", end);
-      canvas.addEventListener("touchstart", start, { passive: false });
-      canvas.addEventListener("touchmove", move, { passive: false });
-      canvas.addEventListener("touchend", end);
-    }
-
-    function clearSignature() {
-      const canvas = document.getElementById("sigPad");
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      hasSigned = false;
-    }
-
-    function confirmBookingOrder() {
-      if (!hasSigned) {
-        alert("Please draw your E-Signature in the agreement box before confirming.");
-        return;
-      }
-      if (!document.getElementById("agreeCheckbox").checked) {
-        alert("Please tick the agreement checkbox to proceed.");
-        return;
-      }
-
-      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
-      const pct = Number(document.getElementById("milestoneStageSelect").value);
-      const paidNowNum = updatePayableNow();
-      const utrVal = document.getElementById("custUtrInput").value.trim() || ("UTR" + Math.floor(100000000000 + Math.random() * 900000000000));
-      const orderId = "PHSR-" + Math.floor(100000 + Math.random() * 900000);
-      const todayStr = new Date().toISOString().split("T")[0];
-
-      const chosenDate = document.getElementById("eventDateInput").value;
-      const chosenSlot = document.getElementById("eventSlotSelect").value;
-      const bookedNow = getBookedSlotsForDate(chosenDate);
-      if (!chosenSlot || bookedNow.has(chosenSlot)) {
-        alert("This slot was just booked. Please pick an available slot or date.");
-        updateSlotAvailability();
-        return;
-      }
-
-      // Save payment & booking record so it displays live inside Admin Ledger & Charts
-      const newPayment = {
-        id: orderId,
-        customerName: currentCustomer.name,
-        customerPhone: currentCustomer.phone,
-        state: document.getElementById("stateSelect").value,
-        city: document.getElementById("citySelect").value,
-        district: document.getElementById("districtSelect").value,
-        occasion: document.getElementById("occasionSelect").value,
-        venueType: document.getElementById("venueTypeSelect").value,
-        eventDate: chosenDate,
-        eventSlot: chosenSlot,
-        servicesList: cart.map(c => `${c.name} (₹${Number(c.price).toLocaleString("en-IN")})`).join(", "),
-        bookedServices: cart.map(c => ({ id: c.id, name: c.name, price: Number(c.price), image: c.image })),
-        totalValue: total,
-        milestonePct: pct,
-        amountPaid: paidNowNum,
-        method: selectedPayMethod,
-        utr: utrVal,
-        date: todayStr,
-        status: "Received"
-      };
-
-      payments.unshift(newPayment);
-      localStorage.setItem("ph_payments_v2", JSON.stringify(payments));
-      updateSlotAvailability();
-
-      const remBal = Math.max(0, total - paidNowNum);
-      document.getElementById("receiptOrderId").textContent = orderId;
-      document.getElementById("receiptBody").innerHTML = `
-        <div><strong>Customer:</strong> ${currentCustomer.name} (+91 ${currentCustomer.phone})</div>
-        <div><strong>Location:</strong> ${newPayment.city}, ${newPayment.district}</div>
-        <div><strong>Event Date & Slot:</strong> ${newPayment.eventDate} • <strong>${newPayment.eventSlot} Slot</strong> (${newPayment.occasion})</div>
-        <div><strong>Total Package Value:</strong> ₹${total.toLocaleString("en-IN")}</div>
-        <div><strong>Paid Now (${pct}%):</strong> <span class="text-emerald-700 font-extrabold">₹${paidNowNum.toLocaleString("en-IN")} via ${selectedPayMethod}</span></div>
-        <div><strong>Remaining Balance Due:</strong> <span class="text-amber-700 font-extrabold">₹${remBal.toLocaleString("en-IN")}</span></div>
-        <div><strong>UTR / Ref No:</strong> <span class="font-mono">${utrVal}</span></div>
-      `;
-
-      closeModal("checkoutModal");
-      document.getElementById("receiptModal").classList.remove("hidden");
-      cart = [];
-      clearSignature();
-      document.getElementById("custUtrInput").value = "";
-      document.getElementById("agreeCheckbox").checked = false;
-      renderCatalog();
-      updateCartUI();
-      renderCustomerPaymentsList();
-    }
-
-    function renderCustomerPaymentsList() {
-      if (!currentCustomer) return;
-      const box = document.getElementById("customerPaymentsList");
-      const myTx = payments.filter(p => p.customerPhone === currentCustomer.phone);
-      document.getElementById("custTxCount").textContent = `${myTx.length} Records`;
-
-      if (myTx.length === 0) {
-        box.innerHTML = `<div class="p-3 rounded-xl bg-sky-50/70 text-slate-500 text-center">No payments sent yet. Select services above to book.</div>`;
-        return;
-      }
-
-      box.innerHTML = myTx.map(tx => {
-        const tot = Number(tx.totalValue || tx.amountPaid || 0);
-        const paid = Number(tx.amountPaid || 0);
-        const rem = Math.max(0, tot - paid);
-        return `
-        <div class="p-3 rounded-2xl bg-white border border-sky-100 space-y-1">
-          <div class="flex items-center justify-between">
-            <span class="font-extrabold text-slate-900">${tx.id} • ${tx.occasion}</span>
-            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">Paid: ₹${paid.toLocaleString("en-IN")} (${tx.milestonePct}%)</span>
-          </div>
-          <div class="text-[11px] text-slate-700 font-semibold">Event Date: <strong>${tx.eventDate || tx.date}</strong> (${tx.eventSlot || "Morning"} Slot) • ${tx.city}</div>
-          <div class="flex items-center justify-between text-[11px] pt-0.5">
-            <span class="text-slate-500">Total: ₹${tot.toLocaleString("en-IN")}</span>
-            <span class="font-extrabold ${rem > 0 ? 'text-amber-700' : 'text-emerald-700'}">Remaining Balance: ₹${rem.toLocaleString("en-IN")}</span>
-          </div>
-          <div class="text-[10px] font-mono text-slate-500">Ref: ${tx.utr} • Via ${tx.method}</div>
-        </div>
-      `;
-      }).join("");
-
-      renderCustomerBalanceSchedule(myTx);
-    }
-
-    let reminderTickerIndex = 0;
-    let balanceReminderInterval = null;
-
-    function getCustomerBookingBalances(myTx) {
-      // Group by order ID so multiple milestone payments on the same booking aggregate cleanly
-      const grouped = new Map();
-      myTx.forEach(tx => {
-        const key = tx.id;
-        const tot = Number(tx.totalValue || tx.amountPaid || 0);
-        const paid = Number(tx.amountPaid || 0);
-        if (!grouped.has(key)) {
-          grouped.set(key, {
-            id: tx.id,
-            occasion: tx.occasion || "Event Booking",
-            city: tx.city || "",
-            district: tx.district || "",
-            eventDate: tx.eventDate || tx.date,
-            eventSlot: tx.eventSlot || "Morning",
-            totalValue: tot,
-            totalPaid: paid,
-            lastPct: Number(tx.milestonePct || 20)
-          });
-        } else {
-          const existing = grouped.get(key);
-          existing.totalPaid += paid;
-          existing.totalValue = Math.max(existing.totalValue, tot);
-          existing.lastPct = Number(tx.milestonePct || existing.lastPct);
-        }
-      });
-
-      return Array.from(grouped.values()).map(b => {
-        const remaining = Math.max(0, b.totalValue - b.totalPaid);
-        const pctPaid = b.totalValue > 0 ? Math.round((b.totalPaid / b.totalValue) * 100) : 100;
-        const m70Amt = Math.round(b.totalValue * 0.70);
-        const m10Amt = Math.max(0, b.totalValue - Math.round(b.totalValue * 0.20) - m70Amt);
-        return { ...b, remaining, pctPaid, m70Amt, m10Amt };
-      });
-    }
-
-    function renderCustomerBalanceSchedule(myTx = null) {
-      if (!currentCustomer) return;
-      const listEl = document.getElementById("customerBalanceCardsList");
-      const tickerEl = document.getElementById("balanceReminderTicker");
-      const badgeEl = document.getElementById("balanceAlertBadge");
-      if (!listEl || !tickerEl) return;
-
-      const records = myTx || payments.filter(p => p.customerPhone === currentCustomer.phone);
-      const balances = getCustomerBookingBalances(records);
-      const pendingBalances = balances.filter(b => b.remaining > 0);
-
-      if (pendingBalances.length === 0) {
-        badgeEl.textContent = "All Paid";
-        badgeEl.className = "px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold";
-        tickerEl.textContent = "All balance installments are cleared. No pending balance dues at this time.";
-        listEl.innerHTML = balances.length
-          ? `<div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold text-center">✓ 100% of your booked event balance has been settled.</div>`
-          : `<div class="p-3 rounded-2xl bg-white/80 border border-sky-100 text-slate-600 text-center">Once you pay the 20% booking advance, your balance schedule and time-to-time reminders will appear here.</div>`;
-        return;
-      }
-
-      const totalPendingAll = pendingBalances.reduce((s, b) => s + b.remaining, 0);
-      badgeEl.textContent = `Due: ₹${totalPendingAll.toLocaleString("en-IN")}`;
-      badgeEl.className = "px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-[10px] font-extrabold";
-
-      const nowTimeStr = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
-      const alerts = pendingBalances.map(b => {
-        const nextStageLabel = b.pctPaid <= 25
-          ? `70% Setup Milestone (₹${b.m70Amt.toLocaleString("en-IN")}) & 10% Completion (₹${b.m10Amt.toLocaleString("en-IN")})`
-          : `Remaining Balance of ₹${b.remaining.toLocaleString("en-IN")}`;
-        return `[Reminder @ ${nowTimeStr}] Booking ${b.id} (${b.occasion} on ${b.eventDate} • ${b.eventSlot}): ₹${b.remaining.toLocaleString("en-IN")} balance remaining — ${nextStageLabel}.`;
-      });
-
-      tickerEl.innerHTML = `<span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5 align-middle"></span>` + alerts[reminderTickerIndex % alerts.length];
-
-      listEl.innerHTML = pendingBalances.map(b => {
-        const is20PaidOnly = b.pctPaid <= 25;
-        return `
-          <div class="p-3 rounded-2xl bg-white border border-sky-200 space-y-2 shadow-sm">
-            <div class="flex items-center justify-between gap-2">
-              <div>
-                <div class="font-extrabold text-slate-900">${b.id} • ${b.occasion}</div>
-                <div class="text-[11px] text-slate-600 font-semibold">Event: <strong>${b.eventDate}</strong> (${b.eventSlot} Slot) • ${b.city}</div>
-              </div>
-              <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 font-extrabold text-[11px]">
-                Balance: ₹${b.remaining.toLocaleString("en-IN")}
-              </span>
-            </div>
-
-            <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
-              <div class="rounded-xl bg-emerald-50 border border-emerald-200 p-1.5">
-                <div class="font-bold text-emerald-700">Paid (${b.pctPaid}%)</div>
-                <div class="font-extrabold text-emerald-900">₹${b.totalPaid.toLocaleString("en-IN")}</div>
-              </div>
-              <div class="rounded-xl bg-sky-50 border border-sky-200 p-1.5">
-                <div class="font-bold text-sky-700">${is20PaidOnly ? 'Next: 70% Setup' : 'Installment'}</div>
-                <div class="font-extrabold text-sky-900">₹${(is20PaidOnly ? Math.min(b.remaining, b.m70Amt) : b.remaining).toLocaleString("en-IN")}</div>
-              </div>
-              <div class="rounded-xl bg-amber-50 border border-amber-200 p-1.5">
-                <div class="font-bold text-amber-700">${is20PaidOnly ? 'Final: 10% Due' : 'Total Due'}</div>
-                <div class="font-extrabold text-amber-900">₹${(is20PaidOnly ? Math.max(0, b.remaining - b.m70Amt) : b.remaining).toLocaleString("en-IN")}</div>
-              </div>
-            </div>
-
-            <button onclick="openBalancePayModal('${b.id}')" class="btn-sky w-full py-2 rounded-xl text-xs font-extrabold">
-              Pay Balance Installment Now
-            </button>
-          </div>
-        `;
-      }).join("");
-
-      // Rotate reminder message every 6 seconds while customer is logged in
-      if (!balanceReminderInterval) {
-        balanceReminderInterval = setInterval(() => {
-          if (currentCustomer && !isAdminLoggedIn) {
-            reminderTickerIndex += 1;
-            renderCustomerBalanceSchedule();
-          }
-        }, 6000);
-      }
-    }
-
-    function openBalancePayModal(orderId) {
-      if (!currentCustomer) return;
-      const myTx = payments.filter(p => p.customerPhone === currentCustomer.phone);
-      const balances = getCustomerBookingBalances(myTx);
-      const target = balances.find(b => b.id === orderId);
-      if (!target || target.remaining <= 0) return;
-
-      document.getElementById("balModalSourceOrderId").value = target.id;
-      document.getElementById("balModalOrderId").textContent = target.id;
-      document.getElementById("balModalTotal").textContent = "₹" + target.totalValue.toLocaleString("en-IN");
-      document.getElementById("balModalPaid").textContent = "₹" + target.totalPaid.toLocaleString("en-IN");
-      document.getElementById("balModalRemaining").textContent = "₹" + target.remaining.toLocaleString("en-IN");
-
-      const sel = document.getElementById("balInstallmentSelect");
-      sel.innerHTML = "";
-      if (target.pctPaid <= 25 && target.remaining > target.m70Amt && target.m70Amt > 0) {
-        const opt70 = document.createElement("option");
-        opt70.value = JSON.stringify({ amount: target.m70Amt, pct: 70 });
-        opt70.textContent = `2nd Milestone • 70% Event Setup (₹${target.m70Amt.toLocaleString("en-IN")})`;
-        sel.appendChild(opt70);
-      }
-      const optRem = document.createElement("option");
-      optRem.value = JSON.stringify({ amount: target.remaining, pct: 100 });
-      optRem.textContent = `Pay Full Remaining Balance Now (₹${target.remaining.toLocaleString("en-IN")})`;
-      sel.appendChild(optRem);
-
-      syncBalancePayButton();
-      document.getElementById("balancePayModal").classList.remove("hidden");
-    }
-
-    function syncBalancePayButton() {
-      const val = JSON.parse(document.getElementById("balInstallmentSelect").value || '{"amount":0}');
-      document.getElementById("balConfirmAmtBtn").textContent = "₹" + Number(val.amount || 0).toLocaleString("en-IN");
-    }
-
-    function submitBalanceInstallment() {
-      if (!currentCustomer) return;
-      const orderId = document.getElementById("balModalSourceOrderId").value;
-      const chosen = JSON.parse(document.getElementById("balInstallmentSelect").value || '{"amount":0,"pct":10}');
-      const payAmt = Number(chosen.amount || 0);
-      if (payAmt <= 0) return;
-
-      const myTx = payments.filter(p => p.customerPhone === currentCustomer.phone && p.id === orderId);
-      const baseRec = myTx[0];
-      if (!baseRec) return;
-
-      const mode = document.getElementById("balPayModeSelect").value;
-      const utr = document.getElementById("balUtrInput").value.trim() || ("UTR" + Math.floor(100000000000 + Math.random() * 900000000000));
-      const todayStr = new Date().toISOString().split("T")[0];
-
-      const balancePaymentTx = {
-        id: orderId,
-        customerName: currentCustomer.name,
-        customerPhone: currentCustomer.phone,
-        city: baseRec.city,
-        district: baseRec.district,
-        occasion: baseRec.occasion,
-        venueType: baseRec.venueType || "Event Venue",
-        eventDate: baseRec.eventDate || baseRec.date,
-        eventSlot: baseRec.eventSlot || "Morning",
-        servicesList: baseRec.servicesList || "",
-        bookedServices: baseRec.bookedServices || [],
-        totalValue: Number(baseRec.totalValue || payAmt),
-        milestonePct: Number(chosen.pct || 10),
-        amountPaid: payAmt,
-        method: mode,
-        utr,
-        date: todayStr,
-        status: "Balance Paid"
-      };
-
-      payments.unshift(balancePaymentTx);
-      localStorage.setItem("ph_payments_v2", JSON.stringify(payments));
-
-      document.getElementById("balUtrInput").value = "";
-      closeModal("balancePayModal");
-      renderCustomerPaymentsList();
-      if (isAdminLoggedIn) {
-        renderAdminPaymentsAndCharts();
-      }
-      alert(`Balance payment of ₹${payAmt.toLocaleString("en-IN")} recorded for ${orderId}!`);
-    }
-
-    // =========================================================
-    // 8. ADMIN TABS, SERVICES UPDATE, CLOUD & ANALYTICS CHARTS
-    // =========================================================
-    function switchAdminTab(tab) {
-      const map = {
-        analytics: "Analytics",
-        services: "Services",
-        payment: "Payment",
-        cloud: "Cloud"
-      };
-      Object.keys(map).forEach(key => {
-        const suffix = map[key];
-        document.getElementById("adminTab" + suffix).classList.toggle("hidden", key !== tab);
-        document.getElementById("tabBtn" + suffix).className = key === tab
-          ? "py-2 px-1 rounded-xl bg-sky-600 text-white text-[11px] font-extrabold shadow-sm"
-          : "py-2 px-1 rounded-xl text-slate-700 text-[11px] font-bold";
-      });
-      if (tab === "analytics") {
-        renderAdminPaymentsAndCharts();
-      }
-    }
-
-    let customCategories = JSON.parse(localStorage.getItem("ph_custom_cats_v2")) || [];
-
-    function getAllCategories() {
-      return [...CATEGORIES, ...customCategories];
-    }
-
-    function populateAdminCategoryDropdown(selectedVal = null) {
-      const catSel = document.getElementById("admCatSelect");
-      const allCats = getAllCategories();
-      catSel.innerHTML =
-        allCats.map(c => `<option value="${c.id}">${c.name}</option>`).join("") +
-        `<option value="__CUSTOM__">+ Custom Service / Category Name...</option>`;
-      if (selectedVal) {
-        catSel.value = selectedVal;
-      }
-      toggleCustomCatField();
-    }
-
-    function toggleCustomCatField() {
-      const catVal = document.getElementById("admCatSelect").value;
-      const wrap = document.getElementById("admCustomCatWrap");
-      if (catVal === "__CUSTOM__") {
-        wrap.classList.remove("hidden");
-      } else {
-        wrap.classList.add("hidden");
-      }
-    }
-
-    function adminSaveService() {
-      const editId = document.getElementById("editServiceId").value;
-      let category = document.getElementById("admCatSelect").value;
-      const customCatText = document.getElementById("admCustomCatName").value.trim();
-      const name = document.getElementById("admItemName").value.trim();
-      const price = Number(document.getElementById("admItemPrice").value);
-      const urlInput = document.getElementById("admItemImgUrl").value.trim();
-      const fileInput = document.getElementById("admItemImgFile");
-
-      if (category === "__CUSTOM__") {
-        if (!customCatText) {
-          alert("Please enter your custom service / category name.");
-          return;
-        }
-        const slugId = "custom_" + customCatText.toLowerCase().replace(/[^a-z0-9]+/g, "_") + "_" + Date.now().toString().slice(-4);
-        const existingMatch = getAllCategories().find(c => c.name.toLowerCase() === customCatText.toLowerCase());
-        if (existingMatch) {
-          category = existingMatch.id;
-        } else {
-          const newCatObj = {
-            id: slugId,
-            name: customCatText,
-            svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.2 6.6H21l-5.5 4 2.1 6.4L12 16l-5.6 4 2.1-6.4L3 9.6h6.8L12 3z"/></svg>`
-          };
-          customCategories.push(newCatObj);
-          localStorage.setItem("ph_custom_cats_v2", JSON.stringify(customCategories));
-          category = newCatObj.id;
-        }
-      }
-
-      if (!name || !price) {
-        alert("Please enter service name and price.");
-        return;
-      }
-
-      const commitSave = (finalImage, sourceLabel) => {
-        if (editId) {
-          const idx = services.findIndex(s => s.id === editId);
-          if (idx > -1) {
-            services[idx] = {
-              ...services[idx],
-              category,
-              name,
-              price,
-              image: finalImage || services[idx].image,
-              source: sourceLabel || services[idx].source
-            };
-          }
-          alert("Service, price & photo updated successfully!");
-        } else {
-          services.unshift({
-            id: "srv-" + Date.now(),
-            category,
-            name,
-            price,
-            source: sourceLabel || "Admin Upload",
-            image: finalImage || "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80"
-          });
-          alert("New service & photo published live!");
-        }
-
-        localStorage.setItem("ph_services_v2", JSON.stringify(services));
-        resetServiceForm();
-        populateAdminCategoryDropdown(category);
-        renderCategories();
-        populateServiceDropdown();
-        renderCatalog();
-        renderAdminServicesList();
+    function addService(e) {
+      e.preventDefault();
+      const title = document.getElementById('srvTitle').value.trim();
+      const price = Number(document.getElementById('srvPrice').value);
+      const urlInput = document.getElementById('srvPhoto').value.trim();
+      const fileInput = document.getElementById('srvPhotoFile');
+      const details = document.getElementById('srvDetails').value.trim();
+
+      const finalizeAdd = (photoSrc) => {
+        state.services.unshift({
+          id: 's_' + Date.now(),
+          title,
+          price,
+          photo: photoSrc,
+          details
+        });
+        saveData();
+        e.target.reset();
+        renderAdminServices();
       };
 
       if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
-        reader.onload = (e) => commitSave(e.target.result, "Admin Gallery Upload");
+        reader.onload = (ev) => finalizeAdd(ev.target.result);
         reader.readAsDataURL(fileInput.files[0]);
+      } else if (urlInput) {
+        finalizeAdd(urlInput);
       } else {
-        const srcTag = urlInput.includes("instagram") ? "Instagram Sync" : (urlInput.includes("fb") || urlInput.includes("facebook") ? "Facebook Sync" : (urlInput ? "Cloud / Web URL" : ""));
-        commitSave(urlInput, srcTag);
+        alert('Please provide an Event Photo URL or upload an image file.');
       }
-    }
-
-    function editServiceItem(id) {
-      const srv = services.find(s => s.id === id);
-      if (!srv) return;
-      document.getElementById("editServiceId").value = srv.id;
-      document.getElementById("admCatSelect").value = srv.category;
-      document.getElementById("admItemName").value = srv.name;
-      document.getElementById("admItemPrice").value = srv.price;
-      document.getElementById("admItemImgUrl").value = srv.image.startsWith("data:") ? "" : srv.image;
-
-      document.getElementById("serviceFormTitle").textContent = "Edit Service, Price & Photo";
-      document.getElementById("saveServiceBtn").textContent = "Update Service & Photo";
-      document.getElementById("cancelEditServiceBtn").classList.remove("hidden");
-      document.getElementById("adminTabServices").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function resetServiceForm() {
-      document.getElementById("editServiceId").value = "";
-      document.getElementById("admCustomCatName").value = "";
-      document.getElementById("admItemName").value = "";
-      document.getElementById("admItemPrice").value = "";
-      document.getElementById("admItemImgUrl").value = "";
-      document.getElementById("admItemImgFile").value = "";
-      document.getElementById("serviceFormTitle").textContent = "Add New Service & Photo";
-      document.getElementById("saveServiceBtn").textContent = "Publish Service & Photo";
-      document.getElementById("cancelEditServiceBtn").classList.add("hidden");
-      toggleCustomCatField();
-    }
-
-    function renderAdminServicesList() {
-      const list = document.getElementById("adminServicesList");
-      list.innerHTML = services.map(s => `
-        <div class="flex items-center justify-between gap-2 p-2.5 rounded-2xl bg-white border border-sky-100 text-xs">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <img src="${s.image}" alt="" class="w-11 h-11 rounded-xl object-cover flex-shrink-0 bg-sky-50" />
-            <div class="min-w-0">
-              <div class="font-bold text-slate-900 truncate">${s.name}</div>
-              <div class="text-[11px] text-sky-700 font-extrabold">₹${Number(s.price).toLocaleString("en-IN")}</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1 flex-shrink-0">
-            <button onclick="editServiceItem('${s.id}')" class="px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-800 font-extrabold text-[10px]">Edit</button>
-            <button onclick="deleteService('${s.id}')" class="px-2 py-1.5 rounded-lg bg-rose-100 text-rose-700 font-bold text-[10px]">Del</button>
-          </div>
-        </div>
-      `).join("");
     }
 
     function deleteService(id) {
-      services = services.filter(s => s.id !== id);
-      localStorage.setItem("ph_services_v2", JSON.stringify(services));
-      populateServiceDropdown();
-      renderCatalog();
-      renderAdminServicesList();
+      state.services = state.services.filter(s => s.id !== id);
+      saveData();
+      renderAdminServices();
     }
 
-    function savePaymentHelpSettings() {
-      appConfig.upi = document.getElementById("admUpiInput").value.trim() || appConfig.upi;
-      appConfig.accHolder = document.getElementById("admAccHolderInput").value.trim() || appConfig.accHolder;
-      appConfig.bank = document.getElementById("admBankInput").value.trim() || appConfig.bank;
-      appConfig.qrUrl = document.getElementById("admQrUrlInput").value.trim();
-
-      appConfig.phone = document.getElementById("admPhoneInput").value.trim() || appConfig.phone;
-      appConfig.whatsapp = document.getElementById("admWhatsappInput").value.trim() || appConfig.whatsapp;
-      appConfig.email = document.getElementById("admEmailInput").value.trim() || appConfig.email;
-
-      localStorage.setItem("ph_config_v2", JSON.stringify(appConfig));
-      applyBrandConfig();
-      alert("Official Payment & Help Desk details updated!");
+    function renderAdminServices() {
+      const tbody = document.getElementById('adminServicesTableBody');
+      tbody.innerHTML = state.services.map(srv => `
+        <tr>
+          <td><img src="${srv.photo}" alt="${escapeHtml(srv.title)}" style="width:76px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;" onclick="openImageOnly('${srv.id}')" /></td>
+          <td><strong>${escapeHtml(srv.title)}</strong></td>
+          <td><strong>₹${Number(srv.price).toLocaleString('en-IN')}</strong></td>
+          <td class="details-list" style="margin-bottom:0;">${escapeHtml(srv.details)}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteService('${srv.id}')">Remove</button></td>
+        </tr>
+      `).join('');
     }
 
-    function saveCloudSettings() {
-      appConfig.cloudLabel = document.getElementById("admCloudLabelInput").value.trim() || "Cloud Storage";
-      appConfig.cloudUrl = document.getElementById("admCloudUrlInput").value.trim() || "https://drive.google.com";
-      localStorage.setItem("ph_config_v2", JSON.stringify(appConfig));
-      applyBrandConfig();
-      alert("Cloud Storage link saved!");
-    }
+    function renderAdminBookings() {
+      const selectedDate = document.getElementById('adminDateFilter').value;
+      const list = selectedDate
+        ? state.bookings.filter(b => b.date === selectedDate)
+        : state.bookings;
 
-    function exportJsonBackup() {
-      const payload = {
-        exportedAt: new Date().toISOString(),
-        config: appConfig,
-        services,
-        payments
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "PartyHub_SR_Events_Backup.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function saveBrandSettings() {
-      const newName = document.getElementById("admBrandNameInput").value.trim();
-      const newSub = document.getElementById("admBrandSubInput").value.trim();
-      const logoUrl = document.getElementById("admLogoUrlInput").value.trim();
-      const logoFile = document.getElementById("admLogoFileInput");
-
-      if (newName) appConfig.brandName = newName;
-      if (newSub) appConfig.brandSub = newSub;
-
-      const finish = (finalLogo) => {
-        appConfig.logoUrl = finalLogo;
-        localStorage.setItem("ph_config_v2", JSON.stringify(appConfig));
-        applyBrandConfig();
-        alert("App Name & Logo updated!");
-      };
-
-      if (logoFile.files && logoFile.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => finish(e.target.result);
-        reader.readAsDataURL(logoFile.files[0]);
-      } else {
-        finish(logoUrl);
-      }
-    }
-
-    // =========================================================
-    // 9. ADMIN PAYMENTS LEDGER + DAILY & MONTHLY CHARTS
-    // =========================================================
-    function setAdminDateFilterToday() {
-      const todayStr = new Date().toISOString().split("T")[0];
-      const inp = document.getElementById("adminFilterDateInput");
-      if (inp) {
-        inp.value = todayStr;
-        renderAdminPaymentsAndCharts();
-      }
-    }
-
-    function clearAdminDateFilter() {
-      const inp = document.getElementById("adminFilterDateInput");
-      if (inp) {
-        inp.value = "";
-        renderAdminPaymentsAndCharts();
-      }
-    }
-
-    function renderAdminPaymentsAndCharts() {
-      // Always sync latest customer bookings & balance installments from localStorage
-      payments = JSON.parse(localStorage.getItem("ph_payments_v2")) || payments;
-
-      const todayStr = new Date().toISOString().split("T")[0];
-      const currentMonthPrefix = todayStr.slice(0, 7); // YYYY-MM
-
-      let todayTotal = 0;
-      let monthTotal = 0;
-      let grandTotal = 0;
-
-      payments.forEach(p => {
-        const amt = Number(p.amountPaid) || 0;
-        grandTotal += amt;
-        if (p.date === todayStr) todayTotal += amt;
-        if ((p.date || "").startsWith(currentMonthPrefix)) monthTotal += amt;
-      });
-
-      document.getElementById("kpiTodayAmt").textContent = "₹" + todayTotal.toLocaleString("en-IN");
-      document.getElementById("kpiMonthAmt").textContent = "₹" + monthTotal.toLocaleString("en-IN");
-      document.getElementById("kpiTotalAmt").textContent = "₹" + grandTotal.toLocaleString("en-IN");
-
-      // Aggregate by Booking Order ID so cumulative Paid vs Remaining Balance & Event Details display cleanly
-      const bookingMap = new Map();
-      payments.forEach(p => {
-        const key = p.id;
-        const tot = Number(p.totalValue || p.amountPaid || 0);
-        const paid = Number(p.amountPaid || 0);
-        if (!bookingMap.has(key)) {
-          bookingMap.set(key, {
-            id: p.id,
-            customerName: p.customerName || "Customer",
-            customerPhone: p.customerPhone || "",
-            state: p.state || "Andhra Pradesh",
-            city: p.city || "",
-            district: p.district || "",
-            occasion: p.occasion || "Event",
-            venueType: p.venueType || "Indoor / Outdoor",
-            eventDate: p.eventDate || p.date,
-            eventSlot: p.eventSlot || "Morning",
-            servicesList: p.servicesList || "",
-            totalValue: tot,
-            cumulativePaid: paid,
-            installments: [{
-              pct: p.milestonePct || 20,
-              amount: paid,
-              method: p.method || "UPI",
-              utr: p.utr || "N/A",
-              date: p.date,
-              status: p.status || "Received"
-            }]
-          });
-        } else {
-          const b = bookingMap.get(key);
-          b.cumulativePaid += paid;
-          b.totalValue = Math.max(b.totalValue, tot);
-          if (!b.servicesList && p.servicesList) b.servicesList = p.servicesList;
-          if (!b.eventDate && p.eventDate) b.eventDate = p.eventDate;
-          b.installments.push({
-            pct: p.milestonePct || 10,
-            amount: paid,
-            method: p.method || "UPI",
-            utr: p.utr || "N/A",
-            date: p.date,
-            status: p.status || "Balance Paid"
-          });
-        }
-      });
-
-      // Preserve bookedServices across grouped records
-      payments.forEach(p => {
-        const b = bookingMap.get(p.id);
-        if (b && (!b.bookedServices || b.bookedServices.length === 0) && Array.isArray(p.bookedServices) && p.bookedServices.length > 0) {
-          b.bookedServices = p.bookedServices;
-        }
-      });
-
-      const allBookings = Array.from(bookingMap.values());
-      const filterDateInput = document.getElementById("adminFilterDateInput");
-      const selectedAdminDate = filterDateInput ? filterDateInput.value : "";
-      const summaryBar = document.getElementById("adminDateSummaryBar");
-
-      const filteredBookings = selectedAdminDate
-        ? allBookings.filter(b => (b.eventDate || "") === selectedAdminDate)
-        : allBookings;
-
-      if (summaryBar) {
-        if (selectedAdminDate) {
-          const slotsTaken = filteredBookings.map(b => b.eventSlot).join(" & ") || "None";
-          summaryBar.innerHTML = `
-            <span>Date: <strong>${selectedAdminDate}</strong> (${filteredBookings.length}/2 Slots Booked)</span>
-            <span class="px-2 py-0.5 rounded-full bg-sky-600 text-white text-[10px]">Slots: ${slotsTaken}</span>
-          `;
-        } else {
-          summaryBar.innerHTML = `<span>Showing all <strong>${allBookings.length}</strong> bookings across all dates</span><span class="text-sky-700">Pick a date above to filter</span>`;
-        }
+      const tbody = document.getElementById('adminBookingsTableBody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;">No events scheduled for the selected date.</td></tr>';
+        return;
       }
 
-      document.getElementById("adminTxCountBadge").textContent = selectedAdminDate
-        ? `${filteredBookings.length} on ${selectedAdminDate}`
-        : `${allBookings.length} Bookings`;
-
-      const ledger = document.getElementById("adminPaymentsLedger");
-      if (filteredBookings.length === 0) {
-        ledger.innerHTML = selectedAdminDate
-          ? `<div class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-1">
-               <div class="font-extrabold text-slate-800">No bookings found for ${selectedAdminDate}</div>
-               <div class="text-[11px] text-slate-500">Both Morning & Afternoon slots are open on this date.</div>
-             </div>`
-          : `<div class="text-xs text-slate-500 text-center py-4">No customer bookings received yet.</div>`;
-      } else {
-        ledger.innerHTML = filteredBookings.map(b => {
-          const totalVal = b.totalValue;
-          const paidVal = b.cumulativePaid;
-          const remainingBal = Math.max(0, totalVal - paidVal);
-          const pctPaid = totalVal > 0 ? Math.min(100, Math.round((paidVal / totalVal) * 100)) : 100;
-          const evDate = b.eventDate || "Not Set";
-          const evSlot = b.eventSlot || "Morning";
-
-          // Resolve service cards with pictures (from stored bookedServices or matched against current services catalog)
-          let visualServices = Array.isArray(b.bookedServices) && b.bookedServices.length > 0 ? b.bookedServices : [];
-          if (visualServices.length === 0 && b.servicesList) {
-            visualServices = b.servicesList.split(",").map(raw => {
-              const cleanName = raw.replace(/\(₹[^)]+\)/g, "").trim();
-              const matched = services.find(s => s.name.toLowerCase().includes(cleanName.toLowerCase()) || cleanName.toLowerCase().includes(s.name.toLowerCase()));
-              return {
-                name: raw.trim(),
-                price: matched ? matched.price : 0,
-                image: matched ? matched.image : "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80"
-              };
-            });
-          }
-
-          const servicePicturesHtml = visualServices.length > 0
-            ? `<div class="space-y-1.5">
-                 <div class="text-[10px] font-extrabold text-sky-900 uppercase tracking-wider">Booked Services & Pictures (${visualServices.length})</div>
-                 <div class="grid grid-cols-1 gap-1.5">
-                   ${visualServices.map(sv => `
-                     <div class="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-sky-100">
-                       <img src="${sv.image}" alt="${sv.name}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-sky-100 border border-sky-200" onerror="this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80'" />
-                       <div class="min-w-0 flex-1">
-                         <div class="text-[11px] font-extrabold text-slate-900 leading-snug">${sv.name}</div>
-                         ${sv.price ? `<div class="text-[11px] font-extrabold text-sky-700 mt-0.5">₹${Number(sv.price).toLocaleString("en-IN")}</div>` : ""}
-                       </div>
-                     </div>
-                   `).join("")}
-                 </div>
-               </div>`
-            : "";
-
-          const installmentsHtml = b.installments.map(inst => `
-            <div class="flex items-center justify-between text-[10px] text-slate-700 bg-white px-2.5 py-1.5 rounded-lg border border-slate-100">
-              <span>• Paid <strong>₹${Number(inst.amount).toLocaleString("en-IN")}</strong> (${inst.status}) via <strong>${inst.method}</strong> on ${inst.date}</span>
-              <span class="font-mono text-slate-500">${inst.utr}</span>
-            </div>
-          `).join("");
-
-          return `
-          <div class="p-3.5 rounded-2xl bg-white border-2 border-sky-200 text-xs space-y-2.5 shadow-sm">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <div class="font-extrabold text-slate-900 text-sm">${b.customerName}</div>
-                <div class="text-[11px] font-bold text-sky-700">+91 ${b.customerPhone} • ID: ${b.id}</div>
-              </div>
-              <div class="text-right flex-shrink-0">
-                <span class="inline-block px-2.5 py-1 rounded-xl bg-sky-600 text-white font-extrabold text-[10px]">
-                  ${evDate}
-                </span>
-                <div class="text-[10px] font-extrabold text-sky-800 mt-0.5">${evSlot} Slot</div>
-              </div>
-            </div>
-
-            <!-- Service Pictures & Names -->
-            ${servicePicturesHtml}
-
-            <!-- Chosen Event Details -->
-            <div class="text-[11px] text-slate-800 bg-sky-50/70 rounded-xl p-2.5 border border-sky-100 space-y-1">
-              <div class="font-extrabold text-sky-900 uppercase text-[10px] tracking-wider">Event Details</div>
-              <div><strong>Event Date & Time Slot:</strong> ${evDate} • ${evSlot} Slot</div>
-              <div><strong>Occasion & Venue:</strong> ${b.occasion} • ${b.venueType}</div>
-              <div><strong>Location:</strong> ${b.city}, ${b.district} District, ${b.state}</div>
-            </div>
-
-            <!-- Payment & Balance Breakdown -->
-            <div class="grid grid-cols-3 gap-1.5 text-center">
-              <div class="rounded-xl bg-slate-50 p-2 border border-slate-200">
-                <div class="text-[9px] font-bold text-slate-500 uppercase">Total Bill</div>
-                <div class="text-xs font-extrabold text-slate-900 mt-0.5">₹${totalVal.toLocaleString("en-IN")}</div>
-              </div>
-              <div class="rounded-xl bg-emerald-50 p-2 border border-emerald-200">
-                <div class="text-[9px] font-bold text-emerald-700 uppercase">Paid (${pctPaid}%)</div>
-                <div class="text-xs font-extrabold text-emerald-800 mt-0.5">₹${paidVal.toLocaleString("en-IN")}</div>
-              </div>
-              <div class="rounded-xl ${remainingBal > 0 ? 'bg-amber-50 border-amber-300' : 'bg-emerald-50 border-emerald-200'} p-2 border">
-                <div class="text-[9px] font-bold ${remainingBal > 0 ? 'text-amber-700' : 'text-emerald-700'} uppercase">Remaining Bal</div>
-                <div class="text-xs font-extrabold ${remainingBal > 0 ? 'text-amber-800' : 'text-emerald-800'} mt-0.5">₹${remainingBal.toLocaleString("en-IN")}</div>
-              </div>
-            </div>
-
-            <!-- Payment Installment Log -->
-            <div class="space-y-1 pt-0.5">
-              <div class="text-[10px] font-extrabold text-slate-500 uppercase">Payment Details & UTR History:</div>
-              ${installmentsHtml}
-            </div>
-          </div>
-        `;
-        }).join("");
-      }
-
-      // Build Last 7 Days Daily Series
-      const dailyLabels = [];
-      const dailyData = [];
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        const iso = d.toISOString().split("T")[0];
-        const shortLabel = d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
-        dailyLabels.push(shortLabel);
-        const daySum = payments
-          .filter(p => p.date === iso)
-          .reduce((s, p) => s + Number(p.amountPaid || 0), 0);
-        dailyData.push(daySum);
-      }
-
-      // Build Monthly Series (Jan - Dec of current year)
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const yearStr = new Date().getFullYear().toString();
-      const monthlyData = monthNames.map((_, mIdx) => {
-        const mm = String(mIdx + 1).padStart(2, "0");
-        const prefix = `${yearStr}-${mm}`;
-        return payments
-          .filter(p => (p.date || "").startsWith(prefix))
-          .reduce((s, p) => s + Number(p.amountPaid || 0), 0);
-      });
-
-      if (typeof Chart !== "undefined") {
-        const dailyCtx = document.getElementById("dailyPaymentChart").getContext("2d");
-        if (dailyChartInstance) dailyChartInstance.destroy();
-        dailyChartInstance = new Chart(dailyCtx, {
-          type: "bar",
-          data: {
-            labels: dailyLabels,
-            datasets: [{
-              label: "Daily Collection (₹)",
-              data: dailyData,
-              backgroundColor: "rgba(2, 132, 199, 0.85)",
-              borderRadius: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              y: { beginAtZero: true, ticks: { font: { size: 10 } } },
-              x: { ticks: { font: { size: 10 } } }
-            }
-          }
-        });
-
-        const monthlyCtx = document.getElementById("monthlyPaymentChart").getContext("2d");
-        if (monthlyChartInstance) monthlyChartInstance.destroy();
-        monthlyChartInstance = new Chart(monthlyCtx, {
-          type: "line",
-          data: {
-            labels: monthNames,
-            datasets: [{
-              label: "Monthly Revenue (₹)",
-              data: monthlyData,
-              borderColor: "#059669",
-              backgroundColor: "rgba(16, 185, 129, 0.16)",
-              fill: true,
-              tension: 0.35,
-              pointRadius: 3.5
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              y: { beginAtZero: true, ticks: { font: { size: 10 } } },
-              x: { ticks: { font: { size: 9 } } }
-            }
-          }
-        });
-      }
+      tbody.innerHTML = list.map(b => `
+        <tr>
+          <td><strong>${escapeHtml(b.date)}</strong></td>
+          <td>
+            <button class="customer-link" onclick="openBookingPhoto('${b.id}')">${escapeHtml(b.customerName)}</button>
+            <div class="brand-sub">${escapeHtml(b.customerPhone)}</div>
+          </td>
+          <td>${escapeHtml(b.city)}<br /><span class="badge">${escapeHtml(b.slot)} &bull; ${escapeHtml(b.exactTime)}</span></td>
+          <td>
+            <strong>${escapeHtml(b.serviceTitle)}</strong>
+            <div class="details-list" style="margin:4px 0 0;">${escapeHtml(b.details)}</div>
+          </td>
+          <td><strong>₹${Number(b.price).toLocaleString('en-IN')}</strong></td>
+        </tr>
+      `).join('');
     }
 
-    // =========================================================
-    // 10. MODAL HELPERS
-    // =========================================================
-    function openHelpDesk() {
-      document.getElementById("helpDeskModal").classList.remove("hidden");
+    function clearAdminDate() {
+      document.getElementById('adminDateFilter').value = '';
+      renderAdminBookings();
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.add("hidden");
+    function openBookingPhoto(bookingId) {
+      const b = state.bookings.find(item => item.id === bookingId);
+      if (!b) return;
+      document.getElementById('modalTitle').textContent = `${b.customerName} — ${b.serviceTitle}`;
+      document.getElementById('modalMeta').textContent = `Date: ${b.date} | City: ${b.city} | ${b.slot} at ${b.exactTime} | Price: ₹${Number(b.price).toLocaleString('en-IN')}`;
+      document.getElementById('modalImage').src = b.photo;
+      document.getElementById('modalDetails').textContent = b.details;
+      document.getElementById('photoModal').classList.add('open');
     }
 
-    function touchSessionActivity() {
-      if (currentCustomer || isAdminLoggedIn) {
-        localStorage.setItem("ph_last_active_ts", String(Date.now()));
-      }
-      resetInactivityTimer();
+    function openImageOnly(serviceId) {
+      const s = state.services.find(item => item.id === serviceId);
+      if (!s) return;
+      document.getElementById('modalTitle').textContent = s.title;
+      document.getElementById('modalMeta').textContent = `Price: ₹${Number(s.price).toLocaleString('en-IN')}`;
+      document.getElementById('modalImage').src = s.photo;
+      document.getElementById('modalDetails').textContent = s.details;
+      document.getElementById('photoModal').classList.add('open');
     }
 
-    function resetInactivityTimer() {
-      if (inactivityTimer) clearTimeout(inactivityTimer);
-      if (!currentCustomer && !isAdminLoggedIn) return;
-      inactivityTimer = setTimeout(() => {
-        if (isAdminLoggedIn) {
-          logoutAdmin();
-          alert("Session expired: You have been automatically logged out after 15 minutes of inactivity.");
-        } else if (currentCustomer) {
-          logoutCustomer();
-          alert("Session expired: You have been automatically logged out after 15 minutes of inactivity.");
-        }
-      }, INACTIVITY_LIMIT_MS);
+    function closePhotoModal() {
+      document.getElementById('photoModal').classList.remove('open');
     }
 
-    function initAutoLogoutWatchers() {
-      const activityEvents = ["click", "touchstart", "mousemove", "keydown", "scroll"];
-      activityEvents.forEach(evt => {
-        window.addEventListener(evt, () => {
-          if (currentCustomer || isAdminLoggedIn) {
-            if (isSessionExpired()) {
-              if (isAdminLoggedIn) logoutAdmin();
-              if (currentCustomer) logoutCustomer();
-              alert("Session expired due to 15 minutes of inactivity.");
-            } else {
-              touchSessionActivity();
-            }
-          }
-        }, { passive: true });
-      });
-
-      // Check when returning to the app if 15 minutes have passed; otherwise stay logged in
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible" && (currentCustomer || isAdminLoggedIn)) {
-          if (isSessionExpired()) {
-            if (isAdminLoggedIn) logoutAdmin();
-            if (currentCustomer) logoutCustomer();
-            alert("Session expired due to 15 minutes of inactivity.");
-          } else {
-            resetInactivityTimer();
-          }
-        }
-      });
-
-      touchSessionActivity();
+    function logoutAll() {
+      state.role = null;
+      state.selectedSlot = '';
+      document.getElementById('adminView').classList.add('hidden');
+      document.getElementById('customerView').classList.add('hidden');
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerLoginCard').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.add('hidden');
+      document.getElementById('adminLoginBtn').classList.remove('hidden');
     }
 
-    window.addEventListener("storage", (e) => {
-      if (e.key === "ph_payments_v2") {
-        payments = JSON.parse(localStorage.getItem("ph_payments_v2")) || [];
-        updateSlotAvailability();
-        if (currentCustomer) renderCustomerPaymentsList();
-        if (isAdminLoggedIn) renderAdminPaymentsAndCharts();
-      }
-    });
-
-    window.addEventListener("DOMContentLoaded", () => {
-      initApp();
-      initAutoLogoutWatchers();
-    });
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
   </script>
 </body>
 </html>
