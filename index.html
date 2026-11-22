@@ -1753,13 +1753,14 @@
         id: orderId,
         customerName: currentCustomer.name,
         customerPhone: currentCustomer.phone,
+        state: document.getElementById("stateSelect").value,
         city: document.getElementById("citySelect").value,
         district: document.getElementById("districtSelect").value,
         occasion: document.getElementById("occasionSelect").value,
         venueType: document.getElementById("venueTypeSelect").value,
         eventDate: chosenDate,
         eventSlot: chosenSlot,
-        servicesList: cart.map(c => c.name).join(", "),
+        servicesList: cart.map(c => `${c.name} (₹${Number(c.price).toLocaleString("en-IN")})`).join(", "),
         totalValue: total,
         milestonePct: pct,
         amountPaid: paidNowNum,
@@ -2286,6 +2287,9 @@
     // 9. ADMIN PAYMENTS LEDGER + DAILY & MONTHLY CHARTS
     // =========================================================
     function renderAdminPaymentsAndCharts() {
+      // Always sync latest customer bookings & balance installments from localStorage
+      payments = JSON.parse(localStorage.getItem("ph_payments_v2")) || payments;
+
       const todayStr = new Date().toISOString().split("T")[0];
       const currentMonthPrefix = todayStr.slice(0, 7); // YYYY-MM
 
@@ -2303,55 +2307,117 @@
       document.getElementById("kpiTodayAmt").textContent = "₹" + todayTotal.toLocaleString("en-IN");
       document.getElementById("kpiMonthAmt").textContent = "₹" + monthTotal.toLocaleString("en-IN");
       document.getElementById("kpiTotalAmt").textContent = "₹" + grandTotal.toLocaleString("en-IN");
-      document.getElementById("adminTxCountBadge").textContent = `${payments.length} Bookings`;
 
-      // Render Customer Booking Details, Event Date & Slot, Paid & Remaining Balance Cards
+      // Aggregate by Booking Order ID so cumulative Paid vs Remaining Balance & Event Details display cleanly
+      const bookingMap = new Map();
+      payments.forEach(p => {
+        const key = p.id;
+        const tot = Number(p.totalValue || p.amountPaid || 0);
+        const paid = Number(p.amountPaid || 0);
+        if (!bookingMap.has(key)) {
+          bookingMap.set(key, {
+            id: p.id,
+            customerName: p.customerName || "Customer",
+            customerPhone: p.customerPhone || "",
+            state: p.state || "Andhra Pradesh",
+            city: p.city || "",
+            district: p.district || "",
+            occasion: p.occasion || "Event",
+            venueType: p.venueType || "Indoor / Outdoor",
+            eventDate: p.eventDate || p.date,
+            eventSlot: p.eventSlot || "Morning",
+            servicesList: p.servicesList || "",
+            totalValue: tot,
+            cumulativePaid: paid,
+            installments: [{
+              pct: p.milestonePct || 20,
+              amount: paid,
+              method: p.method || "UPI",
+              utr: p.utr || "N/A",
+              date: p.date,
+              status: p.status || "Received"
+            }]
+          });
+        } else {
+          const b = bookingMap.get(key);
+          b.cumulativePaid += paid;
+          b.totalValue = Math.max(b.totalValue, tot);
+          if (!b.servicesList && p.servicesList) b.servicesList = p.servicesList;
+          if (!b.eventDate && p.eventDate) b.eventDate = p.eventDate;
+          b.installments.push({
+            pct: p.milestonePct || 10,
+            amount: paid,
+            method: p.method || "UPI",
+            utr: p.utr || "N/A",
+            date: p.date,
+            status: p.status || "Balance Paid"
+          });
+        }
+      });
+
+      const bookingsList = Array.from(bookingMap.values());
+      document.getElementById("adminTxCountBadge").textContent = `${bookingsList.length} Bookings (${payments.length} Payments)`;
+
       const ledger = document.getElementById("adminPaymentsLedger");
-      if (payments.length === 0) {
+      if (bookingsList.length === 0) {
         ledger.innerHTML = `<div class="text-xs text-slate-500 text-center py-4">No customer bookings received yet.</div>`;
       } else {
-        ledger.innerHTML = payments.map(p => {
-          const totalVal = Number(p.totalValue || p.amountPaid || 0);
-          const paidVal = Number(p.amountPaid || 0);
+        ledger.innerHTML = bookingsList.map(b => {
+          const totalVal = b.totalValue;
+          const paidVal = b.cumulativePaid;
           const remainingBal = Math.max(0, totalVal - paidVal);
-          const evDate = p.eventDate || p.date;
-          const evSlot = p.eventSlot || "Morning";
+          const pctPaid = totalVal > 0 ? Math.min(100, Math.round((paidVal / totalVal) * 100)) : 100;
+          const evDate = b.eventDate || "Not Set";
+          const evSlot = b.eventSlot || "Morning";
+
+          const installmentsHtml = b.installments.map(inst => `
+            <div class="flex items-center justify-between text-[10px] text-slate-600 bg-white px-2 py-1 rounded-lg border border-slate-100">
+              <span>• Paid <strong>₹${Number(inst.amount).toLocaleString("en-IN")}</strong> (${inst.status}) via <strong>${inst.method}</strong> on ${inst.date}</span>
+              <span class="font-mono text-slate-500">${inst.utr}</span>
+            </div>
+          `).join("");
+
           return `
-          <div class="p-3.5 rounded-2xl bg-white border border-sky-100 text-xs space-y-1.5 shadow-sm">
-            <div class="flex items-center justify-between gap-2">
+          <div class="p-3.5 rounded-2xl bg-white border border-sky-200 text-xs space-y-2 shadow-sm">
+            <div class="flex items-start justify-between gap-2">
               <div class="min-w-0">
-                <div class="font-extrabold text-slate-900 truncate">${p.customerName}</div>
-                <div class="text-[11px] font-bold text-sky-700">+91 ${p.customerPhone} • ID: ${p.id}</div>
+                <div class="font-extrabold text-slate-900 text-sm">${b.customerName}</div>
+                <div class="text-[11px] font-bold text-sky-700">+91 ${b.customerPhone} • Booking ID: ${b.id}</div>
               </div>
-              <span class="px-2.5 py-1 rounded-xl bg-sky-100 text-sky-900 font-extrabold text-[10px] flex-shrink-0">
-                ${evDate} • ${evSlot}
-              </span>
-            </div>
-
-            <div class="text-[11px] text-slate-700 bg-slate-50 rounded-xl p-2 border border-slate-100 space-y-0.5">
-              <div><strong>Occasion:</strong> ${p.occasion} (${p.venueType || "Event Venue"})</div>
-              <div><strong>Location:</strong> ${p.city}, ${p.district} Dist.</div>
-              ${p.servicesList ? `<div class="truncate"><strong>Services:</strong> ${p.servicesList}</div>` : ""}
-            </div>
-
-            <div class="grid grid-cols-3 gap-1.5 pt-0.5 text-center">
-              <div class="rounded-xl bg-slate-50 p-1.5 border border-slate-200">
-                <div class="text-[9px] font-bold text-slate-500 uppercase">Total Bill</div>
-                <div class="text-[11px] font-extrabold text-slate-900">₹${totalVal.toLocaleString("en-IN")}</div>
-              </div>
-              <div class="rounded-xl bg-emerald-50 p-1.5 border border-emerald-200">
-                <div class="text-[9px] font-bold text-emerald-700 uppercase">Paid (${p.milestonePct}%)</div>
-                <div class="text-[11px] font-extrabold text-emerald-800">₹${paidVal.toLocaleString("en-IN")}</div>
-              </div>
-              <div class="rounded-xl ${remainingBal > 0 ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'} p-1.5 border">
-                <div class="text-[9px] font-bold ${remainingBal > 0 ? 'text-amber-700' : 'text-emerald-700'} uppercase">Balance Due</div>
-                <div class="text-[11px] font-extrabold ${remainingBal > 0 ? 'text-amber-800' : 'text-emerald-800'}">₹${remainingBal.toLocaleString("en-IN")}</div>
+              <div class="text-right flex-shrink-0">
+                <span class="inline-block px-2.5 py-1 rounded-xl bg-sky-600 text-white font-extrabold text-[10px]">
+                  Event Date: ${evDate}
+                </span>
+                <div class="text-[10px] font-extrabold text-sky-800 mt-0.5">${evSlot} Slot</div>
               </div>
             </div>
 
-            <div class="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
-              <span>Paid On: <strong>${p.date}</strong> via <strong>${p.method}</strong></span>
-              <span class="font-mono">UTR: ${p.utr || "N/A"}</span>
+            <div class="text-[11px] text-slate-800 bg-sky-50/70 rounded-xl p-2.5 border border-sky-100 space-y-1">
+              <div class="font-extrabold text-sky-900 uppercase text-[10px] tracking-wider">Chosen Event Details</div>
+              <div><strong>Event Date & Slot:</strong> ${evDate} (${evSlot} Slot)</div>
+              <div><strong>Occasion & Venue:</strong> ${b.occasion} • ${b.venueType}</div>
+              <div><strong>Location:</strong> ${b.city}, ${b.district} District, ${b.state}</div>
+              <div><strong>Selected Services:</strong> <span class="text-slate-700 font-semibold">${b.servicesList || "Custom Event Package"}</span></div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 text-center">
+              <div class="rounded-xl bg-slate-50 p-2 border border-slate-200">
+                <div class="text-[9px] font-bold text-slate-500 uppercase">Total Package</div>
+                <div class="text-xs font-extrabold text-slate-900 mt-0.5">₹${totalVal.toLocaleString("en-IN")}</div>
+              </div>
+              <div class="rounded-xl bg-emerald-50 p-2 border border-emerald-200">
+                <div class="text-[9px] font-bold text-emerald-700 uppercase">Total Paid (${pctPaid}%)</div>
+                <div class="text-xs font-extrabold text-emerald-800 mt-0.5">₹${paidVal.toLocaleString("en-IN")}</div>
+              </div>
+              <div class="rounded-xl ${remainingBal > 0 ? 'bg-amber-50 border-amber-300' : 'bg-emerald-50 border-emerald-200'} p-2 border">
+                <div class="text-[9px] font-bold ${remainingBal > 0 ? 'text-amber-700' : 'text-emerald-700'} uppercase">Remaining Balance</div>
+                <div class="text-xs font-extrabold ${remainingBal > 0 ? 'text-amber-800' : 'text-emerald-800'} mt-0.5">₹${remainingBal.toLocaleString("en-IN")}</div>
+              </div>
+            </div>
+
+            <div class="space-y-1 pt-0.5">
+              <div class="text-[10px] font-extrabold text-slate-500 uppercase">Installment & Balance Payment Log:</div>
+              ${installmentsHtml}
             </div>
           </div>
         `;
@@ -2501,6 +2567,15 @@
 
       touchSessionActivity();
     }
+
+    window.addEventListener("storage", (e) => {
+      if (e.key === "ph_payments_v2") {
+        payments = JSON.parse(localStorage.getItem("ph_payments_v2")) || [];
+        updateSlotAvailability();
+        if (currentCustomer) renderCustomerPaymentsList();
+        if (isAdminLoggedIn) renderAdminPaymentsAndCharts();
+      }
+    });
 
     window.addEventListener("DOMContentLoaded", () => {
       initApp();
