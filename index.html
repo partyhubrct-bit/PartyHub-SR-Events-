@@ -322,8 +322,20 @@
           </div>
           <div>
             <label class="block text-[11px] font-bold text-slate-700 mb-1">Event Date</label>
-            <input id="eventDateInput" type="date" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
+            <input id="eventDateInput" type="date" onchange="updateSlotAvailability()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold" />
           </div>
+        </div>
+
+        <div class="rounded-2xl bg-sky-50/90 border border-sky-200 p-2.5 space-y-1">
+          <div class="flex items-center justify-between">
+            <label class="block text-[11px] font-extrabold text-slate-800">Event Time Slot (Max 2 Bookings / Date)</label>
+            <span id="slotStatusBadge" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">2 Slots Open</span>
+          </div>
+          <select id="eventSlotSelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
+            <option value="Morning">Morning Slot (6:00 AM – 1:00 PM)</option>
+            <option value="Afternoon">Afternoon Slot (2:00 PM – 10:00 PM)</option>
+          </select>
+          <p id="slotHelperMsg" class="text-[10px] font-semibold text-sky-800">Both Morning & Afternoon slots are available for this date.</p>
         </div>
 
         <div class="grid grid-cols-2 gap-2.5">
@@ -488,13 +500,13 @@
           </div>
         </div>
 
-        <!-- Customer Sent Payments Live Feed -->
+        <!-- Customer Bookings & Remaining Balance Ledger -->
         <div class="glass-card rounded-3xl p-4 space-y-2.5">
           <div class="flex items-center justify-between">
-            <h3 class="text-sm font-extrabold text-slate-900">Customer Sent Payments Ledger</h3>
-            <span id="adminTxCountBadge" class="text-[11px] font-extrabold text-sky-700">0 Payments</span>
+            <h3 class="text-sm font-extrabold text-slate-900">Customer Bookings, Dates & Balance Due</h3>
+            <span id="adminTxCountBadge" class="text-[11px] font-extrabold text-sky-700">0 Bookings</span>
           </div>
-          <div id="adminPaymentsLedger" class="space-y-2 max-h-72 overflow-y-auto"></div>
+          <div id="adminPaymentsLedger" class="space-y-2.5 max-h-96 overflow-y-auto"></div>
         </div>
       </div>
 
@@ -962,9 +974,9 @@
 
     function getSeedPayments() {
       const today = new Date();
-      const fmt = (daysAgo) => {
+      const fmt = (daysOffset) => {
         const d = new Date(today);
-        d.setDate(d.getDate() - daysAgo);
+        d.setDate(d.getDate() + daysOffset);
         return d.toISOString().split("T")[0];
       };
       return [
@@ -975,6 +987,10 @@
           city: "Rayachoti",
           district: "Annamayya",
           occasion: "Birthday Party",
+          venueType: "Indoor (Banquet / Home)",
+          eventDate: fmt(0),
+          eventSlot: "Morning",
+          servicesList: "3D Theme Stage & Balloon Arch Setup, Bouncy Castle + Live Mascot",
           totalValue: 19000,
           milestonePct: 20,
           amountPaid: 3800,
@@ -990,12 +1006,16 @@
           city: "Madanapalle",
           district: "Annamayya",
           occasion: "Half Saree / Dhoti Ceremony",
+          venueType: "Outdoor (Open Lawn / Ground)",
+          eventDate: fmt(2),
+          eventSlot: "Morning",
+          servicesList: "Royal Wedding & Reception Flower Mandap",
           totalValue: 38000,
           milestonePct: 70,
           amountPaid: 26600,
           method: "BANK",
           utr: "NEFT9018273645",
-          date: fmt(2),
+          date: fmt(-2),
           status: "Received"
         },
         {
@@ -1005,12 +1025,16 @@
           city: "Kadapa City",
           district: "Kadapa",
           occasion: "Wedding / Reception",
+          venueType: "Indoor (Banquet / Home)",
+          eventDate: fmt(5),
+          eventSlot: "Afternoon",
+          servicesList: "Royal Wedding & Reception Flower Mandap, Vintage Entry Cart",
           totalValue: 54000,
           milestonePct: 20,
           amountPaid: 10800,
           method: "UPI",
           utr: "UTR554433221199",
-          date: fmt(4),
+          date: fmt(-4),
           status: "Received"
         }
       ];
@@ -1045,6 +1069,7 @@
 
       const today = new Date().toISOString().split("T")[0];
       document.getElementById("eventDateInput").value = today;
+      updateSlotAvailability();
 
       // Enforce persistent state on reload or revisit
       if (isAdminLoggedIn) {
@@ -1278,6 +1303,77 @@
     // =========================================================
     // 6. LOCATION & CATALOG RENDERING
     // =========================================================
+    function getBookedSlotsForDate(dateStr) {
+      const booked = new Set();
+      payments.forEach(p => {
+        const d = p.eventDate || p.date;
+        if (d === dateStr && p.eventSlot) {
+          booked.add(p.eventSlot);
+        }
+      });
+      return booked;
+    }
+
+    function updateSlotAvailability() {
+      const dateInput = document.getElementById("eventDateInput");
+      const slotSelect = document.getElementById("eventSlotSelect");
+      const badge = document.getElementById("slotStatusBadge");
+      const helper = document.getElementById("slotHelperMsg");
+      if (!dateInput || !slotSelect) return;
+
+      const selectedDate = dateInput.value;
+      const booked = getBookedSlotsForDate(selectedDate);
+      const morningTaken = booked.has("Morning");
+      const afternoonTaken = booked.has("Afternoon");
+
+      slotSelect.innerHTML = "";
+      if (!morningTaken) {
+        const optM = document.createElement("option");
+        optM.value = "Morning";
+        optM.textContent = "Morning Slot (6:00 AM – 1:00 PM)";
+        slotSelect.appendChild(optM);
+      }
+      if (!afternoonTaken) {
+        const optA = document.createElement("option");
+        optA.value = "Afternoon";
+        optA.textContent = "Afternoon Slot (2:00 PM – 10:00 PM)";
+        slotSelect.appendChild(optA);
+      }
+
+      if (morningTaken && afternoonTaken) {
+        const optFull = document.createElement("option");
+        optFull.value = "";
+        optFull.textContent = "No Slots Available (Both Morning & Afternoon Booked)";
+        slotSelect.appendChild(optFull);
+        slotSelect.disabled = true;
+        badge.textContent = "Fully Booked (2/2)";
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800";
+        helper.textContent = "Both Morning & Afternoon slots are already booked on " + selectedDate + ". Please choose another date.";
+        helper.className = "text-[10px] font-bold text-rose-700";
+      } else if (morningTaken) {
+        slotSelect.disabled = false;
+        slotSelect.value = "Afternoon";
+        badge.textContent = "1 Slot Left (Afternoon)";
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800";
+        helper.textContent = "Morning slot is already booked on this date — only Afternoon booking is available.";
+        helper.className = "text-[10px] font-bold text-amber-800";
+      } else if (afternoonTaken) {
+        slotSelect.disabled = false;
+        slotSelect.value = "Morning";
+        badge.textContent = "1 Slot Left (Morning)";
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800";
+        helper.textContent = "Afternoon slot is already booked on this date — only Morning booking is available.";
+        helper.className = "text-[10px] font-bold text-amber-800";
+      } else {
+        slotSelect.disabled = false;
+        slotSelect.value = "Morning";
+        badge.textContent = "2 Slots Open";
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+        helper.textContent = "Both Morning & Afternoon slots are available for this date (Max 2 bookings/day).";
+        helper.className = "text-[10px] font-semibold text-sky-800";
+      }
+    }
+
     function populateCities() {
       const dist = document.getElementById("districtSelect").value;
       const citySelect = document.getElementById("citySelect");
@@ -1422,6 +1518,12 @@
     }
 
     function openCheckoutModal() {
+      const chosenSlot = document.getElementById("eventSlotSelect").value;
+      const chosenDate = document.getElementById("eventDateInput").value;
+      if (!chosenSlot) {
+        alert("Both Morning & Afternoon bookings are full on " + chosenDate + ". Please select another Event Date.");
+        return;
+      }
       const list = document.getElementById("checkoutItemsList");
       const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
       const s20 = Math.round(total * 0.20);
@@ -1445,9 +1547,10 @@
       const occ = document.getElementById("occasionSelect").value;
       const venue = document.getElementById("venueTypeSelect").value;
       const dt = document.getElementById("eventDateInput").value;
+      const slot = document.getElementById("eventSlotSelect").value;
 
       document.getElementById("agreementSummaryText").innerHTML = `
-        <strong>SERVICE AGREEMENT:</strong> Between <strong>${appConfig.brandName}</strong> (Admin) and <strong>${currentCustomer.name}</strong> (+91 ${currentCustomer.phone}) for <strong>${occ}</strong> (${venue}) at <strong>${city}, ${dist} Dist., AP</strong> on <strong>${dt}</strong>. Total Contract Value: <strong>₹${total.toLocaleString("en-IN")}</strong> payable in 3 milestones: <strong>20% (₹${s20.toLocaleString("en-IN")})</strong> booking advance, <strong>70% (₹${s70.toLocaleString("en-IN")})</strong> on event setup, and <strong>10% (₹${s10.toLocaleString("en-IN")})</strong> on completion.
+        <strong>SERVICE AGREEMENT:</strong> Between <strong>${appConfig.brandName}</strong> (Admin) and <strong>${currentCustomer.name}</strong> (+91 ${currentCustomer.phone}) for <strong>${occ}</strong> (${venue}) at <strong>${city}, ${dist} Dist., AP</strong> on <strong>${dt} (${slot} Slot)</strong>. Total Contract Value: <strong>₹${total.toLocaleString("en-IN")}</strong> payable in 3 milestones: <strong>20% (₹${s20.toLocaleString("en-IN")})</strong> booking advance, <strong>70% (₹${s70.toLocaleString("en-IN")})</strong> on event setup, and <strong>10% (₹${s10.toLocaleString("en-IN")})</strong> on completion.
       `;
 
       updatePayableNow();
@@ -1546,7 +1649,16 @@
       const orderId = "PHSR-" + Math.floor(100000 + Math.random() * 900000);
       const todayStr = new Date().toISOString().split("T")[0];
 
-      // Save payment transaction so it displays live inside Admin Ledger & Charts
+      const chosenDate = document.getElementById("eventDateInput").value;
+      const chosenSlot = document.getElementById("eventSlotSelect").value;
+      const bookedNow = getBookedSlotsForDate(chosenDate);
+      if (!chosenSlot || bookedNow.has(chosenSlot)) {
+        alert("This slot was just booked. Please pick an available slot or date.");
+        updateSlotAvailability();
+        return;
+      }
+
+      // Save payment & booking record so it displays live inside Admin Ledger & Charts
       const newPayment = {
         id: orderId,
         customerName: currentCustomer.name,
@@ -1554,7 +1666,9 @@
         city: document.getElementById("citySelect").value,
         district: document.getElementById("districtSelect").value,
         occasion: document.getElementById("occasionSelect").value,
-        eventDate: document.getElementById("eventDateInput").value,
+        venueType: document.getElementById("venueTypeSelect").value,
+        eventDate: chosenDate,
+        eventSlot: chosenSlot,
         servicesList: cart.map(c => c.name).join(", "),
         totalValue: total,
         milestonePct: pct,
@@ -1567,16 +1681,18 @@
 
       payments.unshift(newPayment);
       localStorage.setItem("ph_payments_v2", JSON.stringify(payments));
+      updateSlotAvailability();
 
+      const remBal = Math.max(0, total - paidNowNum);
       document.getElementById("receiptOrderId").textContent = orderId;
       document.getElementById("receiptBody").innerHTML = `
         <div><strong>Customer:</strong> ${currentCustomer.name} (+91 ${currentCustomer.phone})</div>
         <div><strong>Location:</strong> ${newPayment.city}, ${newPayment.district}</div>
-        <div><strong>Event Date:</strong> ${newPayment.eventDate} (${newPayment.occasion})</div>
+        <div><strong>Event Date & Slot:</strong> ${newPayment.eventDate} • <strong>${newPayment.eventSlot} Slot</strong> (${newPayment.occasion})</div>
         <div><strong>Total Package Value:</strong> ₹${total.toLocaleString("en-IN")}</div>
-        <div><strong>Milestone Sent (${pct}%):</strong> <span class="text-emerald-700 font-extrabold">₹${paidNowNum.toLocaleString("en-IN")} via ${selectedPayMethod}</span></div>
+        <div><strong>Paid Now (${pct}%):</strong> <span class="text-emerald-700 font-extrabold">₹${paidNowNum.toLocaleString("en-IN")} via ${selectedPayMethod}</span></div>
+        <div><strong>Remaining Balance Due:</strong> <span class="text-amber-700 font-extrabold">₹${remBal.toLocaleString("en-IN")}</span></div>
         <div><strong>UTR / Ref No:</strong> <span class="font-mono">${utrVal}</span></div>
-        <div><strong>Admin Sync:</strong> Displayed in Admin Payment Ledger</div>
       `;
 
       closeModal("checkoutModal");
@@ -1601,16 +1717,25 @@
         return;
       }
 
-      box.innerHTML = myTx.map(tx => `
+      box.innerHTML = myTx.map(tx => {
+        const tot = Number(tx.totalValue || tx.amountPaid || 0);
+        const paid = Number(tx.amountPaid || 0);
+        const rem = Math.max(0, tot - paid);
+        return `
         <div class="p-3 rounded-2xl bg-white border border-sky-100 space-y-1">
           <div class="flex items-center justify-between">
             <span class="font-extrabold text-slate-900">${tx.id} • ${tx.occasion}</span>
-            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">₹${Number(tx.amountPaid).toLocaleString("en-IN")} (${tx.milestonePct}%)</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">Paid: ₹${paid.toLocaleString("en-IN")} (${tx.milestonePct}%)</span>
           </div>
-          <div class="text-[11px] text-slate-600">${tx.city}, ${tx.district} • Date: ${tx.date} • Via ${tx.method}</div>
-          <div class="text-[10px] font-mono text-slate-500">Ref: ${tx.utr}</div>
+          <div class="text-[11px] text-slate-700 font-semibold">Event Date: <strong>${tx.eventDate || tx.date}</strong> (${tx.eventSlot || "Morning"} Slot) • ${tx.city}</div>
+          <div class="flex items-center justify-between text-[11px] pt-0.5">
+            <span class="text-slate-500">Total: ₹${tot.toLocaleString("en-IN")}</span>
+            <span class="font-extrabold ${rem > 0 ? 'text-amber-700' : 'text-emerald-700'}">Remaining Balance: ₹${rem.toLocaleString("en-IN")}</span>
+          </div>
+          <div class="text-[10px] font-mono text-slate-500">Ref: ${tx.utr} • Via ${tx.method}</div>
         </div>
-      `).join("");
+      `;
+      }).join("");
     }
 
     // =========================================================
@@ -1883,30 +2008,59 @@
       document.getElementById("kpiTodayAmt").textContent = "₹" + todayTotal.toLocaleString("en-IN");
       document.getElementById("kpiMonthAmt").textContent = "₹" + monthTotal.toLocaleString("en-IN");
       document.getElementById("kpiTotalAmt").textContent = "₹" + grandTotal.toLocaleString("en-IN");
-      document.getElementById("adminTxCountBadge").textContent = `${payments.length} Payments`;
+      document.getElementById("adminTxCountBadge").textContent = `${payments.length} Bookings`;
 
-      // Render Ledger Cards
+      // Render Customer Booking Details, Event Date & Slot, Paid & Remaining Balance Cards
       const ledger = document.getElementById("adminPaymentsLedger");
       if (payments.length === 0) {
-        ledger.innerHTML = `<div class="text-xs text-slate-500 text-center py-4">No customer payments received yet.</div>`;
+        ledger.innerHTML = `<div class="text-xs text-slate-500 text-center py-4">No customer bookings received yet.</div>`;
       } else {
-        ledger.innerHTML = payments.map(p => `
-          <div class="p-3 rounded-2xl bg-white border border-sky-100 text-xs space-y-1 shadow-sm">
-            <div class="flex items-center justify-between">
-              <span class="font-extrabold text-slate-900">${p.customerName} (+91 ${p.customerPhone})</span>
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[11px]">
-                +₹${Number(p.amountPaid).toLocaleString("en-IN")} (${p.milestonePct}%)
+        ledger.innerHTML = payments.map(p => {
+          const totalVal = Number(p.totalValue || p.amountPaid || 0);
+          const paidVal = Number(p.amountPaid || 0);
+          const remainingBal = Math.max(0, totalVal - paidVal);
+          const evDate = p.eventDate || p.date;
+          const evSlot = p.eventSlot || "Morning";
+          return `
+          <div class="p-3.5 rounded-2xl bg-white border border-sky-100 text-xs space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <div class="font-extrabold text-slate-900 truncate">${p.customerName}</div>
+                <div class="text-[11px] font-bold text-sky-700">+91 ${p.customerPhone} • ID: ${p.id}</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-xl bg-sky-100 text-sky-900 font-extrabold text-[10px] flex-shrink-0">
+                ${evDate} • ${evSlot}
               </span>
             </div>
-            <div class="text-[11px] text-slate-600">
-              <strong>${p.occasion}</strong> • ${p.city}, ${p.district} • Date: ${p.date}
+
+            <div class="text-[11px] text-slate-700 bg-slate-50 rounded-xl p-2 border border-slate-100 space-y-0.5">
+              <div><strong>Occasion:</strong> ${p.occasion} (${p.venueType || "Event Venue"})</div>
+              <div><strong>Location:</strong> ${p.city}, ${p.district} Dist.</div>
+              ${p.servicesList ? `<div class="truncate"><strong>Services:</strong> ${p.servicesList}</div>` : ""}
             </div>
+
+            <div class="grid grid-cols-3 gap-1.5 pt-0.5 text-center">
+              <div class="rounded-xl bg-slate-50 p-1.5 border border-slate-200">
+                <div class="text-[9px] font-bold text-slate-500 uppercase">Total Bill</div>
+                <div class="text-[11px] font-extrabold text-slate-900">₹${totalVal.toLocaleString("en-IN")}</div>
+              </div>
+              <div class="rounded-xl bg-emerald-50 p-1.5 border border-emerald-200">
+                <div class="text-[9px] font-bold text-emerald-700 uppercase">Paid (${p.milestonePct}%)</div>
+                <div class="text-[11px] font-extrabold text-emerald-800">₹${paidVal.toLocaleString("en-IN")}</div>
+              </div>
+              <div class="rounded-xl ${remainingBal > 0 ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'} p-1.5 border">
+                <div class="text-[9px] font-bold ${remainingBal > 0 ? 'text-amber-700' : 'text-emerald-700'} uppercase">Balance Due</div>
+                <div class="text-[11px] font-extrabold ${remainingBal > 0 ? 'text-amber-800' : 'text-emerald-800'}">₹${remainingBal.toLocaleString("en-IN")}</div>
+              </div>
+            </div>
+
             <div class="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
-              <span>Order: <strong>${p.id}</strong> • Via <strong>${p.method}</strong></span>
+              <span>Paid On: <strong>${p.date}</strong> via <strong>${p.method}</strong></span>
               <span class="font-mono">UTR: ${p.utr || "N/A"}</span>
             </div>
           </div>
-        `).join("");
+        `;
+        }).join("");
       }
 
       // Build Last 7 Days Daily Series
