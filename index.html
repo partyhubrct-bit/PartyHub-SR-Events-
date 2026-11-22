@@ -1044,31 +1044,40 @@
     let appConfig = Object.assign({}, DEFAULT_CONFIG, JSON.parse(localStorage.getItem("ph_config_v2")) || {});
     let payments = JSON.parse(localStorage.getItem("ph_payments_v2")) || getSeedPayments();
 
-    // Auto-logout when mobile application/browser is closed (sessionStorage) OR after 15 minutes of inactivity
-    const INACTIVITY_LIMIT_MS = 15 * 60 * 1000; // 15 minutes
+    // ONLY 2 LOGOUT CONDITIONS (Refresh NEVER logs out):
+    // 1. 15 minutes (900,000 ms) of inactivity
+    // 2. Manual logout button click
+    const INACTIVITY_LIMIT_MS = 15 * 60 * 1000;
     let inactivityTimer = null;
 
     function isSessionExpired() {
-      const lastActive = Number(sessionStorage.getItem("ph_last_active_ts") || 0);
-      if (!lastActive) return false;
-      return (Date.now() - lastActive) > INACTIVITY_LIMIT_MS;
+      const hasCust = Boolean(localStorage.getItem("ph_customer_session_v2"));
+      const hasAdm = localStorage.getItem("ph_admin_session_v2") === "true";
+      if (!hasCust && !hasAdm) return false;
+      const lastActive = Number(localStorage.getItem("ph_last_active_ts") || 0);
+      if (!lastActive) {
+        localStorage.setItem("ph_last_active_ts", String(Date.now()));
+        return false;
+      }
+      return (Date.now() - lastActive) >= INACTIVITY_LIMIT_MS;
     }
 
     if (isSessionExpired()) {
-      sessionStorage.removeItem("ph_customer_session_v2");
-      sessionStorage.removeItem("ph_admin_session_v2");
-      sessionStorage.removeItem("ph_active_screen_v2");
-      sessionStorage.removeItem("ph_last_active_ts");
+      localStorage.removeItem("ph_customer_session_v2"); if (!isAdminLoggedIn) localStorage.removeItem("ph_last_active_ts");
+      localStorage.removeItem("ph_admin_session_v2"); if (!currentCustomer) localStorage.removeItem("ph_last_active_ts");
+      localStorage.removeItem("ph_active_screen_v2");
+      localStorage.removeItem("ph_last_active_ts");
     }
 
-    // Clear any legacy persistent localStorage login flags so closing the app always logs out
-    sessionStorage.removeItem("ph_customer_session_v2");
-    sessionStorage.removeItem("ph_admin_session_v2");
-    localStorage.removeItem("ph_active_screen_v2");
+    let currentCustomer = JSON.parse(localStorage.getItem("ph_customer_session_v2")) || null;
+    let isAdminLoggedIn = localStorage.getItem("ph_admin_session_v2") === "true";
+    let activeScreen = localStorage.getItem("ph_active_screen_v2") || (isAdminLoggedIn ? "ADMIN" : "CUSTOMER");
 
-    let currentCustomer = JSON.parse(sessionStorage.getItem("ph_customer_session_v2")) || null;
-    let isAdminLoggedIn = sessionStorage.getItem("ph_admin_session_v2") === "true";
-    let activeScreen = sessionStorage.getItem("ph_active_screen_v2") || (isAdminLoggedIn ? "ADMIN" : "CUSTOMER");
+    if (currentCustomer || isAdminLoggedIn) {
+      if (!localStorage.getItem("ph_last_active_ts")) {
+        localStorage.setItem("ph_last_active_ts", String(Date.now()));
+      }
+    }
 
     let selectedCategory = "ALL";
     let cart = [];
@@ -1154,7 +1163,7 @@
     function showCustomerView() {
       if (isAdminLoggedIn) return; // Prevent leaving Admin without Admin Logout
       activeScreen = "CUSTOMER";
-      sessionStorage.setItem("ph_active_screen_v2", "CUSTOMER");
+      localStorage.setItem("ph_active_screen_v2", "CUSTOMER");
       document.getElementById("adminFullView").classList.add("hidden");
       document.getElementById("customerMainView").classList.remove("hidden");
     }
@@ -1173,7 +1182,7 @@
         return;
       }
       activeScreen = "ADMIN";
-      sessionStorage.setItem("ph_active_screen_v2", "ADMIN");
+      localStorage.setItem("ph_active_screen_v2", "ADMIN");
       document.getElementById("customerMainView").classList.add("hidden");
       document.getElementById("floatingCartBar").classList.add("hidden");
       document.getElementById("adminFullView").classList.remove("hidden");
@@ -1191,8 +1200,8 @@
       const p = document.getElementById("adminPassInput").value.trim();
       if (u === "admin" && p === "admin123") {
         isAdminLoggedIn = true;
-        sessionStorage.setItem("ph_admin_session_v2", "true"); touchSessionActivity();
-        sessionStorage.setItem("ph_active_screen_v2", "ADMIN");
+        localStorage.setItem("ph_admin_session_v2", "true"); touchSessionActivity();
+        localStorage.setItem("ph_active_screen_v2", "ADMIN");
         showAdminWorkspace();
       } else {
         alert("Invalid Admin credentials. Use admin / admin123");
@@ -1201,8 +1210,8 @@
 
     function logoutAdmin() {
       isAdminLoggedIn = false;
-      sessionStorage.removeItem("ph_admin_session_v2");
-      sessionStorage.setItem("ph_active_screen_v2", "CUSTOMER");
+      localStorage.removeItem("ph_admin_session_v2"); if (!currentCustomer) localStorage.removeItem("ph_last_active_ts");
+      localStorage.setItem("ph_active_screen_v2", "CUSTOMER");
       document.getElementById("adminUserInput").value = "";
       document.getElementById("adminPassInput").value = "";
       document.getElementById("topAdminBtnLabel").textContent = "Admin";
@@ -1275,14 +1284,14 @@
       const name = document.getElementById("custNameInput").value.trim();
       const phone = document.getElementById("custPhoneInput").value.trim();
       currentCustomer = { name, phone };
-      sessionStorage.setItem("ph_customer_session_v2", JSON.stringify(currentCustomer)); touchSessionActivity();
+      localStorage.setItem("ph_customer_session_v2", JSON.stringify(currentCustomer)); touchSessionActivity();
       syncCustomerAuthUI();
     }
 
     function logoutCustomer() {
       currentCustomer = null;
       cart = [];
-      sessionStorage.removeItem("ph_customer_session_v2");
+      localStorage.removeItem("ph_customer_session_v2"); if (!isAdminLoggedIn) localStorage.removeItem("ph_last_active_ts");
       resetOtpStep();
       syncCustomerAuthUI();
       updateCartUI();
