@@ -434,7 +434,7 @@
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <h2 class="text-sm font-extrabold text-slate-900">Admin Control Center</h2>
           </div>
-          <p class="text-[11px] font-semibold text-sky-800">Auto-logs out when app closes or after 15 mins of inactivity</p>
+          <p class="text-[11px] font-semibold text-sky-800">Stays logged in on refresh • Logs out only after 15 mins unused or manual Logout</p>
         </div>
         <button onclick="logoutAdmin()" class="px-3.5 py-2 rounded-xl bg-rose-600 text-white text-xs font-extrabold shadow-sm active:scale-95">
           Logout Admin
@@ -2177,7 +2177,7 @@
 
     function touchSessionActivity() {
       if (currentCustomer || isAdminLoggedIn) {
-        sessionStorage.setItem("ph_last_active_ts", String(Date.now()));
+        localStorage.setItem("ph_last_active_ts", String(Date.now()));
       }
       resetInactivityTimer();
     }
@@ -2212,7 +2212,7 @@
         }, { passive: true });
       });
 
-      // Check immediately when returning to the mobile app from background/lock screen
+      // Check when returning to the app if 15 minutes have passed; otherwise stay logged in
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible" && (currentCustomer || isAdminLoggedIn)) {
           if (isSessionExpired()) {
@@ -2222,16 +2222,6 @@
           } else {
             resetInactivityTimer();
           }
-        }
-      });
-
-      // Ensure session is cleared when the mobile app/window is closed
-      window.addEventListener("pagehide", (e) => {
-        if (!e.persisted) {
-          sessionStorage.removeItem("ph_customer_session_v2");
-          sessionStorage.removeItem("ph_admin_session_v2");
-          sessionStorage.removeItem("ph_active_screen_v2");
-          sessionStorage.removeItem("ph_last_active_ts");
         }
       });
 
