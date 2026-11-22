@@ -7,9 +7,9 @@
   <style>
     :root {
       --bg-grad: linear-gradient(135deg, #f0f8ff 0%, #d8ecff 50%, #f8fcff 100%);
-      --glass: rgba(255, 255, 255, 0.80);
-      --glass-strong: rgba(255, 255, 255, 0.94);
-      --glass-border: rgba(255, 255, 255, 0.95);
+      --glass: rgba(255, 255, 255, 0.82);
+      --glass-strong: rgba(255, 255, 255, 0.95);
+      --glass-border: rgba(255, 255, 255, 0.96);
       --primary: #0284c7;
       --primary-dark: #0369a1;
       --primary-light: #e0f2fe;
@@ -68,14 +68,14 @@
     }
 
     .brand-title {
-      font-size: 1.25rem;
+      font-size: 1.28rem;
       font-weight: 800;
       color: var(--primary-dark);
       letter-spacing: -0.02em;
     }
 
     .brand-sub {
-      font-size: 0.82rem;
+      font-size: 0.83rem;
       color: var(--muted);
       line-height: 1.4;
     }
@@ -90,7 +90,7 @@
     .btn {
       border: none;
       border-radius: 10px;
-      padding: 9px 13px;
+      padding: 9px 14px;
       font-weight: 600;
       cursor: pointer;
       transition: 0.15s ease;
@@ -192,7 +192,6 @@
       gap: 10px;
     }
 
-    /* Category Pills with Unique Icons */
     .cat-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -349,7 +348,6 @@
       margin-bottom: 14px;
     }
 
-    /* Full-size Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -415,7 +413,7 @@
     <!-- HOME SCREEN: Centered Customer Mobile/OTP Login + Branches (Events Hidden Until Login) -->
     <div id="customerLoginCard" class="glass-card" style="max-width: 540px; margin: 16px auto;">
       <h2 style="text-align:center; margin-bottom: 6px;">Customer Login</h2>
-      <p class="brand-sub" style="text-align:center; margin-bottom: 14px;">Verify your mobile number via OTP to unlock decoration packages, pricing &amp; booking.</p>
+      <p class="brand-sub" style="text-align:center; margin-bottom: 14px;">Verify your mobile number via OTP to view event packages, prices &amp; book your slot.</p>
 
       <label for="custName">Full Name</label>
       <input id="custName" type="text" placeholder="Enter your name" />
@@ -429,7 +427,7 @@
       </div>
 
       <button id="sendOtpBtn" class="btn btn-primary" style="width:100%;" onclick="sendOtp()">Send OTP</button>
-      <button id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;" onclick="verifyOtp()">Verify OTP &amp; Unlock Events</button>
+      <button id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;" onclick="verifyOtp()">Verify OTP &amp; View Events</button>
 
       <!-- Branch Details Displayed Only on Home Screen -->
       <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border); font-size:0.83rem; color:var(--muted); line-height:1.5;">
@@ -439,7 +437,7 @@
       </div>
 
       <div class="notice-danger">
-        <strong>Payment Caution:</strong> Always verify your booking via our official Help Desk (9398934021) before transferring any advance. Pay only to verified PartyHub - SR Events payment details shown inside your account.
+        <strong>Payment Caution:</strong> Always confirm your event slot via our official Help Desk (9398934021) before transferring any advance. Pay only to verified PartyHub - SR Events accounts shown after login.
       </div>
     </div>
 
@@ -451,7 +449,7 @@
           <span class="badge">Service Coverage: Annamayya &amp; Kadapa Districts</span>
         </div>
 
-        <!-- Location, Occasion, Indoor/Outdoor, Date & Price Filter -->
+        <!-- Location, Occasion, Indoor/Outdoor & Budget Filter -->
         <div class="grid-4">
           <div>
             <label for="filterCity">City / Town</label>
@@ -512,7 +510,7 @@
         </div>
       </div>
 
-      <!-- Categorized Service Lists with Unique Logos -->
+      <!-- Categorized Service Lists with Unique Icons -->
       <div class="glass-card">
         <h3 style="margin-bottom:10px;">Select Service Category</h3>
         <div class="cat-grid" id="categoryButtons">
@@ -700,7 +698,7 @@
         <button class="btn btn-primary" onclick="saveSettings()">Save Contact &amp; Payment Settings</button>
 
         <hr style="margin:18px 0; border:none; border-top:1px solid var(--border);" />
-        <h3 style="margin-bottom:8px;">Export / Restore Complete App Data (Never Lose Data Again)</h3>
+        <h3 style="margin-bottom:8px;">Export / Restore Complete App Data</h3>
         <p class="brand-sub" style="margin-bottom:10px;">Download a JSON backup of all your services, photos, and customer bookings, or restore from a backup file anytime.</p>
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
           <button class="btn btn-outline" onclick="exportBackup()">Download Backup (.json)</button>
@@ -743,7 +741,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'partyhub_srevents_full_v14';
+    const STORAGE_KEY = 'partyhub_srevents_full_v15';
 
     const defaultData = {
       settings: {
@@ -761,11 +759,7 @@
           title: 'Birthday Balloon Arch & Ring Backdrop',
           price: 4500,
           photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
-          details: '• 220 pastel & chrome balloons
-• 8x8 ft circular ring backdrop stand
-• Happy Birthday neon/foil signage
-• 2 warm LED focus par lights
-• Complete on-site setup & dismantling included'
+          details: '• 220 pastel & chrome balloons\n• 8x8 ft circular ring backdrop stand\n• Happy Birthday neon/foil signage\n• 2 warm LED focus par lights\n• Complete on-site setup & dismantling included'
         },
         {
           id: 's2',
@@ -775,10 +769,7 @@
           title: 'Grand Cold Pyro & Low-Fog Cloud Entry',
           price: 6500,
           photo: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85',
-          details: '• 6 smokeless cold pyro fountains
-• MAX LED DMX512 low-fog cloud effect
-• Mirror pathway / flower petal shower
-• Dedicated operator on site'
+          details: '• 6 smokeless cold pyro fountains\n• MAX LED DMX512 low-fog cloud effect\n• Mirror pathway / flower petal shower\n• Dedicated operator on site'
         },
         {
           id: 's3',
@@ -788,10 +779,7 @@
           title: 'Kids Bouncy Castle, Live Mascot & Water Tattoos',
           price: 5500,
           photo: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=85',
-          details: '• Inflatable Bouncy Castle (3 hours)
-• 1 Live Cartoon Character Mascot
-• Unlimited Kids Water Tattoos artist
-• Power blower & attendant included'
+          details: '• Inflatable Bouncy Castle (3 hours)\n• 1 Live Cartoon Character Mascot\n• Unlimited Kids Water Tattoos artist\n• Power blower & attendant included'
         },
         {
           id: 's4',
@@ -801,9 +789,7 @@
           title: 'Bridal & Family Mehndi + Party Makeup Artist',
           price: 4000,
           photo: 'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85',
-          details: '• Organic dark-stain bridal/guest mehndi
-• HD party makeup & hairstyling
-• Home/venue visit across Rayachoti & Madanapalle'
+          details: '• Organic dark-stain bridal/guest mehndi\n• HD party makeup & hairstyling\n• Home/venue visit across Rayachoti & Madanapalle'
         }
       ],
       bookings: [
@@ -821,11 +807,7 @@
               title: 'Birthday Balloon Arch & Ring Backdrop',
               price: 4500,
               photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
-              details: '• 220 pastel & chrome balloons
-• 8x8 ft circular ring backdrop stand
-• Happy Birthday neon/foil signage
-• 2 warm LED focus par lights
-• Complete on-site setup & dismantling included'
+              details: '• 220 pastel & chrome balloons\n• 8x8 ft circular ring backdrop stand\n• Happy Birthday neon/foil signage\n• 2 warm LED focus par lights\n• Complete on-site setup & dismantling included'
             }
           ],
           totalPrice: 4500,
@@ -1173,7 +1155,6 @@
         const p20 = Math.round(total * 0.20);
         const p70 = Math.round(total * 0.70);
         const p10 = total - p20 - p70;
-        const primaryItem = b.items[0] || {};
         return `
           <tr>
             <td><strong>${escapeHtml(b.date)}</strong></td>
@@ -1215,10 +1196,7 @@
       document.getElementById('modalTitle').textContent = `${b.customerName} — ${b.items.map(i => i.title).join(' + ')}`;
       document.getElementById('modalMeta').textContent = `Date: ${b.date} | City: ${b.city} | Slot: ${b.slot} at ${b.exactTime} | Total: ₹${Number(b.totalPrice).toLocaleString('en-IN')}`;
       document.getElementById('modalImage').src = first.photo;
-      document.getElementById('modalDetails').textContent = b.items.map(i => `${i.title}:
-${i.details}`).join('
-
-');
+      document.getElementById('modalDetails').textContent = b.items.map(i => `${i.title}:\n${i.details}`).join('\n\n');
       document.getElementById('photoModal').classList.add('open');
     }
 
