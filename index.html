@@ -377,6 +377,21 @@
         <div id="catalogGrid" class="grid grid-cols-1 gap-3"></div>
       </section>
 
+      <!-- 3B. BALANCE PAYMENT SCHEDULE & TIME-TO-TIME REMINDERS (AFTER 20% ADVANCE) -->
+      <section id="customerBalanceScheduleCard" class="glass-blue rounded-3xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-sky-700">Milestone Balance Tracker</span>
+            <h3 class="text-sm font-extrabold text-slate-900">Balance Payment Dues & Time-to-Time Reminders</h3>
+          </div>
+          <span id="balanceAlertBadge" class="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 text-[10px] font-extrabold">Live Sync</span>
+        </div>
+        <p id="balanceReminderTicker" class="text-[11px] font-semibold text-sky-900 bg-white/85 border border-sky-200 rounded-xl px-3 py-2">
+          Checking your active bookings and upcoming 70% setup & 10% handover balance milestones...
+        </p>
+        <div id="customerBalanceCardsList" class="space-y-2.5 text-xs"></div>
+      </section>
+
       <!-- 4. CUSTOMER'S SENT PAYMENTS HISTORY -->
       <section class="glass-card rounded-3xl p-4 space-y-2.5">
         <div class="flex items-center justify-between">
@@ -823,6 +838,51 @@
       </div>
       <div id="receiptBody" class="rounded-2xl bg-slate-50 border border-slate-200 p-3 text-xs space-y-1.5 text-slate-700"></div>
       <button onclick="closeModal('receiptModal')" class="btn-sky w-full py-2.5 rounded-xl font-bold text-xs">Done</button>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 5: PAY NEXT BALANCE INSTALLMENT (70% / 10% / DUE)   -->
+  <!-- ========================================================= -->
+  <div id="balancePayModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-2.5">
+    <div class="bg-white w-full max-w-md rounded-3xl p-4 max-h-[90vh] overflow-y-auto space-y-3.5 shadow-2xl border border-sky-100">
+      <div class="flex items-center justify-between border-b border-sky-100 pb-2.5">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-900">Settle Balance Installment</h3>
+          <p class="text-[11px] text-sky-700 font-semibold">Order: <span id="balModalOrderId" class="font-mono font-bold"></span></p>
+        </div>
+        <button onclick="closeModal('balancePayModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-bold">✕</button>
+      </div>
+
+      <input type="hidden" id="balModalSourceOrderId" value="" />
+      <div class="rounded-2xl bg-sky-50 border border-sky-200 p-3 text-xs space-y-1">
+        <div class="flex justify-between"><span>Total Contract Value:</span><strong id="balModalTotal">₹0</strong></div>
+        <div class="flex justify-between"><span>Already Paid:</span><strong class="text-emerald-700" id="balModalPaid">₹0</strong></div>
+        <div class="flex justify-between border-t border-sky-200 pt-1"><span>Total Remaining Balance:</span><strong class="text-amber-800" id="balModalRemaining">₹0</strong></div>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Choose Balance Payment Amount</label>
+        <select id="balInstallmentSelect" onchange="syncBalancePayButton()" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold"></select>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Payment Mode</label>
+        <select id="balPayModeSelect" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-bold">
+          <option value="UPI">UPI / QR</option>
+          <option value="BANK">Bank Transfer</option>
+          <option value="CARD">Card / NetBank</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">UTR / Transaction Reference (Optional)</label>
+        <input id="balUtrInput" type="text" placeholder="Enter UTR or reference number" class="input-glass w-full rounded-xl px-3 py-2 text-xs font-semibold" />
+      </div>
+
+      <button onclick="submitBalanceInstallment()" class="btn-sky w-full py-3 rounded-xl font-extrabold text-sm">
+        Pay Balance Now (<span id="balConfirmAmtBtn">₹0</span>)
+      </button>
     </div>
   </div>
 
@@ -1766,6 +1826,211 @@
         </div>
       `;
       }).join("");
+
+      renderCustomerBalanceSchedule(myTx);
+    }
+
+    let reminderTickerIndex = 0;
+    let balanceReminderInterval = null;
+
+    function getCustomerBookingBalances(myTx) {
+      // Group by order ID so multiple milestone payments on the same booking aggregate cleanly
+      const grouped = new Map();
+      myTx.forEach(tx => {
+        const key = tx.id;
+        const tot = Number(tx.totalValue || tx.amountPaid || 0);
+        const paid = Number(tx.amountPaid || 0);
+        if (!grouped.has(key)) {
+          grouped.set(key, {
+            id: tx.id,
+            occasion: tx.occasion || "Event Booking",
+            city: tx.city || "",
+            district: tx.district || "",
+            eventDate: tx.eventDate || tx.date,
+            eventSlot: tx.eventSlot || "Morning",
+            totalValue: tot,
+            totalPaid: paid,
+            lastPct: Number(tx.milestonePct || 20)
+          });
+        } else {
+          const existing = grouped.get(key);
+          existing.totalPaid += paid;
+          existing.totalValue = Math.max(existing.totalValue, tot);
+          existing.lastPct = Number(tx.milestonePct || existing.lastPct);
+        }
+      });
+
+      return Array.from(grouped.values()).map(b => {
+        const remaining = Math.max(0, b.totalValue - b.totalPaid);
+        const pctPaid = b.totalValue > 0 ? Math.round((b.totalPaid / b.totalValue) * 100) : 100;
+        const m70Amt = Math.round(b.totalValue * 0.70);
+        const m10Amt = Math.max(0, b.totalValue - Math.round(b.totalValue * 0.20) - m70Amt);
+        return { ...b, remaining, pctPaid, m70Amt, m10Amt };
+      });
+    }
+
+    function renderCustomerBalanceSchedule(myTx = null) {
+      if (!currentCustomer) return;
+      const listEl = document.getElementById("customerBalanceCardsList");
+      const tickerEl = document.getElementById("balanceReminderTicker");
+      const badgeEl = document.getElementById("balanceAlertBadge");
+      if (!listEl || !tickerEl) return;
+
+      const records = myTx || payments.filter(p => p.customerPhone === currentCustomer.phone);
+      const balances = getCustomerBookingBalances(records);
+      const pendingBalances = balances.filter(b => b.remaining > 0);
+
+      if (pendingBalances.length === 0) {
+        badgeEl.textContent = "All Paid";
+        badgeEl.className = "px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold";
+        tickerEl.textContent = "All balance installments are cleared. No pending balance dues at this time.";
+        listEl.innerHTML = balances.length
+          ? `<div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold text-center">✓ 100% of your booked event balance has been settled.</div>`
+          : `<div class="p-3 rounded-2xl bg-white/80 border border-sky-100 text-slate-600 text-center">Once you pay the 20% booking advance, your balance schedule and time-to-time reminders will appear here.</div>`;
+        return;
+      }
+
+      const totalPendingAll = pendingBalances.reduce((s, b) => s + b.remaining, 0);
+      badgeEl.textContent = `Due: ₹${totalPendingAll.toLocaleString("en-IN")}`;
+      badgeEl.className = "px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-[10px] font-extrabold";
+
+      const nowTimeStr = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+      const alerts = pendingBalances.map(b => {
+        const nextStageLabel = b.pctPaid <= 25
+          ? `70% Setup Milestone (₹${b.m70Amt.toLocaleString("en-IN")}) & 10% Completion (₹${b.m10Amt.toLocaleString("en-IN")})`
+          : `Remaining Balance of ₹${b.remaining.toLocaleString("en-IN")}`;
+        return `[Reminder @ ${nowTimeStr}] Booking ${b.id} (${b.occasion} on ${b.eventDate} • ${b.eventSlot}): ₹${b.remaining.toLocaleString("en-IN")} balance remaining — ${nextStageLabel}.`;
+      });
+
+      tickerEl.innerHTML = `<span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5 align-middle"></span>` + alerts[reminderTickerIndex % alerts.length];
+
+      listEl.innerHTML = pendingBalances.map(b => {
+        const is20PaidOnly = b.pctPaid <= 25;
+        return `
+          <div class="p-3 rounded-2xl bg-white border border-sky-200 space-y-2 shadow-sm">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <div class="font-extrabold text-slate-900">${b.id} • ${b.occasion}</div>
+                <div class="text-[11px] text-slate-600 font-semibold">Event: <strong>${b.eventDate}</strong> (${b.eventSlot} Slot) • ${b.city}</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 font-extrabold text-[11px]">
+                Balance: ₹${b.remaining.toLocaleString("en-IN")}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+              <div class="rounded-xl bg-emerald-50 border border-emerald-200 p-1.5">
+                <div class="font-bold text-emerald-700">Paid (${b.pctPaid}%)</div>
+                <div class="font-extrabold text-emerald-900">₹${b.totalPaid.toLocaleString("en-IN")}</div>
+              </div>
+              <div class="rounded-xl bg-sky-50 border border-sky-200 p-1.5">
+                <div class="font-bold text-sky-700">${is20PaidOnly ? 'Next: 70% Setup' : 'Installment'}</div>
+                <div class="font-extrabold text-sky-900">₹${(is20PaidOnly ? Math.min(b.remaining, b.m70Amt) : b.remaining).toLocaleString("en-IN")}</div>
+              </div>
+              <div class="rounded-xl bg-amber-50 border border-amber-200 p-1.5">
+                <div class="font-bold text-amber-700">${is20PaidOnly ? 'Final: 10% Due' : 'Total Due'}</div>
+                <div class="font-extrabold text-amber-900">₹${(is20PaidOnly ? Math.max(0, b.remaining - b.m70Amt) : b.remaining).toLocaleString("en-IN")}</div>
+              </div>
+            </div>
+
+            <button onclick="openBalancePayModal('${b.id}')" class="btn-sky w-full py-2 rounded-xl text-xs font-extrabold">
+              Pay Balance Installment Now
+            </button>
+          </div>
+        `;
+      }).join("");
+
+      // Rotate reminder message every 6 seconds while customer is logged in
+      if (!balanceReminderInterval) {
+        balanceReminderInterval = setInterval(() => {
+          if (currentCustomer && !isAdminLoggedIn) {
+            reminderTickerIndex += 1;
+            renderCustomerBalanceSchedule();
+          }
+        }, 6000);
+      }
+    }
+
+    function openBalancePayModal(orderId) {
+      if (!currentCustomer) return;
+      const myTx = payments.filter(p => p.customerPhone === currentCustomer.phone);
+      const balances = getCustomerBookingBalances(myTx);
+      const target = balances.find(b => b.id === orderId);
+      if (!target || target.remaining <= 0) return;
+
+      document.getElementById("balModalSourceOrderId").value = target.id;
+      document.getElementById("balModalOrderId").textContent = target.id;
+      document.getElementById("balModalTotal").textContent = "₹" + target.totalValue.toLocaleString("en-IN");
+      document.getElementById("balModalPaid").textContent = "₹" + target.totalPaid.toLocaleString("en-IN");
+      document.getElementById("balModalRemaining").textContent = "₹" + target.remaining.toLocaleString("en-IN");
+
+      const sel = document.getElementById("balInstallmentSelect");
+      sel.innerHTML = "";
+      if (target.pctPaid <= 25 && target.remaining > target.m70Amt && target.m70Amt > 0) {
+        const opt70 = document.createElement("option");
+        opt70.value = JSON.stringify({ amount: target.m70Amt, pct: 70 });
+        opt70.textContent = `2nd Milestone • 70% Event Setup (₹${target.m70Amt.toLocaleString("en-IN")})`;
+        sel.appendChild(opt70);
+      }
+      const optRem = document.createElement("option");
+      optRem.value = JSON.stringify({ amount: target.remaining, pct: 100 });
+      optRem.textContent = `Pay Full Remaining Balance Now (₹${target.remaining.toLocaleString("en-IN")})`;
+      sel.appendChild(optRem);
+
+      syncBalancePayButton();
+      document.getElementById("balancePayModal").classList.remove("hidden");
+    }
+
+    function syncBalancePayButton() {
+      const val = JSON.parse(document.getElementById("balInstallmentSelect").value || '{"amount":0}');
+      document.getElementById("balConfirmAmtBtn").textContent = "₹" + Number(val.amount || 0).toLocaleString("en-IN");
+    }
+
+    function submitBalanceInstallment() {
+      if (!currentCustomer) return;
+      const orderId = document.getElementById("balModalSourceOrderId").value;
+      const chosen = JSON.parse(document.getElementById("balInstallmentSelect").value || '{"amount":0,"pct":10}');
+      const payAmt = Number(chosen.amount || 0);
+      if (payAmt <= 0) return;
+
+      const myTx = payments.filter(p => p.customerPhone === currentCustomer.phone && p.id === orderId);
+      const baseRec = myTx[0];
+      if (!baseRec) return;
+
+      const mode = document.getElementById("balPayModeSelect").value;
+      const utr = document.getElementById("balUtrInput").value.trim() || ("UTR" + Math.floor(100000000000 + Math.random() * 900000000000));
+      const todayStr = new Date().toISOString().split("T")[0];
+
+      const balancePaymentTx = {
+        id: orderId,
+        customerName: currentCustomer.name,
+        customerPhone: currentCustomer.phone,
+        city: baseRec.city,
+        district: baseRec.district,
+        occasion: baseRec.occasion,
+        venueType: baseRec.venueType || "Event Venue",
+        eventDate: baseRec.eventDate || baseRec.date,
+        eventSlot: baseRec.eventSlot || "Morning",
+        servicesList: baseRec.servicesList || "",
+        totalValue: Number(baseRec.totalValue || payAmt),
+        milestonePct: Number(chosen.pct || 10),
+        amountPaid: payAmt,
+        method: mode,
+        utr,
+        date: todayStr,
+        status: "Balance Paid"
+      };
+
+      payments.unshift(balancePaymentTx);
+      localStorage.setItem("ph_payments_v2", JSON.stringify(payments));
+
+      document.getElementById("balUtrInput").value = "";
+      closeModal("balancePayModal");
+      renderCustomerPaymentsList();
+      if (isAdminLoggedIn) {
+        renderAdminPaymentsAndCharts();
+      }
+      alert(`Balance payment of ₹${payAmt.toLocaleString("en-IN")} recorded for ${orderId}!`);
     }
 
     // =========================================================
