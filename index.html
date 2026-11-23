@@ -6,7 +6,6 @@
   <title>PartyHub - SR Events | Rayachoti &amp; Madanapalle</title>
   <style>
     :root {
-      --bg-outer: #dbeafe;
       --bg-app: #f4f9ff;
       --surface: #ffffff;
       --primary: #0284c7;
@@ -29,19 +28,26 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    html, body {
-      height: 100%;
+    html {
+      min-height: 100%;
+      background: linear-gradient(145deg, #cde6fe 0%, #eef6ff 100%);
+    }
+
+    body {
+      min-height: 100vh;
       width: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       background: linear-gradient(145deg, #cde6fe 0%, #eef6ff 100%);
       color: var(--text);
     }
 
-    /* Native Mobile Frame Container fitting 100dvh */
+    /* Native Mobile Frame Container with smooth natural document scrolling */
     .mobile-frame {
       width: 100%;
       max-width: 480px;
-      height: 100dvh;
+      min-height: 100vh;
       margin: 0 auto;
       background: var(--bg-app);
       display: flex;
@@ -50,20 +56,20 @@
       box-shadow: 0 20px 50px rgba(2, 132, 199, 0.22);
       border-left: 1px solid rgba(255,255,255,0.8);
       border-right: 1px solid rgba(255,255,255,0.8);
-      overflow: hidden;
     }
 
-    /* App Top Header */
+    /* Sticky App Top Header */
     .app-header {
+      position: sticky;
+      top: 0;
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #fff;
       padding: 12px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-shrink: 0;
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
-      z-index: 20;
+      z-index: 30;
     }
 
     .brand-row {
@@ -93,7 +99,7 @@
 
     .brand-loc {
       font-size: 0.68rem;
-      opacity: 0.9;
+      opacity: 0.92;
     }
 
     .header-btns {
@@ -117,34 +123,28 @@
       transform: scale(0.96);
     }
 
-    /* Scrollable App Viewport inside single-page frame */
+    /* Main Content Area with bottom clearance for fixed nav */
     .app-body {
       flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 12px;
-      scroll-behavior: smooth;
+      padding: 12px 12px 86px;
     }
 
-    .app-body::-webkit-scrollbar {
-      width: 4px;
-    }
-    .app-body::-webkit-scrollbar-thumb {
-      background: #bae6fd;
-      border-radius: 99px;
-    }
-
-    /* Bottom Navigation Bar */
+    /* Sticky Bottom Navigation Bar */
     .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
       background: #ffffff;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding: 6px 4px 8px;
-      flex-shrink: 0;
-      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.05);
-      z-index: 20;
+      padding: 6px 4px calc(8px + env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+      z-index: 30;
     }
 
     .nav-item {
@@ -202,7 +202,7 @@
 
     /* Cards & Controls */
     .card {
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.96);
       border: 1px solid #e0f2fe;
       border-radius: 16px;
       padding: 13px;
@@ -226,6 +226,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 6px;
     }
 
     label {
@@ -289,6 +290,11 @@
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #fff;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #fff;
     }
 
     .btn-outline {
@@ -361,7 +367,7 @@
     .srv-img-wrap {
       position: relative;
       width: 100%;
-      height: 175px;
+      height: 185px;
       background: #0f172a;
     }
 
@@ -370,13 +376,14 @@
       height: 100%;
       object-fit: cover;
       cursor: pointer;
+      display: block;
     }
 
     .srv-tag {
       position: absolute;
       top: 9px;
       left: 9px;
-      background: rgba(15, 23, 42, 0.76);
+      background: rgba(15, 23, 42, 0.78);
       color: #fff;
       font-size: 0.68rem;
       font-weight: 700;
@@ -385,11 +392,23 @@
       backdrop-filter: blur(4px);
     }
 
+    .srv-occ-tag {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      background: rgba(2, 132, 199, 0.88);
+      color: #fff;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
     .srv-zoom {
       position: absolute;
       bottom: 9px;
       right: 9px;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       color: var(--primary-dark);
       font-size: 0.68rem;
       font-weight: 800;
@@ -432,6 +451,7 @@
       font-size: 0.78rem;
       font-weight: 700;
       margin-bottom: 9px;
+      line-height: 1.4;
     }
 
     .alert-danger {
@@ -456,6 +476,18 @@
       margin-bottom: 9px;
     }
 
+    .alert-success {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #a7f3d0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.77rem;
+      line-height: 1.4;
+      margin-bottom: 9px;
+      font-weight: 700;
+    }
+
     .badge {
       display: inline-block;
       padding: 2px 8px;
@@ -464,6 +496,16 @@
       font-weight: 700;
       background: var(--primary-soft);
       color: var(--primary-dark);
+    }
+
+    .badge-due {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-paid {
+      background: #dcfce7;
+      color: #166534;
     }
 
     .split-box {
@@ -510,7 +552,7 @@
     }
 
     .kpi-mini strong {
-      font-size: 0.96rem;
+      font-size: 0.94rem;
       color: var(--primary-dark);
       font-weight: 800;
     }
@@ -564,9 +606,9 @@
       text-align: left;
     }
 
-    /* Fullscreen Sheet Modal inside Mobile Frame */
+    /* Fixed Viewport Sheet Modal */
     .sheet-backdrop {
-      position: absolute;
+      position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.88);
       display: none;
@@ -582,15 +624,17 @@
     .sheet-box {
       background: #fff;
       width: 100%;
-      max-height: 94%;
+      max-width: 480px;
+      max-height: 92vh;
       border-radius: 20px 20px 0 0;
       padding: 14px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .sheet-img {
       width: 100%;
-      max-height: 56dvh;
+      max-height: 55vh;
       object-fit: contain;
       background: #0f172a;
       border-radius: 12px;
@@ -604,7 +648,7 @@
 </head>
 <body>
   <div class="mobile-frame">
-    <!-- NATIVE MOBILE APP TOP BAR -->
+    <!-- STICKY NATIVE MOBILE APP TOP BAR -->
     <header class="app-header">
       <div class="brand-row">
         <div class="brand-avatar">🎉</div>
@@ -620,10 +664,10 @@
       </div>
     </header>
 
-    <!-- SINGLE-PAGE SCROLLABLE APP VIEWPORT -->
+    <!-- NATURALLY SCROLLABLE APP VIEWPORT -->
     <main class="app-body" id="appBody">
 
-      <!-- 1. HOME SCREEN: CENTERED CUSTOMER LOGIN + BRANCHES (EVENTS HIDDEN UNTIL OTP) -->
+      <!-- 1. HOME SCREEN: CENTERED CUSTOMER LOGIN + BRANCHES -->
       <section id="customerLoginCard">
         <div class="hero-banner">
           <div style="font-size:1rem; font-weight:800; color:var(--primary-dark);">Book Dream Events in 2 Minutes</div>
@@ -660,8 +704,11 @@
         </div>
       </section>
 
-      <!-- 2. CUSTOMER APP SCREENS (TABBED VIA BOTTOM NAV BAR) -->
+      <!-- 2. CUSTOMER APP SCREENS -->
       <section id="customerView" class="hidden">
+        <!-- Customer Balance Payment Reminder Banner (Shown automatically when balance > 0) -->
+        <div id="custBalanceReminderBanner" class="alert-warn hidden"></div>
+
         <!-- Customer Tab 1: Explore & Book -->
         <div id="custScreenExplore">
           <div class="card">
@@ -725,9 +772,13 @@
                 </select>
               </div>
               <div>
-                <label for="filterMaxPrice">Max Price (₹)</label>
+                <label for="filterMaxPrice">Max Budget (₹)</label>
                 <input id="filterMaxPrice" type="number" placeholder="Any budget" />
               </div>
+            </div>
+
+            <div id="filterResetRow" class="hidden" style="margin-top:2px;">
+              <button type="button" id="resetFiltersBtn" class="btn btn-outline btn-xs" style="width:100%;">Reset Occasion &amp; Budget Filters</button>
             </div>
           </div>
 
@@ -762,8 +813,11 @@
                 <option value="Cash at Branch / Venue">Cash at Branch / Venue</option>
               </select>
 
+              <label for="initialPaidInput">Initial Advance Amount Paid Now (₹)</label>
+              <input id="initialPaidInput" type="number" min="0" placeholder="Enter advance amount paid (e.g. 20%)" />
+
               <label for="paymentRefInput">Transaction / Advance Reference ID</label>
-              <input id="paymentRefInput" type="text" placeholder="Optional UPI Ref # or Cash" />
+              <input id="paymentRefInput" type="text" placeholder="Optional UPI Ref # or Cash Receipt #" />
 
               <div class="alert-info" id="officialPaymentInfo"></div>
 
@@ -781,10 +835,10 @@
           </div>
         </div>
 
-        <!-- Customer Tab 3: My Bookings & Payment Tracker -->
+        <!-- Customer Tab 3: My Bookings, Balance Payment & Reminders -->
         <div id="custScreenBookings" class="hidden">
           <div class="card">
-            <div class="section-title">My Bookings, Payments &amp; E-Agreements</div>
+            <div class="section-title">My Bookings, Balance Payment &amp; Reminders</div>
             <div id="customerMyBookings" style="font-size:0.82rem; color:var(--muted);">No confirmed bookings yet.</div>
           </div>
         </div>
@@ -805,18 +859,19 @@
         </div>
       </section>
 
-      <!-- 4. ADMIN APP SCREENS (TABBED VIA BOTTOM NAV BAR) -->
+      <!-- 4. ADMIN APP SCREENS -->
       <section id="adminView" class="hidden">
-        <!-- Admin Tab 1: Customer Bookings by Date & Max Photo Viewer -->
+        <!-- Admin Tab 1: Customer Bookings, Complete Payment & Balance Tracking -->
         <div id="adminTabBookings">
+          <div class="kpi-row" id="adminBookingsSummaryKpi"></div>
           <div class="card">
             <div class="section-title">
-              <span>Customer Events &amp; Payments</span>
+              <span>Customer Events, Payments &amp; Balances</span>
               <button type="button" id="clearAdminDateBtn" class="btn btn-outline btn-xs">All Dates</button>
             </div>
             <label for="adminDateFilter">Filter by Event Date</label>
             <input id="adminDateFilter" type="date" />
-            <p style="font-size:0.74rem; color:var(--muted);">Tap any <strong>Customer Name</strong> below to view the maximum-size event picture and complete booking details.</p>
+            <p style="font-size:0.74rem; color:var(--muted);">Tap any <strong>Customer Name</strong> for maximum-size event photo, or record balance payments &amp; send reminders below.</p>
           </div>
           <div id="adminBookingsList"></div>
         </div>
@@ -863,6 +918,7 @@
                     <option value="Wedding / Engagement">Wedding / Engagement</option>
                     <option value="Haldi / Mehndi / Bride-to-Be">Haldi / Mehndi</option>
                     <option value="Baby Shower / Cradle">Baby Shower / Cradle</option>
+                    <option value="All">All Occasions</option>
                   </select>
                 </div>
                 <div>
@@ -941,7 +997,7 @@
       </section>
     </main>
 
-    <!-- NATIVE BOTTOM NAVIGATION BAR (CUSTOMER) -->
+    <!-- STICKY BOTTOM NAVIGATION BAR (CUSTOMER) -->
     <nav id="customerBottomNav" class="bottom-nav hidden">
       <button type="button" class="nav-item active" data-cust-tab="explore">
         <span class="nav-icon">🏠</span><span>Explore</span>
@@ -952,10 +1008,11 @@
       </button>
       <button type="button" class="nav-item" data-cust-tab="bookings">
         <span class="nav-icon">📋</span><span>My Events</span>
+        <span id="dueBadge" class="nav-badge hidden">!</span>
       </button>
     </nav>
 
-    <!-- NATIVE BOTTOM NAVIGATION BAR (ADMIN) -->
+    <!-- STICKY BOTTOM NAVIGATION BAR (ADMIN) -->
     <nav id="adminBottomNav" class="bottom-nav hidden">
       <button type="button" class="nav-item active" data-admin-tab="bookings">
         <span class="nav-icon">📅</span><span>Bookings</span>
@@ -991,6 +1048,35 @@
       </div>
     </div>
 
+    <!-- PAY BALANCE BOTTOM SHEET MODAL (CUSTOMER) -->
+    <div id="payBalanceModal" class="sheet-backdrop">
+      <div class="sheet-box" id="payBalanceModalBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="font-size:0.96rem;">Pay Remaining Event Balance</strong>
+          <button type="button" id="closePayBalModalBtn" class="btn btn-outline btn-xs">✕</button>
+        </div>
+        <div id="payBalSummary" class="split-box"></div>
+        <input type="hidden" id="payBalBookingId" value="" />
+
+        <label for="payBalAmount">Amount to Pay Now (₹)</label>
+        <input id="payBalAmount" type="number" min="1" />
+
+        <label for="payBalMethod">Payment Method</label>
+        <select id="payBalMethod">
+          <option value="UPI (PhonePe / GPay / Paytm)">UPI (PhonePe / GPay / Paytm)</option>
+          <option value="Bank Transfer (IMPS / NEFT)">Bank Transfer (IMPS / NEFT)</option>
+          <option value="Credit / Debit Card">Credit / Debit Card</option>
+          <option value="Cash at Venue / Branch">Cash at Venue / Branch</option>
+        </select>
+
+        <label for="payBalRef">Transaction / Receipt Reference ID</label>
+        <input id="payBalRef" type="text" placeholder="Enter UPI Ref # or Receipt #" />
+
+        <div class="alert-info" id="payBalOfficialInfo"></div>
+        <button type="button" id="submitPayBalanceBtn" class="btn btn-success" style="width:100%;">Submit Balance Payment</button>
+      </div>
+    </div>
+
     <!-- HELP DESK BOTTOM SHEET MODAL -->
     <div id="helpModal" class="sheet-backdrop">
       <div class="sheet-box" id="helpModalBox">
@@ -1005,8 +1091,10 @@
 
   <script>
     (function () {
-      var STORAGE_KEY = 'partyhub_srevents_mobile_v22';
-      var SESSION_KEY = 'partyhub_srevents_session_v22';
+      var STORAGE_KEY = 'partyhub_srevents_data_v23';
+      var LEGACY_KEYS = ['partyhub_srevents_mobile_v22', 'partyhub_srevents_pro_v20', 'partyhub_srevents_domready_v21'];
+      var SESSION_KEY = 'partyhub_srevents_session_v23';
+      var FILTER_KEY = 'partyhub_srevents_filters_v23';
 
       var districtCities = {
         'Annamayya District': [
@@ -1138,12 +1226,27 @@
               '• Organic dark-stain Bridal & Guest Mehndi artist',
               '• HD Party Makeup & Hairstyling at venue/home'
             ].join('\n')
+          },
+          {
+            id: 's8',
+            category: 'Decorations',
+            occasion: 'Baby Shower / Cradle',
+            venue: 'Indoor',
+            title: 'Traditional Cradle Ceremony & Baby Shower Floral Decor',
+            price: 7000,
+            photo: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400&q=90',
+            details: [
+              '• Marigold, jasmine & pastel flower cradle arch',
+              '• Decorated wooden/metal baby cradle setup',
+              '• Welcome board & warm focus lighting',
+              '• Full setup & dismantling across Rayachoti & Madanapalle'
+            ].join('\n')
           }
         ],
         bookings: [
           {
             id: 'b1',
-            date: '2026-11-23',
+            date: '2026-11-25',
             district: 'Annamayya District',
             city: 'Rayachoti',
             venueAddress: 'Bose Nagar Function Hall, Rayachoti',
@@ -1167,24 +1270,57 @@
               }
             ],
             totalPrice: 5500,
-            paymentMethod: 'UPI (PhonePe / GPay / Paytm)',
-            paymentRef: 'UPI-94812041',
-            paymentStatus: '20% Advance Paid',
+            paidAmount: 1100,
+            paymentHistory: [
+              { date: '2026-11-23', amount: 1100, method: 'UPI (PhonePe / GPay / Paytm)', ref: 'UPI-94812041', note: '20% Advance' }
+            ],
+            reminderNote: '70% setup installment (₹3,850) due on event arrival.',
             eSign: 'Karthik Reddy',
             adminApproved: true
           }
         ]
       };
 
+      function normalizeBooking(b) {
+        var total = Number(b.totalPrice) || 0;
+        var paid = typeof b.paidAmount === 'number' ? b.paidAmount : 0;
+        if (typeof b.paidAmount !== 'number') {
+          var st = String(b.paymentStatus || '');
+          if (st.indexOf('100%') !== -1) paid = total;
+          else if (st.indexOf('90%') !== -1) paid = Math.round(total * 0.90);
+          else if (st.indexOf('Paid') !== -1 || st.indexOf('Submitted') !== -1) paid = Math.round(total * 0.20);
+        }
+        if (paid > total) paid = total;
+        if (!Array.isArray(b.paymentHistory)) {
+          b.paymentHistory = paid > 0
+            ? [{ date: b.date || '', amount: paid, method: b.paymentMethod || 'UPI', ref: b.paymentRef || 'Advance', note: 'Initial Payment' }]
+            : [];
+        }
+        b.totalPrice = total;
+        b.paidAmount = paid;
+        return b;
+      }
+
       function loadData() {
         try {
           var raw = window.localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            for (var k = 0; k < LEGACY_KEYS.length; k++) {
+              var oldRaw = window.localStorage.getItem(LEGACY_KEYS[k]);
+              if (oldRaw) {
+                raw = oldRaw;
+                break;
+              }
+            }
+          }
           if (raw) {
             var parsed = JSON.parse(raw);
+            var srvs = Array.isArray(parsed.services) && parsed.services.length ? parsed.services : defaultData.services;
+            var bks = Array.isArray(parsed.bookings) ? parsed.bookings.map(normalizeBooking) : defaultData.bookings;
             return {
               settings: parsed.settings || defaultData.settings,
-              services: Array.isArray(parsed.services) && parsed.services.length ? parsed.services : defaultData.services,
-              bookings: Array.isArray(parsed.bookings) ? parsed.bookings : defaultData.bookings
+              services: srvs,
+              bookings: bks
             };
           }
         } catch (e) {}
@@ -1201,7 +1337,30 @@
         } catch (e) {}
       }
 
-      var IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+      function saveFilters() {
+        try {
+          window.localStorage.setItem(FILTER_KEY, JSON.stringify({
+            district: document.getElementById('filterDistrict').value,
+            city: document.getElementById('filterCity').value,
+            occasion: document.getElementById('filterOccasion').value,
+            maxPrice: document.getElementById('filterMaxPrice').value,
+            category: state.selectedCategory,
+            bookingDate: document.getElementById('bookingDate').value,
+            venueAddress: document.getElementById('bookingVenueAddress').value
+          }));
+        } catch (e) {}
+      }
+
+      function loadFilters() {
+        try {
+          var raw = window.localStorage.getItem(FILTER_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      var IDLE_TIMEOUT_MS = 15 * 60 * 1000;
       var idleTimerId = null;
       var lastActivityWrite = 0;
 
@@ -1270,6 +1429,13 @@
       }
 
       var loaded = loadData();
+      // Persist immediately so initial defaults are guaranteed in storage
+      try {
+        if (!window.localStorage.getItem(STORAGE_KEY)) {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(loaded));
+        }
+      } catch (e) {}
+
       var state = {
         role: null,
         customer: { name: '', phone: '' },
@@ -1301,17 +1467,43 @@
           .replace(/"/g, '&quot;');
       }
 
-      function scrollTopBody() {
-        var body = document.getElementById('appBody');
-        if (body) body.scrollTop = 0;
+      function scrollTopPage() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      function updateCities() {
+      function updateCities(preferredCity) {
         var dist = document.getElementById('filterDistrict').value;
         var cities = districtCities[dist] || [];
-        document.getElementById('filterCity').innerHTML = cities.map(function (c) {
+        var sel = document.getElementById('filterCity');
+        sel.innerHTML = cities.map(function (c) {
           return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>';
         }).join('');
+        if (preferredCity && cities.indexOf(preferredCity) !== -1) {
+          sel.value = preferredCity;
+        }
+      }
+
+      function applySavedFilters() {
+        var f = loadFilters();
+        if (!f) {
+          updateCities();
+          return;
+        }
+        if (f.district && districtCities[f.district]) {
+          document.getElementById('filterDistrict').value = f.district;
+        }
+        updateCities(f.city);
+        if (f.occasion) document.getElementById('filterOccasion').value = f.occasion;
+        if (f.maxPrice !== undefined) document.getElementById('filterMaxPrice').value = f.maxPrice;
+        if (f.bookingDate) document.getElementById('bookingDate').value = f.bookingDate;
+        if (f.venueAddress) document.getElementById('bookingVenueAddress').value = f.venueAddress;
+        if (f.category) {
+          state.selectedCategory = f.category;
+          var chips = document.querySelectorAll('#categoryButtons .chip');
+          for (var i = 0; i < chips.length; i++) {
+            chips[i].classList.toggle('active', chips[i].getAttribute('data-cat') === f.category);
+          }
+        }
       }
 
       function switchCustomerTab(tab) {
@@ -1324,7 +1516,7 @@
         for (var i = 0; i < btns.length; i++) {
           btns[i].classList.toggle('active', btns[i].getAttribute('data-cust-tab') === tab);
         }
-        scrollTopBody();
+        scrollTopPage();
       }
 
       function switchAdminTab(tab) {
@@ -1339,7 +1531,7 @@
           btns[i].classList.toggle('active', btns[i].getAttribute('data-admin-tab') === tab);
         }
         if (tab === 'analytics') renderAnalytics();
-        scrollTopBody();
+        scrollTopPage();
       }
 
       function sendOtp() {
@@ -1379,7 +1571,7 @@
         document.getElementById('logoutBtn').classList.remove('hidden');
         document.getElementById('adminLoginBtn').classList.add('hidden');
         document.getElementById('activeCustomerLabel').textContent = state.customer.name;
-        updateCities();
+        applySavedFilters();
         if (!document.getElementById('bookingDate').value) {
           document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
         }
@@ -1430,18 +1622,32 @@
 
       function renderCustomerPackages() {
         var occ = document.getElementById('filterOccasion').value;
-        var maxPrice = Number(document.getElementById('filterMaxPrice').value) || Infinity;
+        var rawBudget = document.getElementById('filterMaxPrice').value.trim();
+        var maxPrice = rawBudget !== '' && Number(rawBudget) > 0 ? Number(rawBudget) : Infinity;
+
+        var hasActiveFilter = (occ !== 'All') || (maxPrice !== Infinity) || (state.selectedCategory !== 'All');
+        document.getElementById('filterResetRow').classList.toggle('hidden', !hasActiveFilter);
 
         var filtered = state.services.filter(function (s) {
-          if (state.selectedCategory !== 'All' && s.category !== state.selectedCategory) return false;
-          if (occ !== 'All' && s.occasion !== occ) return false;
-          if (Number(s.price) > maxPrice) return false;
+          var sCat = String(s.category || '').trim();
+          var sOcc = String(s.occasion || 'All').trim();
+          var sPrice = Number(s.price) || 0;
+          if (state.selectedCategory !== 'All' && sCat !== state.selectedCategory) return false;
+          if (occ !== 'All' && sOcc !== 'All' && sOcc !== occ) return false;
+          if (sPrice > maxPrice) return false;
           return true;
         });
 
         var grid = document.getElementById('customerPackagesGrid');
         if (!filtered.length) {
-          grid.innerHTML = '<div class="card" style="font-size:0.82rem;color:var(--muted);">No packages match this filter.</div>';
+          var budgetHint = maxPrice !== Infinity ? ' within ₹' + maxPrice.toLocaleString('en-IN') : '';
+          var occHint = occ !== 'All' ? ' for ' + escapeHtml(occ) : '';
+          grid.innerHTML =
+            '<div class="card" style="text-align:center; padding:18px;">' +
+              '<div style="font-weight:800; font-size:0.9rem; margin-bottom:4px;">No Packages Found' + occHint + budgetHint + '</div>' +
+              '<div style="font-size:0.78rem; color:var(--muted); margin-bottom:10px;">Try increasing your Max Budget or resetting filters to view all available events &amp; photos.</div>' +
+              '<button type="button" class="btn btn-primary btn-xs" onclick="document.getElementById(\'resetFiltersBtn\').click()">Show All Packages</button>' +
+            '</div>';
           return;
         }
 
@@ -1451,6 +1657,7 @@
               '<div class="srv-img-wrap" data-open-srv="' + srv.id + '">' +
                 '<img src="' + srv.photo + '" alt="' + escapeHtml(srv.title) + '" />' +
                 '<span class="srv-tag">' + escapeHtml(srv.category) + '</span>' +
+                '<span class="srv-occ-tag">' + escapeHtml(srv.occasion || 'All') + '</span>' +
                 '<span class="srv-zoom">🔍 Full Photo</span>' +
               '</div>' +
               '<div class="srv-content">' +
@@ -1511,10 +1718,13 @@
         }).join('');
 
         document.getElementById('paymentSplitBox').innerHTML =
-          '<strong>Total Amount: ₹' + total.toLocaleString('en-IN') + '</strong>' +
+          '<strong>Total Package Amount: ₹' + total.toLocaleString('en-IN') + '</strong>' +
           '<div class="split-row"><span>1st (20% Advance):</span><strong>₹' + p20.toLocaleString('en-IN') + '</strong></div>' +
           '<div class="split-row"><span>2nd (70% Setup Arrival):</span><strong>₹' + p70.toLocaleString('en-IN') + '</strong></div>' +
           '<div class="split-row"><span>3rd (10% Completion):</span><strong>₹' + p10.toLocaleString('en-IN') + '</strong></div>';
+
+        var initPaidEl = document.getElementById('initialPaidInput');
+        if (!initPaidEl.value) initPaidEl.value = p20;
 
         updatePaymentMethodInfo();
         checkout.classList.remove('hidden');
@@ -1527,6 +1737,7 @@
         var venueAddress = document.getElementById('bookingVenueAddress').value.trim();
         var exactTime = document.getElementById('customExactTime').value;
         var paymentMethod = document.getElementById('paymentMethodSelect').value;
+        var initialPaid = Math.max(0, Number(document.getElementById('initialPaidInput').value) || 0);
         var paymentRef = document.getElementById('paymentRefInput').value.trim();
         var eSign = document.getElementById('customerESign').value.trim();
 
@@ -1535,6 +1746,19 @@
         if (!eSign) return alert('Please type your full name to sign the E-Agreement.');
 
         var total = state.cart.reduce(function (sum, item) { return sum + Number(item.price); }, 0);
+        if (initialPaid > total) initialPaid = total;
+
+        var history = [];
+        if (initialPaid > 0) {
+          history.push({
+            date: new Date().toISOString().slice(0, 10),
+            amount: initialPaid,
+            method: paymentMethod,
+            ref: paymentRef || 'Initial Advance',
+            note: 'Booking Advance'
+          });
+        }
+
         state.bookings.unshift({
           id: 'b_' + Date.now(),
           date: date,
@@ -1547,15 +1771,16 @@
           exactTime: exactTime,
           items: state.cart.slice(),
           totalPrice: total,
-          paymentMethod: paymentMethod,
-          paymentRef: paymentRef || 'Pending Advance',
-          paymentStatus: paymentRef ? '20% Advance Submitted' : '20% Advance Due',
+          paidAmount: initialPaid,
+          paymentHistory: history,
+          reminderNote: (total - initialPaid) > 0 ? 'Balance ₹' + (total - initialPaid).toLocaleString('en-IN') + ' due before event completion.' : '',
           eSign: eSign,
           adminApproved: false
         });
         state.cart = [];
         document.getElementById('customerESign').value = '';
         document.getElementById('paymentRefInput').value = '';
+        document.getElementById('initialPaidInput').value = '';
         saveData();
         checkSlotAvailability();
         renderCart();
@@ -1566,28 +1791,117 @@
       function renderCustomerBookings() {
         var mine = state.bookings.filter(function (b) { return b.customerPhone === state.customer.phone; });
         var box = document.getElementById('customerMyBookings');
+        var reminderBanner = document.getElementById('custBalanceReminderBanner');
+        var dueBadge = document.getElementById('dueBadge');
+
+        var totalDueAll = mine.reduce(function (acc, b) {
+          return acc + Math.max(0, Number(b.totalPrice) - Number(b.paidAmount || 0));
+        }, 0);
+
+        if (totalDueAll > 0) {
+          dueBadge.classList.remove('hidden');
+          reminderBanner.classList.remove('hidden');
+          reminderBanner.innerHTML =
+            '⏰ <strong>Balance Payment Reminder:</strong> You have <strong>₹' + totalDueAll.toLocaleString('en-IN') +
+            '</strong> remaining balance across your booked event(s). <button type="button" class="btn btn-primary btn-xs" style="margin-left:6px;" onclick="document.querySelector(\'[data-cust-tab=bookings]\').click()">Pay Balance Now</button>';
+        } else {
+          dueBadge.classList.add('hidden');
+          reminderBanner.classList.add('hidden');
+        }
+
         if (!mine.length) {
           box.textContent = 'No confirmed bookings yet.';
           return;
         }
+
         box.innerHTML = mine.map(function (b) {
           var total = Number(b.totalPrice);
+          var paid = Number(b.paidAmount || 0);
+          var balance = Math.max(0, total - paid);
+          var statusBadge = balance === 0
+            ? '<span class="badge badge-paid">✓ 100% Fully Paid</span>'
+            : '<span class="badge badge-due">Balance Due: ₹' + balance.toLocaleString('en-IN') + '</span>';
+
+          var historyHtml = (b.paymentHistory || []).map(function (p) {
+            return '<div style="font-size:0.72rem; color:var(--success);">&bull; Paid <strong>₹' + Number(p.amount).toLocaleString('en-IN') + '</strong> via ' + escapeHtml(p.method) + ' (' + escapeHtml(p.ref || '') + ') on ' + escapeHtml(p.date) + '</div>';
+          }).join('');
+
           return (
-            '<div style="padding:11px; border:1px solid var(--border); border-radius:12px; background:#f8fafc; margin-bottom:9px;">' +
-              '<div style="display:flex; justify-content:space-between; gap:6px; align-items:center;">' +
-                '<strong style="color:var(--text);">' + b.items.map(function (i) { return escapeHtml(i.title); }).join(' + ') + '</strong>' +
-                '<span class="badge">' + escapeHtml(b.paymentStatus || '20% Advance Due') + '</span>' +
+            '<div style="padding:12px; border:1px solid var(--border); border-radius:14px; background:#f8fafc; margin-bottom:10px;">' +
+              '<div style="display:flex; justify-content:space-between; gap:6px; align-items:flex-start;">' +
+                '<strong style="color:var(--text); font-size:0.88rem;">' + b.items.map(function (i) { return escapeHtml(i.title); }).join(' + ') + '</strong>' +
+                statusBadge +
               '</div>' +
               '<div style="font-size:0.76rem; margin-top:4px; line-height:1.45;">' +
                 'Date: <strong>' + escapeHtml(b.date) + '</strong> &bull; <strong>' + escapeHtml(b.slot) + ' (' + escapeHtml(b.exactTime) + ')</strong><br />' +
                 escapeHtml(b.city) + ', ' + escapeHtml(b.district || '') + '<br />' +
-                'Total: <strong>₹' + total.toLocaleString('en-IN') + '</strong> (' + escapeHtml(b.paymentMethod || 'UPI') + ')<br />' +
+                'Total: <strong>₹' + total.toLocaleString('en-IN') + '</strong> &bull; Paid: <strong style="color:var(--success);">₹' + paid.toLocaleString('en-IN') + '</strong> &bull; Balance: <strong style="color:var(--danger);">₹' + balance.toLocaleString('en-IN') + '</strong><br />' +
                 'E-Sign: <strong>' + escapeHtml(b.eSign) + '</strong> &bull; ' + (b.adminApproved ? '✓ Verified by Admin' : 'Pending Admin Sign') +
               '</div>' +
-              '<button type="button" class="btn btn-outline btn-xs" style="margin-top:6px;" data-open-booking="' + b.id + '">View Event Photo &amp; Details</button>' +
+              (balance > 0 && b.reminderNote ? '<div class="alert-warn" style="margin-top:6px; margin-bottom:6px; font-size:0.73rem;">🔔 Reminder: ' + escapeHtml(b.reminderNote) + '</div>' : '') +
+              (historyHtml ? '<div style="margin-top:6px; padding-top:6px; border-top:1px dashed #cbd5e1;">' + historyHtml + '</div>' : '') +
+              '<div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">' +
+                (balance > 0 ? '<button type="button" class="btn btn-success btn-xs" data-pay-balance="' + b.id + '">💳 Pay Balance (₹' + balance.toLocaleString('en-IN') + ')</button>' : '') +
+                '<button type="button" class="btn btn-outline btn-xs" data-open-booking="' + b.id + '">🔍 View Event Photo &amp; Details</button>' +
+              '</div>' +
             '</div>'
           );
         }).join('');
+      }
+
+      function openPayBalanceModal(bookingId) {
+        var b = state.bookings.find(function (item) { return item.id === bookingId; });
+        if (!b) return;
+        var total = Number(b.totalPrice);
+        var paid = Number(b.paidAmount || 0);
+        var balance = Math.max(0, total - paid);
+        document.getElementById('payBalBookingId').value = b.id;
+        document.getElementById('payBalSummary').innerHTML =
+          '<strong>' + escapeHtml(b.customerName) + '</strong> (' + escapeHtml(b.date) + ')<br />' +
+          'Total: ₹' + total.toLocaleString('en-IN') + ' | Paid: ₹' + paid.toLocaleString('en-IN') + ' | <strong>Remaining Balance: ₹' + balance.toLocaleString('en-IN') + '</strong>';
+        document.getElementById('payBalAmount').value = balance;
+        document.getElementById('payBalAmount').max = balance;
+        document.getElementById('payBalRef').value = '';
+        document.getElementById('payBalOfficialInfo').innerHTML = '<strong>Official UPI:</strong> ' + escapeHtml(state.settings.upi) + ' | Ph: ' + escapeHtml(state.settings.phone);
+        document.getElementById('payBalanceModal').classList.add('open');
+      }
+
+      function submitBalancePayment() {
+        var bookingId = document.getElementById('payBalBookingId').value;
+        var b = state.bookings.find(function (item) { return item.id === bookingId; });
+        if (!b) return;
+        var total = Number(b.totalPrice);
+        var paid = Number(b.paidAmount || 0);
+        var balance = Math.max(0, total - paid);
+        var payAmt = Number(document.getElementById('payBalAmount').value) || 0;
+        var method = document.getElementById('payBalMethod').value;
+        var ref = document.getElementById('payBalRef').value.trim();
+
+        if (payAmt <= 0 || payAmt > balance) {
+          alert('Please enter a valid payment amount up to ₹' + balance.toLocaleString('en-IN') + '.');
+          return;
+        }
+
+        b.paidAmount = paid + payAmt;
+        if (!Array.isArray(b.paymentHistory)) b.paymentHistory = [];
+        b.paymentHistory.push({
+          date: new Date().toISOString().slice(0, 10),
+          amount: payAmt,
+          method: method,
+          ref: ref || 'Balance Payment',
+          note: (b.paidAmount >= total) ? 'Final Settlement' : 'Installment Payment'
+        });
+
+        var newBal = Math.max(0, total - b.paidAmount);
+        b.reminderNote = newBal > 0 ? 'Remaining balance ₹' + newBal.toLocaleString('en-IN') + ' due before event completion.' : '';
+        saveData();
+        document.getElementById('payBalanceModal').classList.remove('open');
+        if (state.role === 'customer') renderCustomerBookings();
+        if (state.role === 'admin') {
+          renderAdminBookings();
+          renderAnalytics();
+        }
+        alert('Payment of ₹' + payAmt.toLocaleString('en-IN') + ' recorded! Remaining Balance: ₹' + newBal.toLocaleString('en-IN'));
       }
 
       function openAdminLogin() {
@@ -1749,7 +2063,7 @@
         document.getElementById('srvDetails').value = s.details;
         document.getElementById('saveServiceBtn').textContent = 'Update Service';
         document.getElementById('cancelEditServiceBtn').classList.remove('hidden');
-        scrollTopBody();
+        scrollTopPage();
       }
 
       function renderAdminServices() {
@@ -1759,7 +2073,7 @@
             '<div class="card" style="display:flex; gap:10px; align-items:flex-start;">' +
               '<img src="' + srv.photo + '" alt="' + escapeHtml(srv.title) + '" data-open-srv="' + srv.id + '" style="width:78px; height:78px; object-fit:cover; border-radius:12px; flex-shrink:0; cursor:pointer;" />' +
               '<div style="flex:1; min-width:0;">' +
-                '<span class="badge">' + escapeHtml(srv.category) + '</span>' +
+                '<span class="badge">' + escapeHtml(srv.category) + ' &bull; ' + escapeHtml(srv.occasion || 'All') + '</span>' +
                 '<div style="font-weight:800; font-size:0.88rem; margin-top:3px;">' + escapeHtml(srv.title) + '</div>' +
                 '<div style="font-weight:800; color:var(--primary-dark); font-size:0.9rem;">₹' + Number(srv.price).toLocaleString('en-IN') + '</div>' +
                 '<div class="srv-details" style="margin:4px 0 8px;">' + escapeHtml(srv.details) + '</div>' +
@@ -1779,6 +2093,15 @@
           ? state.bookings.filter(function (b) { return b.date === selectedDate; })
           : state.bookings;
 
+        var totalAll = list.reduce(function (s, b) { return s + Number(b.totalPrice || 0); }, 0);
+        var paidAll = list.reduce(function (s, b) { return s + Number(b.paidAmount || 0); }, 0);
+        var balAll = Math.max(0, totalAll - paidAll);
+
+        document.getElementById('adminBookingsSummaryKpi').innerHTML =
+          '<div class="kpi-mini"><span>Total Value</span><strong>₹' + totalAll.toLocaleString('en-IN') + '</strong></div>' +
+          '<div class="kpi-mini"><span>Total Paid</span><strong style="color:var(--success);">₹' + paidAll.toLocaleString('en-IN') + '</strong></div>' +
+          '<div class="kpi-mini"><span>Balance Due</span><strong style="color:var(--danger);">₹' + balAll.toLocaleString('en-IN') + '</strong></div>';
+
         var box = document.getElementById('adminBookingsList');
         if (!list.length) {
           box.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);font-size:0.82rem;">No events scheduled for this date.</div>';
@@ -1787,9 +2110,21 @@
 
         box.innerHTML = list.map(function (b) {
           var total = Number(b.totalPrice);
+          var paid = Number(b.paidAmount || 0);
+          var balance = Math.max(0, total - paid);
           var p20 = Math.round(total * 0.20);
           var p70 = Math.round(total * 0.70);
           var p10 = total - p20 - p70;
+
+          var historyHtml = (b.paymentHistory || []).map(function (p) {
+            return '<div style="font-size:0.72rem; color:var(--success);">&bull; ₹' + Number(p.amount).toLocaleString('en-IN') + ' via ' + escapeHtml(p.method) + ' (' + escapeHtml(p.ref || '') + ') on ' + escapeHtml(p.date) + '</div>';
+          }).join('');
+
+          var waReminderText = encodeURIComponent(
+            'Hello ' + b.customerName + ', reminder from PartyHub - SR Events for your event on ' + b.date +
+            ' (' + b.slot + ' at ' + b.exactTime + '). Total: ₹' + total + ', Paid: ₹' + paid + ', Remaining Balance: ₹' + balance + '.'
+          );
+
           return (
             '<div class="card">' +
               '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px;">' +
@@ -1800,12 +2135,18 @@
                 '<span class="badge">' + escapeHtml(b.date) + ' &bull; ' + escapeHtml(b.slot) + ' ' + escapeHtml(b.exactTime) + '</span>' +
               '</div>' +
               '<div style="font-size:0.82rem; font-weight:700; margin-bottom:4px;">' + b.items.map(function (i) { return escapeHtml(i.title); }).join(' + ') + '</div>' +
-              '<div style="font-size:0.78rem; color:var(--primary-dark); font-weight:700; margin-bottom:6px;">' +
-                'Total: ₹' + total.toLocaleString('en-IN') + ' (20%: ₹' + p20 + ' | 70%: ₹' + p70 + ' | 10%: ₹' + p10 + ') &bull; ' + escapeHtml(b.paymentMethod || 'UPI') +
+              '<div class="split-box" style="margin-bottom:8px;">' +
+                '<div class="split-row"><span>Total Package:</span><strong>₹' + total.toLocaleString('en-IN') + '</strong></div>' +
+                '<div class="split-row"><span>Total Paid:</span><strong style="color:var(--success);">₹' + paid.toLocaleString('en-IN') + '</strong></div>' +
+                '<div class="split-row"><span>Remaining Balance:</span><strong style="color:var(--danger);">₹' + balance.toLocaleString('en-IN') + '</strong></div>' +
+                '<div style="font-size:0.7rem; color:var(--muted); margin-top:3px;">Installments (20/70/10): ₹' + p20 + ' / ₹' + p70 + ' / ₹' + p10 + '</div>' +
+                (historyHtml ? '<div style="margin-top:4px; padding-top:4px; border-top:1px dashed #cbd5e1;">' + historyHtml + '</div>' : '') +
               '</div>' +
               '<div style="display:flex; gap:6px; flex-wrap:wrap;">' +
-                '<button type="button" class="btn btn-primary btn-xs" data-open-booking="' + b.id + '">🔍 Max Photo &amp; Details</button>' +
-                '<button type="button" class="btn btn-outline btn-xs" data-pay-status="' + b.id + '">' + escapeHtml(b.paymentStatus || '20% Advance Due') + '</button>' +
+                '<button type="button" class="btn btn-primary btn-xs" data-open-booking="' + b.id + '">🔍 Max Photo</button>' +
+                (balance > 0 ? '<button type="button" class="btn btn-success btn-xs" data-pay-balance="' + b.id + '">+ Record Payment</button>' : '<span class="badge badge-paid">✓ Settled</span>') +
+                (balance > 0 ? '<button type="button" class="btn btn-outline btn-xs" data-send-reminder="' + b.id + '">🔔 Send Reminder</button>' : '') +
+                (balance > 0 ? '<a href="https://wa.me/91' + escapeHtml(b.customerPhone) + '?text=' + waReminderText + '" target="_blank" rel="noopener" class="btn btn-outline btn-xs">WhatsApp Due</a>' : '') +
                 '<button type="button" class="btn ' + (b.adminApproved ? 'btn-primary' : 'btn-outline') + ' btn-xs" data-approve-booking="' + b.id + '">' + (b.adminApproved ? '✓ E-Signed' : 'Counter-Sign') + '</button>' +
               '</div>' +
             '</div>'
@@ -1816,12 +2157,12 @@
       function renderAnalytics() {
         var totalBookings = state.bookings.length;
         var totalRevenue = state.bookings.reduce(function (s, b) { return s + Number(b.totalPrice || 0); }, 0);
-        var paidBookings = state.bookings.filter(function (b) { return (b.paymentStatus || '').indexOf('Paid') !== -1; }).length;
+        var totalCollected = state.bookings.reduce(function (s, b) { return s + Number(b.paidAmount || 0); }, 0);
 
         document.getElementById('analyticsKpiGrid').innerHTML =
           '<div class="kpi-mini"><span>Events</span><strong>' + totalBookings + '</strong></div>' +
-          '<div class="kpi-mini"><span>Gross Value</span><strong>₹' + totalRevenue.toLocaleString('en-IN') + '</strong></div>' +
-          '<div class="kpi-mini"><span>Paid / Adv</span><strong>' + paidBookings + '/' + totalBookings + '</strong></div>';
+          '<div class="kpi-mini"><span>Total Value</span><strong>₹' + totalRevenue.toLocaleString('en-IN') + '</strong></div>' +
+          '<div class="kpi-mini"><span>Collected</span><strong>₹' + totalCollected.toLocaleString('en-IN') + '</strong></div>';
 
         var dailyMap = {};
         var monthlyMap = {};
@@ -1862,9 +2203,8 @@
         if (!b || !b.items.length) return;
         var first = b.items[0];
         var total = Number(b.totalPrice);
-        var p20 = Math.round(total * 0.20);
-        var p70 = Math.round(total * 0.70);
-        var p10 = total - p20 - p70;
+        var paid = Number(b.paidAmount || 0);
+        var balance = Math.max(0, total - paid);
 
         document.getElementById('modalTitle').textContent = b.customerName + ' — ' + b.items.map(function (i) { return i.title; }).join(' + ');
         document.getElementById('modalMeta').textContent = b.date + ' | ' + b.slot + ' at ' + b.exactTime + ' | ' + b.city + ', ' + (b.district || '') + ' (' + (b.venueAddress || b.city) + ')';
@@ -1882,9 +2222,8 @@
         var payBox = document.getElementById('modalPaymentBox');
         payBox.classList.remove('hidden');
         payBox.innerHTML =
-          '<strong>Payment &amp; E-Agreement:</strong> Total ₹' + total.toLocaleString('en-IN') +
-          ' (20%: ₹' + p20 + ' | 70%: ₹' + p70 + ' | 10%: ₹' + p10 + ')<br />' +
-          'Method: <strong>' + escapeHtml(b.paymentMethod || 'UPI') + '</strong> (' + escapeHtml(b.paymentRef || 'N/A') + ') &bull; Status: <strong>' + escapeHtml(b.paymentStatus || '20% Advance Due') + '</strong><br />' +
+          '<strong>Payment &amp; Balance Details:</strong><br />' +
+          'Total: <strong>₹' + total.toLocaleString('en-IN') + '</strong> &bull; Paid: <strong style="color:var(--success);">₹' + paid.toLocaleString('en-IN') + '</strong> &bull; Balance: <strong style="color:var(--danger);">₹' + balance.toLocaleString('en-IN') + '</strong><br />' +
           'Customer E-Sign: <strong>' + escapeHtml(b.eSign) + '</strong> &bull; Admin: <strong>' + (b.adminApproved ? 'Countersigned' : 'Pending') + '</strong>';
 
         document.getElementById('modalDetails').textContent = b.items.map(function (i) { return i.title + ':\n' + i.details; }).join('\n\n');
@@ -1895,7 +2234,7 @@
         var s = state.services.find(function (item) { return item.id === serviceId; });
         if (!s) return;
         document.getElementById('modalTitle').textContent = s.title;
-        document.getElementById('modalMeta').textContent = s.category + ' | Price: ₹' + Number(s.price).toLocaleString('en-IN');
+        document.getElementById('modalMeta').textContent = s.category + ' (' + (s.occasion || 'All') + ') | Price: ₹' + Number(s.price).toLocaleString('en-IN');
         document.getElementById('modalImage').src = s.photo;
         document.getElementById('modalGalleryStrip').innerHTML = '';
         document.getElementById('modalPaymentBox').classList.add('hidden');
@@ -1932,7 +2271,7 @@
         } else {
           showMsg('custLoginMsg', '');
         }
-        scrollTopBody();
+        scrollTopPage();
       }
 
       function initApp() {
@@ -1959,12 +2298,38 @@
 
         document.getElementById('filterDistrict').addEventListener('change', function () {
           updateCities();
+          saveFilters();
           renderCustomerPackages();
         });
-        document.getElementById('filterCity').addEventListener('change', renderCustomerPackages);
-        document.getElementById('filterOccasion').addEventListener('change', renderCustomerPackages);
-        document.getElementById('filterMaxPrice').addEventListener('input', renderCustomerPackages);
-        document.getElementById('bookingDate').addEventListener('change', checkSlotAvailability);
+        document.getElementById('filterCity').addEventListener('change', function () {
+          saveFilters();
+          renderCustomerPackages();
+        });
+        document.getElementById('filterOccasion').addEventListener('change', function () {
+          saveFilters();
+          renderCustomerPackages();
+        });
+        document.getElementById('filterMaxPrice').addEventListener('input', function () {
+          saveFilters();
+          renderCustomerPackages();
+        });
+        document.getElementById('bookingDate').addEventListener('change', function () {
+          saveFilters();
+          checkSlotAvailability();
+        });
+        document.getElementById('bookingVenueAddress').addEventListener('input', saveFilters);
+
+        document.getElementById('resetFiltersBtn').addEventListener('click', function () {
+          document.getElementById('filterOccasion').value = 'All';
+          document.getElementById('filterMaxPrice').value = '';
+          state.selectedCategory = 'All';
+          var chips = document.querySelectorAll('#categoryButtons .chip');
+          for (var i = 0; i < chips.length; i++) {
+            chips[i].classList.toggle('active', chips[i].getAttribute('data-cat') === 'All');
+          }
+          saveFilters();
+          renderCustomerPackages();
+        });
 
         document.getElementById('slotMorningBtn').addEventListener('click', function () { selectSlot('Morning'); });
         document.getElementById('slotAfternoonBtn').addEventListener('click', function () { selectSlot('Afternoon'); });
@@ -1976,6 +2341,7 @@
           var all = document.querySelectorAll('.chip');
           for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
           btn.classList.add('active');
+          saveFilters();
           renderCustomerPackages();
         });
 
@@ -2027,7 +2393,7 @@
             try {
               var parsed = JSON.parse(ev.target.result);
               if (parsed.services) state.services = parsed.services;
-              if (parsed.bookings) state.bookings = parsed.bookings;
+              if (parsed.bookings) state.bookings = parsed.bookings.map(normalizeBooking);
               if (parsed.settings) state.settings = parsed.settings;
               saveData();
               populateSettingsForm();
@@ -2065,6 +2431,14 @@
           if (e.target.id === 'photoModal') document.getElementById('photoModal').classList.remove('open');
         });
 
+        document.getElementById('closePayBalModalBtn').addEventListener('click', function () {
+          document.getElementById('payBalanceModal').classList.remove('open');
+        });
+        document.getElementById('payBalanceModal').addEventListener('click', function (e) {
+          if (e.target.id === 'payBalanceModal') document.getElementById('payBalanceModal').classList.remove('open');
+        });
+        document.getElementById('submitPayBalanceBtn').addEventListener('click', submitBalancePayment);
+
         document.addEventListener('click', function (e) {
           var addBtn = e.target.closest('[data-add-cart]');
           if (addBtn) {
@@ -2084,6 +2458,24 @@
             return;
           }
 
+          var payBalBtn = e.target.closest('[data-pay-balance]');
+          if (payBalBtn) {
+            openPayBalanceModal(payBalBtn.getAttribute('data-pay-balance'));
+            return;
+          }
+
+          var remBtn = e.target.closest('[data-send-reminder]');
+          if (remBtn) {
+            var rb = state.bookings.find(function (item) { return item.id === remBtn.getAttribute('data-send-reminder'); });
+            if (rb) {
+              var bal = Math.max(0, Number(rb.totalPrice) - Number(rb.paidAmount || 0));
+              rb.reminderNote = 'Admin Reminder (' + new Date().toLocaleDateString('en-IN') + '): Please pay remaining balance of ₹' + bal.toLocaleString('en-IN') + ' before event setup/completion.';
+              saveData();
+              alert('In-app balance reminder sent to ' + rb.customerName + '!');
+            }
+            return;
+          }
+
           var editSrvBtn = e.target.closest('[data-edit-srv]');
           if (editSrvBtn) {
             editService(editSrvBtn.getAttribute('data-edit-srv'));
@@ -2096,20 +2488,6 @@
             state.services = state.services.filter(function (s) { return s.id !== id; });
             saveData();
             renderAdminServices();
-            return;
-          }
-
-          var payStatusBtn = e.target.closest('[data-pay-status]');
-          if (payStatusBtn) {
-            var pb = state.bookings.find(function (item) { return item.id === payStatusBtn.getAttribute('data-pay-status'); });
-            if (pb) {
-              var order = ['20% Advance Due', '20% Advance Paid', '90% Paid (Setup)', '100% Fully Paid'];
-              var idx = order.indexOf(pb.paymentStatus);
-              pb.paymentStatus = order[(idx + 1) % order.length];
-              saveData();
-              renderAdminBookings();
-              renderAnalytics();
-            }
             return;
           }
 
@@ -2142,6 +2520,7 @@
             document.getElementById('modalImage').src = switchPhotoBtn.getAttribute('data-switch-photo');
           }
         });
+
         ['click', 'touchstart', 'keydown', 'scroll', 'input'].forEach(function (evt) {
           document.addEventListener(evt, function () {
             if (state.role) touchActivity(false);
@@ -2168,7 +2547,7 @@
           document.getElementById('logoutBtn').classList.remove('hidden');
           document.getElementById('adminLoginBtn').classList.add('hidden');
           document.getElementById('activeCustomerLabel').textContent = state.customer.name;
-          updateCities();
+          applySavedFilters();
           if (!document.getElementById('bookingDate').value) {
             document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
           }
