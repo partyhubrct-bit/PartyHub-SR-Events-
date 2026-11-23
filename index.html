@@ -1006,6 +1006,7 @@
   <script>
     (function () {
       var STORAGE_KEY = 'partyhub_srevents_mobile_v22';
+      var SESSION_KEY = 'partyhub_srevents_session_v22';
 
       var districtCities = {
         'Annamayya District': [
@@ -1200,6 +1201,74 @@
         } catch (e) {}
       }
 
+      var IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+      var idleTimerId = null;
+      var lastActivityWrite = 0;
+
+      function saveSession() {
+        try {
+          var existing = loadSession();
+          var lastAct = (existing && existing.lastActivity) ? existing.lastActivity : Date.now();
+          window.localStorage.setItem(SESSION_KEY, JSON.stringify({
+            role: state.role,
+            customer: state.customer,
+            cart: state.cart,
+            activeCustTab: state.activeCustTab || 'explore',
+            activeAdminTab: state.activeAdminTab || 'bookings',
+            lastActivity: lastAct
+          }));
+        } catch (e) {}
+      }
+
+      function touchActivity(force) {
+        if (!state.role) return;
+        var now = Date.now();
+        if (force || (now - lastActivityWrite > 10000)) {
+          lastActivityWrite = now;
+          try {
+            var existing = loadSession() || {};
+            existing.role = state.role;
+            existing.customer = state.customer;
+            existing.cart = state.cart;
+            existing.activeCustTab = state.activeCustTab || 'explore';
+            existing.activeAdminTab = state.activeAdminTab || 'bookings';
+            existing.lastActivity = now;
+            window.localStorage.setItem(SESSION_KEY, JSON.stringify(existing));
+          } catch (e) {}
+        }
+        resetIdleTimer();
+      }
+
+      function resetIdleTimer() {
+        if (idleTimerId) {
+          clearTimeout(idleTimerId);
+          idleTimerId = null;
+        }
+        if (!state.role) return;
+        idleTimerId = setTimeout(function () {
+          logoutAll(true);
+        }, IDLE_TIMEOUT_MS);
+      }
+
+      function clearSession() {
+        if (idleTimerId) {
+          clearTimeout(idleTimerId);
+          idleTimerId = null;
+        }
+        try {
+          window.localStorage.removeItem(SESSION_KEY);
+        } catch (e) {}
+      }
+
+      function loadSession() {
+        try {
+          var raw = window.localStorage.getItem(SESSION_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
       var loaded = loadData();
       var state = {
         role: null,
@@ -1246,6 +1315,8 @@
       }
 
       function switchCustomerTab(tab) {
+        state.activeCustTab = tab;
+        saveSession();
         document.getElementById('custScreenExplore').classList.toggle('hidden', tab !== 'explore');
         document.getElementById('custScreenCart').classList.toggle('hidden', tab !== 'cart');
         document.getElementById('custScreenBookings').classList.toggle('hidden', tab !== 'bookings');
@@ -1257,6 +1328,8 @@
       }
 
       function switchAdminTab(tab) {
+        state.activeAdminTab = tab;
+        saveSession();
         document.getElementById('adminTabBookings').classList.toggle('hidden', tab !== 'bookings');
         document.getElementById('adminTabServices').classList.toggle('hidden', tab !== 'services');
         document.getElementById('adminTabAnalytics').classList.toggle('hidden', tab !== 'analytics');
@@ -1296,6 +1369,8 @@
         }
         showMsg('custLoginMsg', '');
         state.role = 'customer';
+        saveSession();
+        touchActivity(true);
         document.getElementById('customerLoginCard').classList.add('hidden');
         document.getElementById('adminLoginCard').classList.add('hidden');
         document.getElementById('customerView').classList.remove('hidden');
@@ -1404,6 +1479,7 @@
       }
 
       function renderCart() {
+        if (state.role === 'customer') saveSession();
         var box = document.getElementById('cartItemsBox');
         var checkout = document.getElementById('checkoutBox');
         var badge = document.getElementById('cartBadge');
@@ -1536,6 +1612,8 @@
         }
         showMsg('adminLoginMsg', '');
         state.role = 'admin';
+        saveSession();
+        touchActivity(true);
         document.getElementById('adminLoginCard').classList.add('hidden');
         document.getElementById('customerLoginCard').classList.add('hidden');
         document.getElementById('customerView').classList.add('hidden');
@@ -1833,10 +1911,11 @@
         document.getElementById('cfgBank').value = state.settings.bank || '';
       }
 
-      function logoutAll() {
+      function logoutAll(isTimeout) {
         state.role = null;
         state.selectedSlot = '';
         state.cart = [];
+        clearSession();
         document.getElementById('adminView').classList.add('hidden');
         document.getElementById('adminBottomNav').classList.add('hidden');
         document.getElementById('customerView').classList.add('hidden');
@@ -1848,6 +1927,11 @@
         document.getElementById('otpSection').classList.add('hidden');
         document.getElementById('sendOtpBtn').classList.remove('hidden');
         document.getElementById('verifyOtpBtn').classList.add('hidden');
+        if (isTimeout === true) {
+          showMsg('custLoginMsg', 'Session expired after 15 minutes of inactivity. Please log in again.');
+        } else {
+          showMsg('custLoginMsg', '');
+        }
         scrollTopBody();
       }
 
@@ -1861,7 +1945,7 @@
         document.getElementById('backToCustBtn').addEventListener('click', backToCustomerLogin);
         document.getElementById('doAdminLoginBtn').addEventListener('click', handleAdminLogin);
         document.getElementById('adminPin').addEventListener('keydown', function (e) { if (e.key === 'Enter') handleAdminLogin(); });
-        document.getElementById('logoutBtn').addEventListener('click', logoutAll);
+        document.getElementById('logoutBtn').addEventListener('click', function () { logoutAll(false); });
 
         document.getElementById('customerBottomNav').addEventListener('click', function (e) {
           var btn = e.target.closest('[data-cust-tab]');
@@ -2058,12 +2142,69 @@
             document.getElementById('modalImage').src = switchPhotoBtn.getAttribute('data-switch-photo');
           }
         });
+        ['click', 'touchstart', 'keydown', 'scroll', 'input'].forEach(function (evt) {
+          document.addEventListener(evt, function () {
+            if (state.role) touchActivity(false);
+          }, { passive: true });
+        });
+      }
+
+      function restoreActiveSession() {
+        var saved = loadSession();
+        if (!saved || !saved.role) return;
+        if (saved.lastActivity && (Date.now() - saved.lastActivity >= IDLE_TIMEOUT_MS)) {
+          logoutAll(true);
+          return;
+        }
+        if (saved.role === 'customer' && saved.customer && saved.customer.phone) {
+          state.role = 'customer';
+          state.customer = saved.customer;
+          state.cart = Array.isArray(saved.cart) ? saved.cart : [];
+          document.getElementById('customerLoginCard').classList.add('hidden');
+          document.getElementById('adminLoginCard').classList.add('hidden');
+          document.getElementById('customerView').classList.remove('hidden');
+          document.getElementById('customerBottomNav').classList.remove('hidden');
+          document.getElementById('adminBottomNav').classList.add('hidden');
+          document.getElementById('logoutBtn').classList.remove('hidden');
+          document.getElementById('adminLoginBtn').classList.add('hidden');
+          document.getElementById('activeCustomerLabel').textContent = state.customer.name;
+          updateCities();
+          if (!document.getElementById('bookingDate').value) {
+            document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
+          }
+          checkSlotAvailability();
+          renderCustomerPackages();
+          renderCart();
+          renderCustomerBookings();
+          switchCustomerTab(saved.activeCustTab || 'explore');
+          touchActivity(true);
+        } else if (saved.role === 'admin') {
+          state.role = 'admin';
+          document.getElementById('adminLoginCard').classList.add('hidden');
+          document.getElementById('customerLoginCard').classList.add('hidden');
+          document.getElementById('customerView').classList.add('hidden');
+          document.getElementById('customerBottomNav').classList.add('hidden');
+          document.getElementById('adminView').classList.remove('hidden');
+          document.getElementById('adminBottomNav').classList.remove('hidden');
+          document.getElementById('logoutBtn').classList.remove('hidden');
+          document.getElementById('adminLoginBtn').classList.add('hidden');
+          populateSettingsForm();
+          renderAdminServices();
+          renderAdminBookings();
+          renderAnalytics();
+          switchAdminTab(saved.activeAdminTab || 'bookings');
+          touchActivity(true);
+        }
       }
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initApp);
+        document.addEventListener('DOMContentLoaded', function () {
+          initApp();
+          restoreActiveSession();
+        });
       } else {
         initApp();
+        restoreActiveSession();
       }
     })();
   </script>
