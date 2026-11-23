@@ -6,18 +6,21 @@
   <title>PartyHub - SR Events | Rayachoti &amp; Madanapalle</title>
   <style>
     :root {
-      --bg-grad: linear-gradient(135deg, #f0f8ff 0%, #dbeeff 50%, #f8fcff 100%);
-      --glass: rgba(255, 255, 255, 0.88);
+      --bg-grad: linear-gradient(135deg, #f3f9ff 0%, #dceeff 48%, #f8fbff 100%);
+      --glass: rgba(255, 255, 255, 0.86);
       --glass-strong: rgba(255, 255, 255, 0.98);
       --glass-border: rgba(255, 255, 255, 0.95);
       --primary: #0284c7;
       --primary-dark: #0369a1;
       --primary-light: #e0f2fe;
+      --accent: #0ea5e9;
       --text: #0f172a;
       --muted: #475569;
       --border: #bae6fd;
       --danger: #b91c1c;
       --danger-bg: #fef2f2;
+      --success: #047857;
+      --success-bg: #ecfdf5;
     }
 
     * {
@@ -40,20 +43,20 @@
     }
 
     .app-shell {
-      max-width: 1080px;
+      max-width: 1120px;
       margin: 0 auto;
       width: 100%;
     }
 
     .glass-card {
       background: var(--glass);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--glass-border);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 10px 28px rgba(2, 132, 199, 0.09);
-      margin-bottom: 14px;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 12px 32px rgba(2, 132, 199, 0.10);
+      margin-bottom: 16px;
     }
 
     .topbar {
@@ -66,9 +69,10 @@
     }
 
     .brand-title {
-      font-size: 1.28rem;
+      font-size: 1.35rem;
       font-weight: 800;
       color: var(--primary-dark);
+      letter-spacing: -0.02em;
     }
 
     .brand-sub {
@@ -86,11 +90,11 @@
 
     .btn {
       border: none;
-      border-radius: 10px;
-      padding: 10px 14px;
+      border-radius: 12px;
+      padding: 10px 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.15s ease;
+      transition: 0.16s ease;
       font-size: 0.88rem;
       display: inline-flex;
       align-items: center;
@@ -100,12 +104,13 @@
     }
 
     .btn-primary {
-      background: var(--primary);
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #fff;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
     }
 
     .btn-primary:hover {
-      background: var(--primary-dark);
+      opacity: 0.94;
     }
 
     .btn-outline {
@@ -127,8 +132,9 @@
     }
 
     .btn-sm {
-      padding: 6px 10px;
+      padding: 6px 11px;
       font-size: 0.8rem;
+      border-radius: 9px;
     }
 
     .notice-danger {
@@ -166,7 +172,7 @@
 
     label {
       display: block;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       font-weight: 600;
       margin-bottom: 5px;
       color: var(--text);
@@ -175,7 +181,7 @@
     input, select, textarea {
       width: 100%;
       padding: 10px 12px;
-      border-radius: 10px;
+      border-radius: 11px;
       border: 1px solid #cbd5e1;
       background: var(--glass-strong);
       font-size: 0.92rem;
@@ -190,19 +196,25 @@
 
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
     }
 
     .grid-4 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
       gap: 10px;
     }
 
     .cat-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 10px;
       margin-bottom: 14px;
     }
@@ -210,13 +222,13 @@
     .cat-btn {
       background: #fff;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 10px;
       text-align: center;
       cursor: pointer;
       transition: 0.15s ease;
       font-weight: 700;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       color: var(--primary-dark);
       display: flex;
       flex-direction: column;
@@ -225,13 +237,13 @@
     }
 
     .cat-btn.active {
-      background: var(--primary);
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #fff;
       border-color: var(--primary);
     }
 
     .cat-icon {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
     }
 
     .slot-group {
@@ -244,21 +256,22 @@
     .package-card {
       background: #fff;
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
     }
 
     .package-card img {
       width: 100%;
-      height: 180px;
+      height: 195px;
       object-fit: cover;
       cursor: pointer;
     }
 
     .package-body {
-      padding: 13px;
+      padding: 14px;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -268,7 +281,7 @@
     .price-tag {
       color: var(--primary-dark);
       font-weight: 800;
-      font-size: 1.06rem;
+      font-size: 1.12rem;
       margin: 5px 0;
     }
 
@@ -284,10 +297,15 @@
       display: inline-block;
       padding: 3px 9px;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
       background: var(--primary-light);
       color: var(--primary-dark);
+    }
+
+    .badge-warn {
+      background: #fef3c7;
+      color: #92400e;
     }
 
     .table-wrap {
@@ -325,7 +343,7 @@
       border: none;
       cursor: pointer;
       padding: 0;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       text-align: left;
     }
 
@@ -356,14 +374,76 @@
       margin-bottom: 14px;
     }
 
+    /* Analytics KPI & Bar Chart */
+    .kpi-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .kpi-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-top: 4px;
+    }
+
+    .chart-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+    }
+
+    .bar-label {
+      width: 96px;
+      font-weight: 600;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 16px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      border-radius: 999px;
+      min-width: 6px;
+    }
+
+    .bar-val {
+      width: 92px;
+      text-align: right;
+      font-weight: 700;
+      color: var(--primary-dark);
+      flex-shrink: 0;
+    }
+
+    /* Full-Screen Lightbox Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.88);
+      background: rgba(15, 23, 42, 0.90);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: 12px;
       z-index: 1000;
     }
 
@@ -373,10 +453,10 @@
 
     .modal-box {
       background: #fff;
-      border-radius: 16px;
-      max-width: 900px;
+      border-radius: 18px;
+      max-width: 980px;
       width: 100%;
-      max-height: 94vh;
+      max-height: 95vh;
       overflow-y: auto;
       padding: 16px;
     }
@@ -391,7 +471,7 @@
 
     .modal-img {
       width: 100%;
-      max-height: 70vh;
+      max-height: 72vh;
       object-fit: contain;
       background: #0f172a;
       border-radius: 12px;
@@ -409,10 +489,10 @@
     <div class="topbar">
       <div>
         <div class="brand-title">PartyHub - SR Events</div>
-        <div class="brand-sub">Annamayya &amp; Kadapa Districts Event Planner, Decorators &amp; Rentals</div>
+        <div class="brand-sub">Andhra Pradesh &bull; Annamayya &amp; YSR Kadapa Districts Event Planners &amp; Decorators</div>
       </div>
       <div class="topbar-actions">
-        <button type="button" id="helpDeskBtn" class="btn btn-outline btn-sm" onclick="phOpenHelpDesk()">Help Desk</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="phOpenHelpDesk()">Help Desk</button>
         <button type="button" id="adminLoginBtn" class="btn btn-outline btn-sm" onclick="phOpenAdminLogin()">Admin Login</button>
         <button type="button" id="logoutBtn" class="btn btn-outline btn-sm hidden" onclick="phLogoutAll()">Logout</button>
       </div>
@@ -420,12 +500,12 @@
 
     <!-- HOME SCREEN: CENTERED CUSTOMER MOBILE/OTP LOGIN + BRANCHES -->
     <div id="customerLoginCard" class="glass-card" style="max-width: 540px; margin: 16px auto;">
-      <h2 style="text-align:center; margin-bottom: 6px;">Customer Login</h2>
-      <p class="brand-sub" style="text-align:center; margin-bottom: 14px;">Verify your mobile number via OTP to unlock decoration packages, pricing &amp; booking.</p>
+      <h2 style="text-align:center; margin-bottom: 6px;">Customer Mobile Login</h2>
+      <p class="brand-sub" style="text-align:center; margin-bottom: 14px;">Enter your mobile number &amp; verify OTP to explore packages, slots &amp; bookings.</p>
 
       <div id="custLoginMsg" class="inline-alert hidden"></div>
 
-      <label for="custName">Full Name</label>
+      <label for="custName">Customer Full Name</label>
       <input id="custName" type="text" placeholder="Enter your full name" autocomplete="name" />
 
       <label for="custPhone">Mobile Number</label>
@@ -437,42 +517,51 @@
       </div>
 
       <button type="button" id="sendOtpBtn" class="btn btn-primary" style="width:100%;" onclick="phSendOtp()">Send OTP</button>
-      <button type="button" id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;" onclick="phVerifyOtp()">Verify OTP &amp; Unlock Events</button>
+      <button type="button" id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;" onclick="phVerifyOtp()">Verify OTP &amp; Continue</button>
 
-      <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border); font-size:0.83rem; color:var(--muted); line-height:1.5;">
-        <strong style="color:var(--primary-dark);">Our Branches:</strong><br />
+      <!-- Branch Details Displayed Only on Home Screen -->
+      <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border); font-size:0.83rem; color:var(--muted); line-height:1.55;">
+        <strong style="color:var(--primary-dark);">Our Branches (Andhra Pradesh):</strong><br />
         &bull; <strong>Rayachoti Branch:</strong> PartyHub - SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269<br />
         &bull; <strong>Madanapalle Branch:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Road, Opp. ZP High School, Madanapalle - 517325
       </div>
 
       <div class="notice-danger">
-        <strong>Payment Caution:</strong> Always verify your booking slot via our official Help Desk (9398934021) before transferring any advance. Pay only to verified PartyHub - SR Events accounts shown inside your account.
+        <strong>Payment Caution:</strong> Verify your slot availability with our Help Desk (9398934021) before making any advance transfer. Pay only to official PartyHub - SR Events payment details shown after login.
       </div>
     </div>
 
-    <!-- CUSTOMER DASHBOARD (VISIBLE ONLY AFTER OTP LOGIN) -->
+    <!-- CUSTOMER DASHBOARD (HIDDEN UNTIL OTP LOGIN) -->
     <div id="customerView" class="hidden">
       <div class="glass-card">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
           <h3>Welcome, <span id="activeCustomerLabel"></span></h3>
-          <span class="badge">Annamayya &amp; Kadapa Districts</span>
+          <span class="badge">State: Andhra Pradesh (Annamayya &amp; Kadapa Districts Only)</span>
         </div>
 
-        <div class="grid-4">
+        <!-- State (Fixed AP), District (Annamayya / Kadapa), City/Town -->
+        <div class="grid-3">
           <div>
-            <label for="filterCity">City / Town</label>
-            <select id="filterCity" onchange="phRenderCustomerPackages()">
-              <option value="Rayachoti">Rayachoti (Annamayya)</option>
-              <option value="Madanapalle">Madanapalle (Annamayya)</option>
-              <option value="Pileru">Pileru (Annamayya)</option>
-              <option value="Galiveedu">Galiveedu (Annamayya)</option>
-              <option value="Guvvalacheruvu">Guvvalacheruvu (Annamayya)</option>
-              <option value="Rajampeta">Rajampeta (Annamayya)</option>
-              <option value="Kadapa">Kadapa (YSR Kadapa)</option>
-              <option value="Proddatur">Proddatur (YSR Kadapa)</option>
-              <option value="Pulivendula">Pulivendula (YSR Kadapa)</option>
+            <label for="filterState">State</label>
+            <select id="filterState" disabled>
+              <option value="Andhra Pradesh" selected>Andhra Pradesh</option>
             </select>
           </div>
+          <div>
+            <label for="filterDistrict">Select District</label>
+            <select id="filterDistrict" onchange="phUpdateCities()">
+              <option value="Annamayya District">Annamayya District</option>
+              <option value="Kadapa District">Kadapa District (YSR Kadapa)</option>
+            </select>
+          </div>
+          <div>
+            <label for="filterCity">Select City / Town</label>
+            <select id="filterCity"></select>
+          </div>
+        </div>
+
+        <!-- Occasion, Indoor/Outdoor & Budget Filters -->
+        <div class="grid-3">
           <div>
             <label for="filterOccasion">Occasion</label>
             <select id="filterOccasion" onchange="phRenderCustomerPackages()">
@@ -480,6 +569,7 @@
               <option value="Birthday">Birthday</option>
               <option value="Anniversary">Anniversary</option>
               <option value="Wedding / Engagement">Wedding / Engagement</option>
+              <option value="Haldi / Mehndi / Bride-to-Be">Haldi / Mehndi / Bride-to-Be</option>
               <option value="Baby Shower / Cradle">Baby Shower / Cradle</option>
             </select>
           </div>
@@ -493,26 +583,28 @@
           </div>
           <div>
             <label for="filterMaxPrice">Max Budget (₹)</label>
-            <input id="filterMaxPrice" type="number" placeholder="e.g., 15000" oninput="phRenderCustomerPackages()" />
+            <input id="filterMaxPrice" type="number" placeholder="e.g., 20000" oninput="phRenderCustomerPackages()" />
           </div>
         </div>
 
+        <!-- Date, Venue Address & Single-Date Morning/Afternoon Slot + Exact Timing -->
         <div class="grid-2">
           <div>
-            <label for="bookingDate">Select Event Date</label>
-            <input id="bookingDate" type="date" />
+            <label for="bookingDate">Select Event Date (1 Date per Booking)</label>
+            <input id="bookingDate" type="date" onchange="phCheckSlotAvailability()" />
           </div>
           <div>
-            <label for="bookingVenueAddress">Event Hall / Home Address</label>
-            <input id="bookingVenueAddress" type="text" placeholder="Enter function hall or house address" />
+            <label for="bookingVenueAddress">Function Hall / Home Address</label>
+            <input id="bookingVenueAddress" type="text" placeholder="Enter venue / street address" />
           </div>
         </div>
 
-        <label>Select Event Slot</label>
+        <label>Select Available Slot for Selected Date</label>
         <div class="slot-group">
-          <button type="button" id="slotMorningBtn" class="btn btn-outline" onclick="phSelectSlot('Morning')">Morning</button>
-          <button type="button" id="slotAfternoonBtn" class="btn btn-outline" onclick="phSelectSlot('Afternoon')">Afternoon</button>
+          <button type="button" id="slotMorningBtn" class="btn btn-outline" onclick="phSelectSlot('Morning')">Morning Slot</button>
+          <button type="button" id="slotAfternoonBtn" class="btn btn-outline" onclick="phSelectSlot('Afternoon')">Afternoon Slot</button>
         </div>
+        <div id="slotStatusNote" class="brand-sub" style="margin-bottom:8px;"></div>
 
         <div id="customTimeBox" class="hidden">
           <label id="customTimeLabel" for="customExactTime">Customize Exact Timing</label>
@@ -520,8 +612,9 @@
         </div>
       </div>
 
+      <!-- Categorized Services Collected from Google Business Profile -->
       <div class="glass-card">
-        <h3 style="margin-bottom:10px;">Select Service Category</h3>
+        <h3 style="margin-bottom:10px;">Select Event Service Category</h3>
         <div class="cat-grid" id="categoryButtons">
           <button type="button" class="cat-btn active" onclick="phSetCategory('All', this)">
             <span class="cat-icon">✨</span><span>All Services</span>
@@ -533,7 +626,13 @@
             <span class="cat-icon">🎆</span><span>Special Entries</span>
           </button>
           <button type="button" class="cat-btn" onclick="phSetCategory('Activities', this)">
-            <span class="cat-icon">🏰</span><span>Activities</span>
+            <span class="cat-icon">🏰</span><span>Activities &amp; Games</span>
+          </button>
+          <button type="button" class="cat-btn" onclick="phSetCategory('Catering & Stalls', this)">
+            <span class="cat-icon">🍨</span><span>Catering &amp; Stalls</span>
+          </button>
+          <button type="button" class="cat-btn" onclick="phSetCategory('Photography & Rentals', this)">
+            <span class="cat-icon">📸</span><span>Photo &amp; Rentals</span>
           </button>
           <button type="button" class="cat-btn" onclick="phSetCategory('Makeup & Mehndi', this)">
             <span class="cat-icon">💄</span><span>Makeup &amp; Mehndi</span>
@@ -543,20 +642,50 @@
         <div id="customerPackagesGrid" class="grid-2"></div>
       </div>
 
+      <!-- Cart, Multiple Payment Methods, 20% / 70% / 10% Split & E-Agreement -->
       <div class="glass-card" id="cartSection">
-        <h3 style="margin-bottom:10px;">Selected Cart, 20% / 70% / 10% Payment Plan &amp; Digital E-Sign</h3>
-        <div id="cartItemsBox" class="brand-sub">No services added to cart yet. Click "Add to Cart &amp; Book" on any package above.</div>
+        <h3 style="margin-bottom:10px;">Your Event Cart, Payment Method &amp; E-Agreement</h3>
+        <div id="cartItemsBox" class="brand-sub">No services added to cart yet. Click "Add to Cart &amp; Book" on any service above.</div>
         <div id="checkoutBox" class="hidden" style="margin-top:12px;">
           <div class="split-box" id="paymentSplitBox"></div>
-          <label for="customerESign">Customer Digital E-Sign (Type your full name to agree to terms)</label>
-          <input id="customerESign" type="text" placeholder="Type full name for e-signature" />
+
+          <div class="grid-2">
+            <div>
+              <label for="paymentMethodSelect">Select Payment Method</label>
+              <select id="paymentMethodSelect" onchange="phUpdatePaymentMethodInfo()">
+                <option value="UPI (PhonePe / GPay / Paytm)">UPI (PhonePe / GPay / Paytm)</option>
+                <option value="Bank Transfer (IMPS / NEFT)">Bank Transfer (IMPS / NEFT)</option>
+                <option value="Credit / Debit Card">Credit / Debit Card</option>
+                <option value="Cash at Branch / Venue">Cash at Branch / Venue</option>
+              </select>
+            </div>
+            <div>
+              <label for="paymentRefInput">Transaction / Reference ID (Optional for Advance)</label>
+              <input id="paymentRefInput" type="text" placeholder="e.g., UPI Ref # or Cash Advance" />
+            </div>
+          </div>
+
           <div class="notice-info" id="officialPaymentInfo"></div>
-          <button type="button" id="confirmBookingBtn" class="btn btn-primary" style="width:100%;" onclick="phConfirmBooking()">E-Sign &amp; Confirm Booking</button>
+
+          <div class="split-box" style="background:#fff;">
+            <strong>Digital E-Agreement Terms:</strong>
+            <p class="brand-sub" style="margin-top:4px;">
+              1. Customer agrees to the 20% advance, 70% on setup arrival, and 10% upon completion schedule.<br />
+              2. PartyHub - SR Events will deliver all listed event inclusions on the selected date, slot, and exact time.<br />
+              3. All rental props, backdrops, and DMX/lighting equipment remain property of PartyHub - SR Events.
+            </p>
+          </div>
+
+          <label for="customerESign">Customer Digital E-Signature (Type your full name to sign E-Agreement)</label>
+          <input id="customerESign" type="text" placeholder="Type your full name for E-Agreement" />
+
+          <button type="button" id="confirmBookingBtn" class="btn btn-primary" style="width:100%;" onclick="phConfirmBooking()">Sign E-Agreement &amp; Confirm Booking</button>
         </div>
       </div>
 
+      <!-- Customer Booking, Payment & E-Agreement Tracker -->
       <div class="glass-card">
-        <h3 style="margin-bottom:10px;">My Confirmed Bookings</h3>
+        <h3 style="margin-bottom:10px;">Track My Bookings, Payments &amp; E-Agreements</h3>
         <div id="customerMyBookings" class="brand-sub">No confirmed bookings yet.</div>
       </div>
     </div>
@@ -569,29 +698,30 @@
       <label for="adminPin">Admin Passcode</label>
       <input id="adminPin" type="password" placeholder="Enter 2026" />
       <div style="display:flex; gap:10px;">
-        <button type="button" id="doAdminLoginBtn" class="btn btn-primary" onclick="phAdminLogin()">Login to Admin Panel</button>
-        <button type="button" id="backToCustBtn" class="btn btn-outline" onclick="phBackToCustomerLogin()">Back</button>
+        <button type="button" class="btn btn-primary" onclick="phAdminLogin()">Login to Admin Panel</button>
+        <button type="button" class="btn btn-outline" onclick="phBackToCustomerLogin()">Back</button>
       </div>
     </div>
 
     <!-- ADMIN DASHBOARD -->
     <div id="adminView" class="hidden">
       <div class="tabs">
-        <button type="button" class="btn btn-outline active" id="tabBookingsBtn" onclick="phSwitchAdminTab('bookings')">1. Bookings by Date &amp; Full Photo Viewer</button>
-        <button type="button" class="btn btn-outline" id="tabServicesBtn" onclick="phSwitchAdminTab('services')">2. Services, Photos &amp; Event Details</button>
-        <button type="button" class="btn btn-outline" id="tabSettingsBtn" onclick="phSwitchAdminTab('settings')">3. Help Desk, Payment &amp; Data Backup</button>
+        <button type="button" class="btn btn-outline active" id="tabBookingsBtn" onclick="phSwitchAdminTab('bookings')">1. Customer Bookings, Payments &amp; Max-Size Photo</button>
+        <button type="button" class="btn btn-outline" id="tabServicesBtn" onclick="phSwitchAdminTab('services')">2. Manage &amp; Customize Services / Prices</button>
+        <button type="button" class="btn btn-outline" id="tabAnalyticsBtn" onclick="phSwitchAdminTab('analytics')">3. Daily &amp; Monthly Graphs</button>
+        <button type="button" class="btn btn-outline" id="tabSettingsBtn" onclick="phSwitchAdminTab('settings')">4. Help Desk, Payment &amp; Backup</button>
       </div>
 
-      <!-- TAB 1: BOOKINGS BY DATE & CLICK CUSTOMER NAME FOR BIG EVENT PICTURE -->
+      <!-- TAB 1: BOOKINGS BY DATE + FULL-SIZE PHOTO + PAYMENT & E-AGREEMENT TRACKING -->
       <div id="adminTabBookings" class="glass-card">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
           <div>
-            <h2>Events Schedule by Date</h2>
-            <div class="brand-sub">Select a date to view event details. Click any Customer Name to view the event picture in full size.</div>
+            <h2>Customer Events, Payments &amp; Schedule</h2>
+            <div class="brand-sub">Select a date to filter events, or click any Customer Name to view the event picture in maximum size.</div>
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
             <input id="adminDateFilter" type="date" style="margin-bottom:0; width:auto;" onchange="phRenderAdminBookings()" />
-            <button type="button" id="clearAdminDateBtn" class="btn btn-outline btn-sm" onclick="phClearAdminDate()">Show All Dates</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="phClearAdminDate()">Show All Dates</button>
           </div>
         </div>
 
@@ -599,11 +729,11 @@
           <table>
             <thead>
               <tr>
-                <th>Event Date</th>
-                <th>Customer Name (Click for Big Photo)</th>
-                <th>City, Address &amp; Exact Time</th>
-                <th>Event &amp; Package Details</th>
-                <th>Total &amp; 20/70/10 Split</th>
+                <th>Date &amp; Exact Time</th>
+                <th>Customer (Click for Max Photo)</th>
+                <th>District, City &amp; Address</th>
+                <th>Booked Event &amp; Complete Details</th>
+                <th>Payment Method &amp; Status</th>
                 <th>Admin E-Sign</th>
               </tr>
             </thead>
@@ -612,24 +742,33 @@
         </div>
       </div>
 
-      <!-- TAB 2: SERVICES, PHOTOS & EVENT DETAILS COLUMN -->
+      <!-- TAB 2: ADD / EDIT / CUSTOMIZE SERVICES, PHOTOS, DETAILS & PRICES -->
       <div id="adminTabServices" class="glass-card hidden">
-        <h2 style="margin-bottom:12px;">Add Service / Social Media Photo with Complete Event Details</h2>
-        <form id="addServiceForm" onsubmit="phAddService(event)">
+        <h2 style="margin-bottom:12px;" id="serviceFormHeading">Add or Customize Event Service &amp; High-Res Photo</h2>
+        <form id="addServiceForm" onsubmit="phSaveServiceForm(event)">
+          <input type="hidden" id="editServiceId" value="" />
           <div class="grid-2">
             <div>
-              <label for="srvTitle">Service / Theme Name</label>
-              <input id="srvTitle" type="text" required placeholder="e.g., 3D Jungle Theme Balloon Setup" />
+              <label for="srvTitle">Service / Theme Title</label>
+              <input id="srvTitle" type="text" required placeholder="e.g., 3D Jungle Theme Balloon Decoration" />
             </div>
             <div>
-              <label for="srvCategory">Category</label>
-              <select id="srvCategory">
+              <label for="srvCategorySelect">Category (Or select Custom Category below)</label>
+              <select id="srvCategorySelect" onchange="phToggleCustomCategory()">
                 <option value="Decorations">Decorations</option>
                 <option value="Special Entries">Special Entries</option>
-                <option value="Activities">Activities</option>
+                <option value="Activities">Activities &amp; Games</option>
+                <option value="Catering & Stalls">Catering &amp; Stalls</option>
+                <option value="Photography & Rentals">Photo &amp; Rentals</option>
                 <option value="Makeup & Mehndi">Makeup &amp; Mehndi</option>
+                <option value="__CUSTOM__">+ Custom Category (Type Your Own)</option>
               </select>
             </div>
+          </div>
+
+          <div id="customCategoryBox" class="hidden">
+            <label for="srvCustomCategory">Custom Category Name</label>
+            <input id="srvCustomCategory" type="text" placeholder="Enter custom service category name" />
           </div>
 
           <div class="grid-4">
@@ -639,6 +778,7 @@
                 <option value="Birthday">Birthday</option>
                 <option value="Anniversary">Anniversary</option>
                 <option value="Wedding / Engagement">Wedding / Engagement</option>
+                <option value="Haldi / Mehndi / Bride-to-Be">Haldi / Mehndi / Bride-to-Be</option>
                 <option value="Baby Shower / Cradle">Baby Shower / Cradle</option>
               </select>
             </div>
@@ -651,32 +791,35 @@
             </div>
             <div>
               <label for="srvPrice">Price (₹)</label>
-              <input id="srvPrice" type="number" min="0" required placeholder="e.g., 5500" />
+              <input id="srvPrice" type="number" min="0" required placeholder="e.g., 6500" />
             </div>
             <div>
-              <label for="srvPhoto">Photo URL</label>
+              <label for="srvPhoto">High-Resolution Photo URL</label>
               <input id="srvPhoto" type="url" placeholder="https://..." />
             </div>
           </div>
 
-          <label for="srvPhotoFile">Or Upload Event Photo From Phone / PC (Auto-Compressed)</label>
+          <label for="srvPhotoFile">Or Upload High-Res Photo From Device</label>
           <input id="srvPhotoFile" type="file" accept="image/*" />
 
-          <label for="srvDetails">Event Details (Write complete details of what is actually provided with this price)</label>
-          <textarea id="srvDetails" required placeholder="List exact balloon count, backdrop size, LED lights, fog/cold pyro, props, setup &amp; dismantling included..."></textarea>
+          <label for="srvDetails">Complete Event Details (What is actually provided with this price)</label>
+          <textarea id="srvDetails" required placeholder="Write complete details: balloon count, backdrop size, lights, pyros, props, setup &amp; dismantling included..."></textarea>
 
-          <button type="submit" class="btn btn-primary">Save Service &amp; Event Details</button>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="submit" class="btn btn-primary" id="saveServiceBtn">Save Event Service</button>
+            <button type="button" class="btn btn-outline hidden" id="cancelEditServiceBtn" onclick="phResetServiceForm()">Cancel Edit</button>
+          </div>
         </form>
 
         <div class="table-wrap" style="margin-top:16px;">
           <table>
             <thead>
               <tr>
-                <th>Photo</th>
+                <th>High-Res Photo</th>
                 <th>Category &amp; Service</th>
                 <th>Price</th>
-                <th>Event Details (What is Actually Provided with Price)</th>
-                <th>Action</th>
+                <th>Complete Event Details</th>
+                <th>Manage</th>
               </tr>
             </thead>
             <tbody id="adminServicesTableBody"></tbody>
@@ -684,9 +827,26 @@
         </div>
       </div>
 
-      <!-- TAB 3: HELP DESK, PAYMENT DETAILS & JSON BACKUP/RESTORE -->
+      <!-- TAB 3: DAILY & MONTHLY REVENUE & BOOKING GRAPHS -->
+      <div id="adminTabAnalytics" class="glass-card hidden">
+        <h2 style="margin-bottom:12px;">Daily &amp; Monthly Event &amp; Revenue Analytics</h2>
+        <div class="grid-3" id="analyticsKpiGrid"></div>
+
+        <div class="grid-2">
+          <div class="chart-box">
+            <h3 style="margin-bottom:10px;">Daily Revenue &amp; Events Graph</h3>
+            <div id="dailyChartContainer"></div>
+          </div>
+          <div class="chart-box">
+            <h3 style="margin-bottom:10px;">Monthly Revenue &amp; Events Graph</h3>
+            <div id="monthlyChartContainer"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: HELP DESK, PAYMENT DETAILS & BACKUP -->
       <div id="adminTabSettings" class="glass-card hidden">
-        <h2 style="margin-bottom:12px;">Help Desk Contacts, Payment Details &amp; Data Backup</h2>
+        <h2 style="margin-bottom:12px;">Help Desk, Official Payment Details &amp; Data Backup</h2>
         <div class="grid-2">
           <div>
             <label for="cfgPhone">Help Desk Phone</label>
@@ -701,17 +861,20 @@
             <input id="cfgEmail" type="email" />
           </div>
           <div>
-            <label for="cfgUpi">Official UPI / Bank Payment Details</label>
+            <label for="cfgUpi">Official UPI ID</label>
             <input id="cfgUpi" type="text" />
           </div>
+          <div style="grid-column: 1 / -1;">
+            <label for="cfgBank">Official Bank Account &amp; Branch Payment Details</label>
+            <input id="cfgBank" type="text" />
+          </div>
         </div>
-        <button type="button" id="saveSettingsBtn" class="btn btn-primary" onclick="phSaveSettings()">Save Contact &amp; Payment Settings</button>
+        <button type="button" class="btn btn-primary" onclick="phSaveSettings()">Save Help Desk &amp; Payment Details</button>
 
         <hr style="margin:18px 0; border:none; border-top:1px solid var(--border);" />
-        <h3 style="margin-bottom:8px;">Export / Restore Complete App Data</h3>
-        <p class="brand-sub" style="margin-bottom:10px;">Download a JSON backup of all your services, uploaded photos, and customer bookings, or restore from a backup file anytime.</p>
+        <h3 style="margin-bottom:8px;">Export / Restore Complete Data Backup</h3>
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <button type="button" id="exportBackupBtn" class="btn btn-outline" onclick="phExportBackup()">Download Backup (.json)</button>
+          <button type="button" class="btn btn-outline" onclick="phExportBackup()">Download Backup (.json)</button>
           <label class="btn btn-outline" style="margin-bottom:0; cursor:pointer;">
             Restore Backup (.json)
             <input id="importBackupInput" type="file" accept=".json" style="display:none;" onchange="phImportBackup(event)" />
@@ -721,18 +884,19 @@
     </div>
   </div>
 
-  <!-- FULL-SIZE EVENT PICTURE MODAL -->
+  <!-- MAXIMUM-SIZE EVENT PICTURE LIGHTBOX MODAL -->
   <div id="photoModal" class="modal-backdrop" onclick="phClosePhotoModal()">
-    <div class="modal-box" id="photoModalBox" onclick="event.stopPropagation()">
+    <div class="modal-box" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div>
           <h3 id="modalTitle"></h3>
           <div id="modalMeta" class="brand-sub"></div>
         </div>
-        <button type="button" id="closePhotoModalBtn" class="btn btn-outline btn-sm" onclick="phClosePhotoModal()">✕ Close</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="phClosePhotoModal()">✕ Close</button>
       </div>
-      <img id="modalImage" class="modal-img" src="" alt="Full Size Event Picture" />
+      <img id="modalImage" class="modal-img" src="" alt="Maximum Size Event Picture" />
       <div id="modalGalleryStrip" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;"></div>
+      <div id="modalPaymentBox" class="split-box hidden"></div>
       <div>
         <strong>Complete Event Details (Included with Price):</strong>
         <p id="modalDetails" class="details-list" style="margin-top:6px;"></p>
@@ -742,24 +906,65 @@
 
   <!-- HELP DESK MODAL -->
   <div id="helpModal" class="modal-backdrop" onclick="phCloseHelpModal()">
-    <div class="modal-box" style="max-width:460px;" id="helpModalBox" onclick="event.stopPropagation()">
+    <div class="modal-box" style="max-width:460px;" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h3>PartyHub - SR Events Help Desk</h3>
-        <button type="button" id="closeHelpModalBtn" class="btn btn-outline btn-sm" onclick="phCloseHelpModal()">✕</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="phCloseHelpModal()">✕</button>
       </div>
       <div id="helpDeskContent" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
   </div>
 
   <script>
-    var STORAGE_KEY = 'partyhub_srevents_clean_v19';
+    var STORAGE_KEY = 'partyhub_srevents_pro_v20';
+
+    var districtCities = {
+      'Annamayya District': [
+        'Rayachoti',
+        'Madanapalle',
+        'Rajampeta',
+        'Pileru',
+        'Galiveedu',
+        'Guvvalacheruvu',
+        'Lakkireddipalli',
+        'Sambepalli',
+        'Chinnamandem',
+        'T. Sundupalli',
+        'Veeraballi',
+        'Nandalur',
+        'Kodur (Railway Koduru)',
+        'Kalakada',
+        'Valmikipuram (Vayalpad)',
+        'Kurabalakota',
+        'B. Kothakota',
+        'Thamballapalle',
+        'Mulakalacheruvu'
+      ],
+      'Kadapa District': [
+        'Kadapa City',
+        'Proddatur',
+        'Pulivendula',
+        'Jammalamadugu',
+        'Badvel',
+        'Mydukur',
+        'Kamalapuram',
+        'Yerraguntla',
+        'Vempalli',
+        'Sidhout',
+        'Chennur',
+        'Khajipet',
+        'Porumamilla',
+        'Duvvur'
+      ]
+    };
 
     var defaultData = {
       settings: {
         phone: '9398934021',
         whatsapp: '919398934021',
         email: 'partyhubsrevents@gmail.com',
-        upi: 'UPI: partyhubsrevents@okaxis | PartyHub - SR Events (Rayachoti & Madanapalle)'
+        upi: 'partyhubsrevents@okaxis',
+        bank: 'PartyHub - SR Events | Rayachoti & Madanapalle Branches | Ph: 9398934021'
       },
       services: [
         {
@@ -767,46 +972,77 @@
           category: 'Decorations',
           occasion: 'Birthday',
           venue: 'Indoor',
-          title: 'Birthday Balloon Arch & Ring Backdrop',
-          price: 4500,
-          photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
-          details: '• 220 pastel & chrome balloons\n• 8x8 ft circular ring backdrop stand\n• Happy Birthday neon/foil signage\n• 2 warm LED focus par lights\n• Complete on-site setup & dismantling included'
+          title: '2D & 3D Theme Birthday Balloon Decoration',
+          price: 5500,
+          photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1400&q=90',
+          details: '• 250 pastel, metallic & chrome balloons\n• 8x8 ft circular ring or 2D/3D theme cutout backdrop\n• Custom Neon Happy Birthday signage & age foil number\n• 2 warm LED focus lights + pedestal cake table\n• Complete delivery, setup & dismantling included'
         },
         {
           id: 's2',
-          category: 'Special Entries',
-          occasion: 'Wedding / Engagement',
+          category: 'Decorations',
+          occasion: 'Anniversary',
           venue: 'Indoor',
-          title: 'Grand Cold Pyro & Low-Fog Cloud Entry',
-          price: 6500,
-          photo: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85',
-          details: '• 6 smokeless cold pyro fountains\n• MAX LED DMX512 low-fog cloud effect\n• Mirror pathway / flower petal shower\n• Dedicated operator on site'
+          title: 'Artificial Flower & Fairy-Light Stage Backdrop',
+          price: 8500,
+          photo: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=90',
+          details: '• Premium artificial floral arch & curtain drape stage\n• Warm fairy lights & golden metal stand\n• Couple sofa/seating & floral table centerpiece\n• 4 warm LED par lights\n• Full setup & removal included'
         },
         {
           id: 's3',
-          category: 'Activities',
-          occasion: 'Birthday',
-          venue: 'Outdoor',
-          title: 'Kids Bouncy Castle, Live Mascot & Water Tattoos',
-          price: 5500,
-          photo: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=85',
-          details: '• Inflatable Bouncy Castle (3 hours)\n• 1 Live Cartoon Character Mascot\n• Unlimited Kids Water Tattoos artist\n• Power blower & attendant included'
+          category: 'Special Entries',
+          occasion: 'Wedding / Engagement',
+          venue: 'Indoor',
+          title: 'Grand Entry: Cold Pyro, Low Fog, Mirror & Helium Blast',
+          price: 9500,
+          photo: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1400&q=90',
+          details: '• 6 smokeless cold pyro fountains\n• MAX LED DMX512 low-fog cloud effect machine\n• Reflective mirror pathway / flower cart entry\n• Helium balloon blasting finale\n• Dedicated technician on site'
         },
         {
           id: 's4',
-          category: 'Makeup & Mehndi',
+          category: 'Activities',
+          occasion: 'Birthday',
+          venue: 'Outdoor',
+          title: 'Bouncy Castle, Live Cartoon Mascot & Water Tattoos',
+          price: 6000,
+          photo: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1400&q=90',
+          details: '• Large Inflatable Bouncy Castle (3 hours)\n• 1 Live Cartoon Character Mascot for welcome & cake cutting\n• Unlimited Kids Water Tattoos & Balloon Twisting artist\n• Air blower & full-time attendant included'
+        },
+        {
+          id: 's5',
+          category: 'Catering & Stalls',
+          occasion: 'Birthday',
+          venue: 'Outdoor',
+          title: 'Live Party Food Stalls (Popcorn, Cotton Candy & Ice Cream)',
+          price: 4500,
+          photo: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1400&q=90',
+          details: '• Live Popcorn stall (100 servings)\n• Live Cotton Candy / Sugar Candy stall (100 servings)\n• Chocolate Fountain / Ice Cream counter\n• Hygienic disposables & uniformed staff included'
+        },
+        {
+          id: 's6',
+          category: 'Photography & Rentals',
           occasion: 'Wedding / Engagement',
           venue: 'Indoor',
-          title: 'Bridal & Family Mehndi + Party Makeup Artist',
-          price: 4000,
-          photo: 'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85',
-          details: '• Organic dark-stain bridal/guest mehndi\n• HD party makeup & hairstyling\n• Home/venue visit across Rayachoti & Madanapalle'
+          title: 'Candid Photography, LED Lights & Party Supply Rentals',
+          price: 7500,
+          photo: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=90',
+          details: '• HD Candid & Traditional event photography (4 hours)\n• Edited high-resolution digital photo gallery\n• Welcome arch, DMX fog machine & party prop rentals\n• Available across Annamayya & Kadapa districts'
+        },
+        {
+          id: 's7',
+          category: 'Makeup & Mehndi',
+          occasion: 'Haldi / Mehndi / Bride-to-Be',
+          venue: 'Indoor',
+          title: 'Haldi / Bride-to-Be Decor + Bridal Mehndi & Makeup',
+          price: 6500,
+          photo: 'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1400&q=90',
+          details: '• Marigold & floral Haldi / Bride-to-Be backdrop\n• Organic dark-stain Bridal & Guest Mehndi artist\n• HD Party Makeup & Hairstyling at venue/home'
         }
       ],
       bookings: [
         {
           id: 'b1',
-          date: '2026-11-25',
+          date: '2026-11-23',
+          district: 'Annamayya District',
           city: 'Rayachoti',
           venueAddress: 'Bose Nagar Function Hall, Rayachoti',
           customerName: 'Karthik Reddy',
@@ -816,15 +1052,44 @@
           items: [
             {
               id: 's1',
-              title: 'Birthday Balloon Arch & Ring Backdrop',
-              price: 4500,
-              photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
-              details: '• 220 pastel & chrome balloons\n• 8x8 ft circular ring backdrop stand\n• Happy Birthday neon/foil signage\n• 2 warm LED focus par lights\n• Complete on-site setup & dismantling included'
+              title: '2D & 3D Theme Birthday Balloon Decoration',
+              price: 5500,
+              photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1400&q=90',
+              details: '• 250 pastel, metallic & chrome balloons\n• 8x8 ft circular ring or 2D/3D theme cutout backdrop\n• Custom Neon Happy Birthday signage & age foil number\n• 2 warm LED focus lights + pedestal cake table\n• Complete delivery, setup & dismantling included'
             }
           ],
-          totalPrice: 4500,
+          totalPrice: 5500,
+          paymentMethod: 'UPI (PhonePe / GPay / Paytm)',
+          paymentRef: 'UPI-94812041',
+          paymentStatus: '20% Advance Paid',
           eSign: 'Karthik Reddy',
           adminApproved: true
+        },
+        {
+          id: 'b2',
+          date: '2026-11-25',
+          district: 'Kadapa District',
+          city: 'Kadapa City',
+          venueAddress: 'RIMS Road Convention Hall, Kadapa',
+          customerName: 'Prashanth Kumar',
+          customerPhone: '9440122334',
+          slot: 'Afternoon',
+          exactTime: '15:30',
+          items: [
+            {
+              id: 's3',
+              title: 'Grand Entry: Cold Pyro, Low Fog, Mirror & Helium Blast',
+              price: 9500,
+              photo: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1400&q=90',
+              details: '• 6 smokeless cold pyro fountains\n• MAX LED DMX512 low-fog cloud effect machine\n• Reflective mirror pathway / flower cart entry\n• Helium balloon blasting finale\n• Dedicated technician on site'
+            }
+          ],
+          totalPrice: 9500,
+          paymentMethod: 'Bank Transfer (IMPS / NEFT)',
+          paymentRef: 'NEFT-772190',
+          paymentStatus: '20% Advance Paid',
+          eSign: 'Prashanth Kumar',
+          adminApproved: false
         }
       ]
     };
@@ -886,6 +1151,15 @@
         .replace(/"/g, '&quot;');
     }
 
+    function phUpdateCities() {
+      var dist = document.getElementById('filterDistrict').value;
+      var cities = districtCities[dist] || [];
+      var citySel = document.getElementById('filterCity');
+      citySel.innerHTML = cities.map(function (c) {
+        return '<option value="' + phEscape(c) + '">' + phEscape(c) + '</option>';
+      }).join('');
+    }
+
     function phSendOtp() {
       var name = document.getElementById('custName').value.trim();
       var phone = document.getElementById('custPhone').value.replace(/\D/g, '');
@@ -919,12 +1193,30 @@
       document.getElementById('logoutBtn').classList.remove('hidden');
       document.getElementById('adminLoginBtn').classList.add('hidden');
       document.getElementById('activeCustomerLabel').textContent = state.customer.name + ' (' + state.customer.phone + ')';
+      phUpdateCities();
       if (!document.getElementById('bookingDate').value) {
         document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
       }
+      phCheckSlotAvailability();
       phRenderCustomerPackages();
       phRenderCart();
       phRenderCustomerBookings();
+    }
+
+    function phCheckSlotAvailability() {
+      var date = document.getElementById('bookingDate').value;
+      var note = document.getElementById('slotStatusNote');
+      if (!date) {
+        note.textContent = '';
+        return;
+      }
+      var bookedOnDate = state.bookings.filter(function (b) { return b.date === date; });
+      var morningTaken = bookedOnDate.some(function (b) { return b.slot === 'Morning'; });
+      var afternoonTaken = bookedOnDate.some(function (b) { return b.slot === 'Afternoon'; });
+
+      document.getElementById('slotMorningBtn').textContent = morningTaken ? 'Morning Slot (Booked - Waitlist)' : 'Morning Slot (Available)';
+      document.getElementById('slotAfternoonBtn').textContent = afternoonTaken ? 'Afternoon Slot (Booked - Waitlist)' : 'Afternoon Slot (Available)';
+      note.textContent = 'Selected Date (' + date + '): Morning ' + (morningTaken ? 'has an existing booking' : 'is open') + ', Afternoon ' + (afternoonTaken ? 'has an existing booking' : 'is open') + '. Choose a slot to customize your exact timing.';
     }
 
     function phSelectSlot(slot) {
@@ -981,7 +1273,7 @@
       grid.innerHTML = filtered.map(function (srv) {
         return (
           '<div class="package-card">' +
-            '<img src="' + srv.photo + '" alt="' + phEscape(srv.title) + '" onclick="phOpenServiceModal(\'' + srv.id + '\')" title="Click to enlarge" />' +
+            '<img src="' + srv.photo + '" alt="' + phEscape(srv.title) + '" onclick="phOpenServiceModal('' + srv.id + '')" title="Click to view full high-res image" />' +
             '<div class="package-body">' +
               '<div>' +
                 '<span class="badge">' + phEscape(srv.category) + ' &bull; ' + phEscape(srv.venue || 'Indoor') + '</span>' +
@@ -989,7 +1281,7 @@
                 '<div class="price-tag">₹' + Number(srv.price).toLocaleString('en-IN') + '</div>' +
                 '<div class="details-list">' + phEscape(srv.details) + '</div>' +
               '</div>' +
-              '<button type="button" class="btn btn-primary" onclick="phAddToCart(\'' + srv.id + '\')">Add to Cart &amp; Book</button>' +
+              '<button type="button" class="btn btn-primary" onclick="phAddToCart('' + srv.id + '')">Add to Cart &amp; Book</button>' +
             '</div>' +
           '</div>'
         );
@@ -1007,6 +1299,20 @@
     function phRemoveFromCart(idx) {
       state.cart.splice(idx, 1);
       phRenderCart();
+    }
+
+    function phUpdatePaymentMethodInfo() {
+      var method = document.getElementById('paymentMethodSelect').value;
+      var info = document.getElementById('officialPaymentInfo');
+      if (method.indexOf('UPI') === 0) {
+        info.innerHTML = '<strong>Official UPI ID:</strong> ' + phEscape(state.settings.upi) + ' (' + phEscape(state.settings.bank) + ')';
+      } else if (method.indexOf('Bank') === 0) {
+        info.innerHTML = '<strong>Official Bank Account:</strong> ' + phEscape(state.settings.bank);
+      } else if (method.indexOf('Card') === 0) {
+        info.innerHTML = '<strong>Card Payment Link / POS:</strong> Available at Rayachoti &amp; Madanapalle branches or via Help Desk (' + phEscape(state.settings.phone) + ').';
+      } else {
+        info.innerHTML = '<strong>Cash Payment:</strong> Pay 20% advance at Rayachoti (Bose Nagar) or Madanapalle (Sameera Complex) branch against official receipt.';
+      }
     }
 
     function phRenderCart() {
@@ -1038,25 +1344,29 @@
         '<div class="split-row"><span>2nd Installment (70% On Setup Arrival):</span><strong>₹' + p70.toLocaleString('en-IN') + '</strong></div>' +
         '<div class="split-row"><span>3rd Installment (10% After Completion):</span><strong>₹' + p10.toLocaleString('en-IN') + '</strong></div>';
 
-      document.getElementById('officialPaymentInfo').innerHTML = '<strong>Official Payment Details:</strong> ' + phEscape(state.settings.upi);
+      phUpdatePaymentMethodInfo();
       checkout.classList.remove('hidden');
     }
 
     function phConfirmBooking() {
       var date = document.getElementById('bookingDate').value;
+      var district = document.getElementById('filterDistrict').value;
       var city = document.getElementById('filterCity').value;
       var venueAddress = document.getElementById('bookingVenueAddress').value.trim();
       var exactTime = document.getElementById('customExactTime').value;
+      var paymentMethod = document.getElementById('paymentMethodSelect').value;
+      var paymentRef = document.getElementById('paymentRefInput').value.trim();
       var eSign = document.getElementById('customerESign').value.trim();
 
       if (!date) return alert('Please select an event date.');
       if (!state.selectedSlot || !exactTime) return alert('Please select Morning or Afternoon slot and customize your exact time.');
-      if (!eSign) return alert('Please type your full name in the Customer Digital E-Sign field.');
+      if (!eSign) return alert('Please type your full name to sign the E-Agreement.');
 
       var total = state.cart.reduce(function (sum, item) { return sum + Number(item.price); }, 0);
       state.bookings.unshift({
         id: 'b_' + Date.now(),
         date: date,
+        district: district,
         city: city,
         venueAddress: venueAddress || city,
         customerName: state.customer.name,
@@ -1065,15 +1375,20 @@
         exactTime: exactTime,
         items: state.cart.slice(),
         totalPrice: total,
+        paymentMethod: paymentMethod,
+        paymentRef: paymentRef || 'Pending Advance',
+        paymentStatus: paymentRef ? '20% Advance Submitted' : '20% Advance Due',
         eSign: eSign,
         adminApproved: false
       });
       state.cart = [];
       document.getElementById('customerESign').value = '';
+      document.getElementById('paymentRefInput').value = '';
       phSaveData();
+      phCheckSlotAvailability();
       phRenderCart();
       phRenderCustomerBookings();
-      alert('Booking confirmed & e-signed by ' + eSign + ' for ' + date + ' (' + state.selectedSlot + ' at ' + exactTime + ') in ' + city + '!');
+      alert('Booking confirmed & E-Agreement signed by ' + eSign + ' for ' + date + ' (' + state.selectedSlot + ' at ' + exactTime + ') in ' + city + ', ' + district + '!');
     }
 
     function phRenderCustomerBookings() {
@@ -1084,11 +1399,25 @@
         return;
       }
       box.innerHTML = mine.map(function (b) {
+        var total = Number(b.totalPrice);
+        var p20 = Math.round(total * 0.20);
+        var p70 = Math.round(total * 0.70);
+        var p10 = total - p20 - p70;
         return (
-          '<div style="padding:10px; border:1px solid var(--border); border-radius:10px; background:#fff; margin-bottom:8px;">' +
-            '<strong>' + b.items.map(function (i) { return phEscape(i.title); }).join(' + ') + '</strong> — Total: ₹' + Number(b.totalPrice).toLocaleString('en-IN') + '<br />' +
-            'Date: <strong>' + phEscape(b.date) + '</strong> | City: ' + phEscape(b.city) + ' (' + phEscape(b.venueAddress || b.city) + ') | Slot: <strong>' + phEscape(b.slot) + ' at ' + phEscape(b.exactTime) + '</strong><br />' +
-            'Customer E-Sign: <strong>' + phEscape(b.eSign) + '</strong> | Admin Agreement: <strong>' + (b.adminApproved ? 'Countersigned by PartyHub - SR Events' : 'Pending Admin Counter-Sign') + '</strong>' +
+          '<div style="padding:12px; border:1px solid var(--border); border-radius:12px; background:#fff; margin-bottom:10px;">' +
+            '<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">' +
+              '<strong>' + b.items.map(function (i) { return phEscape(i.title); }).join(' + ') + '</strong>' +
+              '<span class="badge">' + phEscape(b.paymentStatus || '20% Advance Due') + '</span>' +
+            '</div>' +
+            '<div class="brand-sub" style="margin-top:4px;">' +
+              'Date: <strong>' + phEscape(b.date) + '</strong> | Slot: <strong>' + phEscape(b.slot) + ' at ' + phEscape(b.exactTime) + '</strong><br />' +
+              'Location: Andhra Pradesh &bull; ' + phEscape(b.district || '') + ' &bull; ' + phEscape(b.city) + ' (' + phEscape(b.venueAddress || b.city) + ')<br />' +
+              'Total: <strong>₹' + total.toLocaleString('en-IN') + '</strong> (20%: ₹' + p20 + ' | 70%: ₹' + p70 + ' | 10%: ₹' + p10 + ') &bull; Method: ' + phEscape(b.paymentMethod || 'UPI') + ' (' + phEscape(b.paymentRef || '') + ')<br />' +
+              'E-Agreement Signed by: <strong>' + phEscape(b.eSign) + '</strong> | Admin Status: <strong>' + (b.adminApproved ? 'Countersigned & Verified' : 'Awaiting Admin Counter-Sign') + '</strong>' +
+            '</div>' +
+            '<div style="margin-top:8px;">' +
+              '<button type="button" class="btn btn-outline btn-sm" onclick="phOpenBookingPhoto('' + b.id + '')">View Full Event Picture &amp; Details</button>' +
+            '</div>' +
           '</div>'
         );
       }).join('');
@@ -1124,15 +1453,24 @@
       phPopulateSettingsForm();
       phRenderAdminServices();
       phRenderAdminBookings();
+      phRenderAnalytics();
     }
 
     function phSwitchAdminTab(tab) {
       document.getElementById('adminTabBookings').classList.toggle('hidden', tab !== 'bookings');
       document.getElementById('adminTabServices').classList.toggle('hidden', tab !== 'services');
+      document.getElementById('adminTabAnalytics').classList.toggle('hidden', tab !== 'analytics');
       document.getElementById('adminTabSettings').classList.toggle('hidden', tab !== 'settings');
       document.getElementById('tabBookingsBtn').classList.toggle('active', tab === 'bookings');
       document.getElementById('tabServicesBtn').classList.toggle('active', tab === 'services');
+      document.getElementById('tabAnalyticsBtn').classList.toggle('active', tab === 'analytics');
       document.getElementById('tabSettingsBtn').classList.toggle('active', tab === 'settings');
+      if (tab === 'analytics') phRenderAnalytics();
+    }
+
+    function phToggleCustomCategory() {
+      var sel = document.getElementById('srvCategorySelect').value;
+      document.getElementById('customCategoryBox').classList.toggle('hidden', sel !== '__CUSTOM__');
     }
 
     function phCompressImageFile(file, callback) {
@@ -1141,7 +1479,7 @@
         var img = new Image();
         img.onload = function () {
           var canvas = document.createElement('canvas');
-          var maxDim = 900;
+          var maxDim = 1100;
           var w = img.width;
           var h = img.height;
           if (w > maxDim || h > maxDim) {
@@ -1156,17 +1494,20 @@
           canvas.width = w;
           canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          callback(canvas.toDataURL('image/jpeg', 0.78));
+          callback(canvas.toDataURL('image/jpeg', 0.82));
         };
         img.src = ev.target.result;
       };
       reader.readAsDataURL(file);
     }
 
-    function phAddService(e) {
+    function phSaveServiceForm(e) {
       e.preventDefault();
+      var editId = document.getElementById('editServiceId').value;
       var title = document.getElementById('srvTitle').value.trim();
-      var category = document.getElementById('srvCategory').value;
+      var catSel = document.getElementById('srvCategorySelect').value;
+      var customCat = document.getElementById('srvCustomCategory').value.trim();
+      var category = catSel === '__CUSTOM__' ? (customCat || 'Custom Service') : catSel;
       var occasion = document.getElementById('srvOccasion').value;
       var venue = document.getElementById('srvVenue').value;
       var price = Number(document.getElementById('srvPrice').value);
@@ -1174,29 +1515,85 @@
       var fileInput = document.getElementById('srvPhotoFile');
       var details = document.getElementById('srvDetails').value.trim();
 
-      var finalizeAdd = function (photoSrc) {
-        state.services.unshift({
-          id: 's_' + Date.now(),
-          category: category,
-          occasion: occasion,
-          venue: venue,
-          title: title,
-          price: price,
-          photo: photoSrc,
-          details: details
-        });
+      var finalize = function (photoSrc) {
+        if (editId) {
+          var idx = state.services.findIndex(function (s) { return s.id === editId; });
+          if (idx !== -1) {
+            state.services[idx] = {
+              id: editId,
+              category: category,
+              occasion: occasion,
+              venue: venue,
+              title: title,
+              price: price,
+              photo: photoSrc || state.services[idx].photo,
+              details: details
+            };
+          }
+        } else {
+          state.services.unshift({
+            id: 's_' + Date.now(),
+            category: category,
+            occasion: occasion,
+            venue: venue,
+            title: title,
+            price: price,
+            photo: photoSrc,
+            details: details
+          });
+        }
         phSaveData();
-        document.getElementById('addServiceForm').reset();
+        phResetServiceForm();
         phRenderAdminServices();
       };
 
       if (fileInput.files && fileInput.files[0]) {
-        phCompressImageFile(fileInput.files[0], finalizeAdd);
+        phCompressImageFile(fileInput.files[0], finalize);
       } else if (urlInput) {
-        finalizeAdd(urlInput);
+        finalize(urlInput);
+      } else if (editId) {
+        finalize('');
       } else {
-        alert('Please enter a Photo URL or upload an image from your device.');
+        alert('Please enter a High-Resolution Photo URL or upload a photo from your device.');
       }
+    }
+
+    function phEditService(id) {
+      var s = state.services.find(function (item) { return item.id === id; });
+      if (!s) return;
+      document.getElementById('editServiceId').value = s.id;
+      document.getElementById('serviceFormHeading').textContent = 'Edit / Customize Service: ' + s.title;
+      document.getElementById('srvTitle').value = s.title;
+      var catSel = document.getElementById('srvCategorySelect');
+      var hasOption = false;
+      for (var i = 0; i < catSel.options.length; i++) {
+        if (catSel.options[i].value === s.category) hasOption = true;
+      }
+      if (hasOption) {
+        catSel.value = s.category;
+        document.getElementById('customCategoryBox').classList.add('hidden');
+      } else {
+        catSel.value = '__CUSTOM__';
+        document.getElementById('customCategoryBox').classList.remove('hidden');
+        document.getElementById('srvCustomCategory').value = s.category;
+      }
+      document.getElementById('srvOccasion').value = s.occasion || 'Birthday';
+      document.getElementById('srvVenue').value = s.venue || 'Indoor';
+      document.getElementById('srvPrice').value = s.price;
+      document.getElementById('srvPhoto').value = s.photo;
+      document.getElementById('srvDetails').value = s.details;
+      document.getElementById('saveServiceBtn').textContent = 'Update Service Details';
+      document.getElementById('cancelEditServiceBtn').classList.remove('hidden');
+      document.getElementById('adminTabServices').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function phResetServiceForm() {
+      document.getElementById('addServiceForm').reset();
+      document.getElementById('editServiceId').value = '';
+      document.getElementById('serviceFormHeading').textContent = 'Add or Customize Event Service & High-Res Photo';
+      document.getElementById('saveServiceBtn').textContent = 'Save Event Service';
+      document.getElementById('cancelEditServiceBtn').classList.add('hidden');
+      document.getElementById('customCategoryBox').classList.add('hidden');
     }
 
     function phDeleteService(id) {
@@ -1213,16 +1610,30 @@
       phRenderAdminBookings();
     }
 
+    function phCyclePaymentStatus(bookingId) {
+      var b = state.bookings.find(function (item) { return item.id === bookingId; });
+      if (!b) return;
+      var order = ['20% Advance Due', '20% Advance Paid', '90% Paid (Setup)', '100% Fully Paid'];
+      var idx = order.indexOf(b.paymentStatus);
+      b.paymentStatus = order[(idx + 1) % order.length];
+      phSaveData();
+      phRenderAdminBookings();
+      phRenderAnalytics();
+    }
+
     function phRenderAdminServices() {
       var tbody = document.getElementById('adminServicesTableBody');
       tbody.innerHTML = state.services.map(function (srv) {
         return (
           '<tr>' +
-            '<td><img src="' + srv.photo + '" alt="' + phEscape(srv.title) + '" onclick="phOpenServiceModal(\'' + srv.id + '\')" style="width:76px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;" /></td>' +
+            '<td><img src="' + srv.photo + '" alt="' + phEscape(srv.title) + '" onclick="phOpenServiceModal('' + srv.id + '')" style="width:84px;height:62px;object-fit:cover;border-radius:8px;cursor:pointer;" /></td>' +
             '<td><span class="badge">' + phEscape(srv.category) + '</span><br /><strong>' + phEscape(srv.title) + '</strong></td>' +
             '<td><strong>₹' + Number(srv.price).toLocaleString('en-IN') + '</strong></td>' +
             '<td class="details-list" style="margin-bottom:0;">' + phEscape(srv.details) + '</td>' +
-            '<td><button type="button" class="btn btn-danger btn-sm" onclick="phDeleteService(\'' + srv.id + '\')">Delete</button></td>' +
+            '<td>' +
+              '<button type="button" class="btn btn-outline btn-sm" style="margin-bottom:4px;" onclick="phEditService('' + srv.id + '')">Edit</button><br />' +
+              '<button type="button" class="btn btn-danger btn-sm" onclick="phDeleteService('' + srv.id + '')">Delete</button>' +
+            '</td>' +
           '</tr>'
         );
       }).join('');
@@ -1247,16 +1658,16 @@
         var p10 = total - p20 - p70;
         return (
           '<tr>' +
-            '<td><strong>' + phEscape(b.date) + '</strong></td>' +
+            '<td><strong>' + phEscape(b.date) + '</strong><br /><span class="badge">' + phEscape(b.slot) + ' &bull; ' + phEscape(b.exactTime) + '</span></td>' +
             '<td>' +
-              '<button type="button" class="customer-link" onclick="phOpenBookingPhoto(\'' + b.id + '\')">' + phEscape(b.customerName) + '</button>' +
+              '<button type="button" class="customer-link" onclick="phOpenBookingPhoto('' + b.id + '')">' + phEscape(b.customerName) + '</button>' +
               '<div class="brand-sub">' + phEscape(b.customerPhone) + '</div>' +
               '<div class="brand-sub">Cust E-Sign: ' + phEscape(b.eSign || b.customerName) + '</div>' +
             '</td>' +
             '<td>' +
               '<strong>' + phEscape(b.city) + '</strong>' +
+              '<div class="brand-sub">' + phEscape(b.district || 'Andhra Pradesh') + '</div>' +
               '<div class="brand-sub">' + phEscape(b.venueAddress || '') + '</div>' +
-              '<span class="badge">' + phEscape(b.slot) + ' &bull; ' + phEscape(b.exactTime) + '</span>' +
             '</td>' +
             '<td>' +
               b.items.map(function (it) {
@@ -1266,9 +1677,11 @@
             '<td>' +
               '<strong>₹' + total.toLocaleString('en-IN') + '</strong>' +
               '<div class="brand-sub">20%: ₹' + p20 + ' | 70%: ₹' + p70 + ' | 10%: ₹' + p10 + '</div>' +
+              '<div class="brand-sub">' + phEscape(b.paymentMethod || 'UPI') + ' (' + phEscape(b.paymentRef || '') + ')</div>' +
+              '<button type="button" class="btn btn-outline btn-sm" style="margin-top:4px;" onclick="phCyclePaymentStatus('' + b.id + '')">' + phEscape(b.paymentStatus || '20% Advance Due') + '</button>' +
             '</td>' +
             '<td>' +
-              '<button type="button" class="btn ' + (b.adminApproved ? 'btn-primary' : 'btn-outline') + ' btn-sm" onclick="phToggleAdminApproval(\'' + b.id + '\')">' +
+              '<button type="button" class="btn ' + (b.adminApproved ? 'btn-primary' : 'btn-outline') + ' btn-sm" onclick="phToggleAdminApproval('' + b.id + '')">' +
                 (b.adminApproved ? '✓ E-Signed' : 'Counter-Sign') +
               '</button>' +
             '</td>' +
@@ -1282,22 +1695,78 @@
       phRenderAdminBookings();
     }
 
+    function phRenderAnalytics() {
+      var totalBookings = state.bookings.length;
+      var totalRevenue = state.bookings.reduce(function (s, b) { return s + Number(b.totalPrice || 0); }, 0);
+      var paidBookings = state.bookings.filter(function (b) { return (b.paymentStatus || '').indexOf('Paid') !== -1; }).length;
+
+      document.getElementById('analyticsKpiGrid').innerHTML =
+        '<div class="kpi-card"><div class="brand-sub">Total Booked Events</div><div class="kpi-val">' + totalBookings + '</div></div>' +
+        '<div class="kpi-card"><div class="brand-sub">Total Gross Event Value</div><div class="kpi-val">₹' + totalRevenue.toLocaleString('en-IN') + '</div></div>' +
+        '<div class="kpi-card"><div class="brand-sub">Advance / Paid Bookings</div><div class="kpi-val">' + paidBookings + ' / ' + totalBookings + '</div></div>';
+
+      var dailyMap = {};
+      var monthlyMap = {};
+      state.bookings.forEach(function (b) {
+        var d = b.date || 'Unknown';
+        var m = d.slice(0, 7);
+        dailyMap[d] = (dailyMap[d] || 0) + Number(b.totalPrice || 0);
+        monthlyMap[m] = (monthlyMap[m] || 0) + Number(b.totalPrice || 0);
+      });
+
+      var renderBars = function (mapObj, containerId) {
+        var keys = Object.keys(mapObj).sort();
+        var el = document.getElementById(containerId);
+        if (!keys.length) {
+          el.innerHTML = '<p class="brand-sub">No booking data yet.</p>';
+          return;
+        }
+        var maxVal = Math.max.apply(null, keys.map(function (k) { return mapObj[k]; })) || 1;
+        el.innerHTML = keys.map(function (k) {
+          var val = mapObj[k];
+          var pct = Math.round((val / maxVal) * 100);
+          return (
+            '<div class="bar-row">' +
+              '<div class="bar-label">' + phEscape(k) + '</div>' +
+              '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;"></div></div>' +
+              '<div class="bar-val">₹' + val.toLocaleString('en-IN') + '</div>' +
+            '</div>'
+          );
+        }).join('');
+      };
+
+      renderBars(dailyMap, 'dailyChartContainer');
+      renderBars(monthlyMap, 'monthlyChartContainer');
+    }
+
     function phOpenBookingPhoto(bookingId) {
       var b = state.bookings.find(function (item) { return item.id === bookingId; });
       if (!b || !b.items.length) return;
       var first = b.items[0];
+      var total = Number(b.totalPrice);
+      var p20 = Math.round(total * 0.20);
+      var p70 = Math.round(total * 0.70);
+      var p10 = total - p20 - p70;
+
       document.getElementById('modalTitle').textContent = b.customerName + ' — ' + b.items.map(function (i) { return i.title; }).join(' + ');
-      document.getElementById('modalMeta').textContent = 'Date: ' + b.date + ' | City: ' + b.city + ' (' + (b.venueAddress || b.city) + ') | Slot: ' + b.slot + ' at ' + b.exactTime + ' | Total: ₹' + Number(b.totalPrice).toLocaleString('en-IN');
+      document.getElementById('modalMeta').textContent = 'Date: ' + b.date + ' | ' + (b.district || '') + ' - ' + b.city + ' (' + (b.venueAddress || b.city) + ') | ' + b.slot + ' at ' + b.exactTime;
       document.getElementById('modalImage').src = first.photo;
 
       var strip = document.getElementById('modalGalleryStrip');
       if (b.items.length > 1) {
         strip.innerHTML = b.items.map(function (it, i) {
-          return '<button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById(\'modalImage\').src=\'' + it.photo + '\'">Photo ' + (i + 1) + ': ' + phEscape(it.title) + '</button>';
+          return '<button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('modalImage').src='' + it.photo + ''">Photo ' + (i + 1) + ': ' + phEscape(it.title) + '</button>';
         }).join('');
       } else {
         strip.innerHTML = '';
       }
+
+      var payBox = document.getElementById('modalPaymentBox');
+      payBox.classList.remove('hidden');
+      payBox.innerHTML =
+        '<strong>Booking &amp; Payment Summary:</strong> Total ₹' + total.toLocaleString('en-IN') +
+        ' (20% Advance: ₹' + p20 + ' | 70% Setup: ₹' + p70 + ' | 10% Final: ₹' + p10 + ')<br />' +
+        'Method: <strong>' + phEscape(b.paymentMethod || 'UPI') + '</strong> | Ref: ' + phEscape(b.paymentRef || 'N/A') + ' | Status: <strong>' + phEscape(b.paymentStatus || '20% Advance Due') + '</strong> | E-Sign: <strong>' + phEscape(b.eSign) + '</strong>';
 
       document.getElementById('modalDetails').textContent = b.items.map(function (i) { return i.title + ':\n' + i.details; }).join('\n\n');
       document.getElementById('photoModal').classList.add('open');
@@ -1310,6 +1779,7 @@
       document.getElementById('modalMeta').textContent = s.category + ' | Price: ₹' + Number(s.price).toLocaleString('en-IN');
       document.getElementById('modalImage').src = s.photo;
       document.getElementById('modalGalleryStrip').innerHTML = '';
+      document.getElementById('modalPaymentBox').classList.add('hidden');
       document.getElementById('modalDetails').textContent = s.details;
       document.getElementById('photoModal').classList.add('open');
     }
@@ -1322,7 +1792,8 @@
       document.getElementById('helpDeskContent').innerHTML =
         '<a href="tel:' + phEscape(state.settings.phone) + '" class="btn btn-primary">Call Help Desk: ' + phEscape(state.settings.phone) + '</a>' +
         '<a href="https://wa.me/' + phEscape(state.settings.whatsapp) + '" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp Support</a>' +
-        '<a href="mailto:' + phEscape(state.settings.email) + '" class="btn btn-outline">Email: ' + phEscape(state.settings.email) + '</a>';
+        '<a href="mailto:' + phEscape(state.settings.email) + '" class="btn btn-outline">Email: ' + phEscape(state.settings.email) + '</a>' +
+        '<div class="notice-info" style="margin-bottom:0;"><strong>Official Payment:</strong> UPI ' + phEscape(state.settings.upi) + '<br />' + phEscape(state.settings.bank) + '</div>';
       document.getElementById('helpModal').classList.add('open');
     }
 
@@ -1335,6 +1806,7 @@
       document.getElementById('cfgWhatsapp').value = state.settings.whatsapp;
       document.getElementById('cfgEmail').value = state.settings.email;
       document.getElementById('cfgUpi').value = state.settings.upi;
+      document.getElementById('cfgBank').value = state.settings.bank || '';
     }
 
     function phSaveSettings() {
@@ -1342,6 +1814,7 @@
       state.settings.whatsapp = document.getElementById('cfgWhatsapp').value.trim();
       state.settings.email = document.getElementById('cfgEmail').value.trim();
       state.settings.upi = document.getElementById('cfgUpi').value.trim();
+      state.settings.bank = document.getElementById('cfgBank').value.trim();
       phSaveData();
       alert('Help Desk & Payment settings saved.');
     }
@@ -1374,6 +1847,7 @@
           phPopulateSettingsForm();
           phRenderAdminServices();
           phRenderAdminBookings();
+          phRenderAnalytics();
           alert('Backup restored successfully!');
         } catch (err) {
           alert('Invalid backup JSON file.');
