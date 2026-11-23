@@ -7,8 +7,8 @@
   <style>
     :root {
       --bg-grad: linear-gradient(135deg, #f0f8ff 0%, #dbeeff 50%, #f8fcff 100%);
-      --glass: rgba(255, 255, 255, 0.84);
-      --glass-strong: rgba(255, 255, 255, 0.97);
+      --glass: rgba(255, 255, 255, 0.88);
+      --glass-strong: rgba(255, 255, 255, 0.98);
       --glass-border: rgba(255, 255, 255, 0.95);
       --primary: #0284c7;
       --primary-dark: #0369a1;
@@ -18,8 +18,6 @@
       --border: #bae6fd;
       --danger: #b91c1c;
       --danger-bg: #fef2f2;
-      --success: #047857;
-      --success-bg: #ecfdf5;
     }
 
     * {
@@ -71,7 +69,6 @@
       font-size: 1.28rem;
       font-weight: 800;
       color: var(--primary-dark);
-      letter-spacing: -0.02em;
     }
 
     .brand-sub {
@@ -415,9 +412,9 @@
         <div class="brand-sub">Annamayya &amp; Kadapa Districts Event Planner, Decorators &amp; Rentals</div>
       </div>
       <div class="topbar-actions">
-        <button type="button" id="helpDeskBtn" class="btn btn-outline btn-sm">Help Desk</button>
-        <button type="button" id="adminLoginBtn" class="btn btn-outline btn-sm">Admin Login</button>
-        <button type="button" id="logoutBtn" class="btn btn-outline btn-sm hidden">Logout</button>
+        <button type="button" id="helpDeskBtn" class="btn btn-outline btn-sm" onclick="phOpenHelpDesk()">Help Desk</button>
+        <button type="button" id="adminLoginBtn" class="btn btn-outline btn-sm" onclick="phOpenAdminLogin()">Admin Login</button>
+        <button type="button" id="logoutBtn" class="btn btn-outline btn-sm hidden" onclick="phLogoutAll()">Logout</button>
       </div>
     </div>
 
@@ -439,8 +436,8 @@
         <input id="custOtp" type="text" maxlength="4" value="1234" placeholder="1234" />
       </div>
 
-      <button type="button" id="sendOtpBtn" class="btn btn-primary" style="width:100%;">Send OTP</button>
-      <button type="button" id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;">Verify OTP &amp; Unlock Events</button>
+      <button type="button" id="sendOtpBtn" class="btn btn-primary" style="width:100%;" onclick="phSendOtp()">Send OTP</button>
+      <button type="button" id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;" onclick="phVerifyOtp()">Verify OTP &amp; Unlock Events</button>
 
       <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border); font-size:0.83rem; color:var(--muted); line-height:1.5;">
         <strong style="color:var(--primary-dark);">Our Branches:</strong><br />
@@ -464,7 +461,7 @@
         <div class="grid-4">
           <div>
             <label for="filterCity">City / Town</label>
-            <select id="filterCity">
+            <select id="filterCity" onchange="phRenderCustomerPackages()">
               <option value="Rayachoti">Rayachoti (Annamayya)</option>
               <option value="Madanapalle">Madanapalle (Annamayya)</option>
               <option value="Pileru">Pileru (Annamayya)</option>
@@ -478,7 +475,7 @@
           </div>
           <div>
             <label for="filterOccasion">Occasion</label>
-            <select id="filterOccasion">
+            <select id="filterOccasion" onchange="phRenderCustomerPackages()">
               <option value="All">All Occasions</option>
               <option value="Birthday">Birthday</option>
               <option value="Anniversary">Anniversary</option>
@@ -488,7 +485,7 @@
           </div>
           <div>
             <label for="filterVenue">Indoor / Outdoor</label>
-            <select id="filterVenue">
+            <select id="filterVenue" onchange="phRenderCustomerPackages()">
               <option value="All">Indoor &amp; Outdoor</option>
               <option value="Indoor">Indoor</option>
               <option value="Outdoor">Outdoor</option>
@@ -496,7 +493,7 @@
           </div>
           <div>
             <label for="filterMaxPrice">Max Budget (₹)</label>
-            <input id="filterMaxPrice" type="number" placeholder="e.g., 15000" />
+            <input id="filterMaxPrice" type="number" placeholder="e.g., 15000" oninput="phRenderCustomerPackages()" />
           </div>
         </div>
 
@@ -513,8 +510,8 @@
 
         <label>Select Event Slot</label>
         <div class="slot-group">
-          <button type="button" id="slotMorningBtn" class="btn btn-outline">Morning</button>
-          <button type="button" id="slotAfternoonBtn" class="btn btn-outline">Afternoon</button>
+          <button type="button" id="slotMorningBtn" class="btn btn-outline" onclick="phSelectSlot('Morning')">Morning</button>
+          <button type="button" id="slotAfternoonBtn" class="btn btn-outline" onclick="phSelectSlot('Afternoon')">Afternoon</button>
         </div>
 
         <div id="customTimeBox" class="hidden">
@@ -526,19 +523,19 @@
       <div class="glass-card">
         <h3 style="margin-bottom:10px;">Select Service Category</h3>
         <div class="cat-grid" id="categoryButtons">
-          <button type="button" class="cat-btn active" data-cat="All">
+          <button type="button" class="cat-btn active" onclick="phSetCategory('All', this)">
             <span class="cat-icon">✨</span><span>All Services</span>
           </button>
-          <button type="button" class="cat-btn" data-cat="Decorations">
+          <button type="button" class="cat-btn" onclick="phSetCategory('Decorations', this)">
             <span class="cat-icon">🎈</span><span>Decorations</span>
           </button>
-          <button type="button" class="cat-btn" data-cat="Special Entries">
+          <button type="button" class="cat-btn" onclick="phSetCategory('Special Entries', this)">
             <span class="cat-icon">🎆</span><span>Special Entries</span>
           </button>
-          <button type="button" class="cat-btn" data-cat="Activities">
+          <button type="button" class="cat-btn" onclick="phSetCategory('Activities', this)">
             <span class="cat-icon">🏰</span><span>Activities</span>
           </button>
-          <button type="button" class="cat-btn" data-cat="Makeup & Mehndi">
+          <button type="button" class="cat-btn" onclick="phSetCategory('Makeup & Mehndi', this)">
             <span class="cat-icon">💄</span><span>Makeup &amp; Mehndi</span>
           </button>
         </div>
@@ -554,7 +551,7 @@
           <label for="customerESign">Customer Digital E-Sign (Type your full name to agree to terms)</label>
           <input id="customerESign" type="text" placeholder="Type full name for e-signature" />
           <div class="notice-info" id="officialPaymentInfo"></div>
-          <button type="button" id="confirmBookingBtn" class="btn btn-primary" style="width:100%;">E-Sign &amp; Confirm Booking</button>
+          <button type="button" id="confirmBookingBtn" class="btn btn-primary" style="width:100%;" onclick="phConfirmBooking()">E-Sign &amp; Confirm Booking</button>
         </div>
       </div>
 
@@ -572,17 +569,17 @@
       <label for="adminPin">Admin Passcode</label>
       <input id="adminPin" type="password" placeholder="Enter 2026" />
       <div style="display:flex; gap:10px;">
-        <button type="button" id="doAdminLoginBtn" class="btn btn-primary">Login to Admin Panel</button>
-        <button type="button" id="backToCustBtn" class="btn btn-outline">Back</button>
+        <button type="button" id="doAdminLoginBtn" class="btn btn-primary" onclick="phAdminLogin()">Login to Admin Panel</button>
+        <button type="button" id="backToCustBtn" class="btn btn-outline" onclick="phBackToCustomerLogin()">Back</button>
       </div>
     </div>
 
     <!-- ADMIN DASHBOARD -->
     <div id="adminView" class="hidden">
       <div class="tabs">
-        <button type="button" class="btn btn-outline active" id="tabBookingsBtn">1. Bookings by Date &amp; Full Photo Viewer</button>
-        <button type="button" class="btn btn-outline" id="tabServicesBtn">2. Services, Photos &amp; Event Details</button>
-        <button type="button" class="btn btn-outline" id="tabSettingsBtn">3. Help Desk, Payment &amp; Data Backup</button>
+        <button type="button" class="btn btn-outline active" id="tabBookingsBtn" onclick="phSwitchAdminTab('bookings')">1. Bookings by Date &amp; Full Photo Viewer</button>
+        <button type="button" class="btn btn-outline" id="tabServicesBtn" onclick="phSwitchAdminTab('services')">2. Services, Photos &amp; Event Details</button>
+        <button type="button" class="btn btn-outline" id="tabSettingsBtn" onclick="phSwitchAdminTab('settings')">3. Help Desk, Payment &amp; Data Backup</button>
       </div>
 
       <!-- TAB 1: BOOKINGS BY DATE & CLICK CUSTOMER NAME FOR BIG EVENT PICTURE -->
@@ -593,8 +590,8 @@
             <div class="brand-sub">Select a date to view event details. Click any Customer Name to view the event picture in full size.</div>
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
-            <input id="adminDateFilter" type="date" style="margin-bottom:0; width:auto;" />
-            <button type="button" id="clearAdminDateBtn" class="btn btn-outline btn-sm">Show All Dates</button>
+            <input id="adminDateFilter" type="date" style="margin-bottom:0; width:auto;" onchange="phRenderAdminBookings()" />
+            <button type="button" id="clearAdminDateBtn" class="btn btn-outline btn-sm" onclick="phClearAdminDate()">Show All Dates</button>
           </div>
         </div>
 
@@ -618,7 +615,7 @@
       <!-- TAB 2: SERVICES, PHOTOS & EVENT DETAILS COLUMN -->
       <div id="adminTabServices" class="glass-card hidden">
         <h2 style="margin-bottom:12px;">Add Service / Social Media Photo with Complete Event Details</h2>
-        <form id="addServiceForm">
+        <form id="addServiceForm" onsubmit="phAddService(event)">
           <div class="grid-2">
             <div>
               <label for="srvTitle">Service / Theme Name</label>
@@ -708,16 +705,16 @@
             <input id="cfgUpi" type="text" />
           </div>
         </div>
-        <button type="button" id="saveSettingsBtn" class="btn btn-primary">Save Contact &amp; Payment Settings</button>
+        <button type="button" id="saveSettingsBtn" class="btn btn-primary" onclick="phSaveSettings()">Save Contact &amp; Payment Settings</button>
 
         <hr style="margin:18px 0; border:none; border-top:1px solid var(--border);" />
         <h3 style="margin-bottom:8px;">Export / Restore Complete App Data</h3>
         <p class="brand-sub" style="margin-bottom:10px;">Download a JSON backup of all your services, uploaded photos, and customer bookings, or restore from a backup file anytime.</p>
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <button type="button" id="exportBackupBtn" class="btn btn-outline">Download Backup (.json)</button>
+          <button type="button" id="exportBackupBtn" class="btn btn-outline" onclick="phExportBackup()">Download Backup (.json)</button>
           <label class="btn btn-outline" style="margin-bottom:0; cursor:pointer;">
             Restore Backup (.json)
-            <input id="importBackupInput" type="file" accept=".json" style="display:none;" />
+            <input id="importBackupInput" type="file" accept=".json" style="display:none;" onchange="phImportBackup(event)" />
           </label>
         </div>
       </div>
@@ -725,14 +722,14 @@
   </div>
 
   <!-- FULL-SIZE EVENT PICTURE MODAL -->
-  <div id="photoModal" class="modal-backdrop">
-    <div class="modal-box" id="photoModalBox">
+  <div id="photoModal" class="modal-backdrop" onclick="phClosePhotoModal()">
+    <div class="modal-box" id="photoModalBox" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div>
           <h3 id="modalTitle"></h3>
           <div id="modalMeta" class="brand-sub"></div>
         </div>
-        <button type="button" id="closePhotoModalBtn" class="btn btn-outline btn-sm">✕ Close</button>
+        <button type="button" id="closePhotoModalBtn" class="btn btn-outline btn-sm" onclick="phClosePhotoModal()">✕ Close</button>
       </div>
       <img id="modalImage" class="modal-img" src="" alt="Full Size Event Picture" />
       <div id="modalGalleryStrip" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;"></div>
@@ -744,771 +741,661 @@
   </div>
 
   <!-- HELP DESK MODAL -->
-  <div id="helpModal" class="modal-backdrop">
-    <div class="modal-box" style="max-width:460px;" id="helpModalBox">
+  <div id="helpModal" class="modal-backdrop" onclick="phCloseHelpModal()">
+    <div class="modal-box" style="max-width:460px;" id="helpModalBox" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h3>PartyHub - SR Events Help Desk</h3>
-        <button type="button" id="closeHelpModalBtn" class="btn btn-outline btn-sm">✕</button>
+        <button type="button" id="closeHelpModalBtn" class="btn btn-outline btn-sm" onclick="phCloseHelpModal()">✕</button>
       </div>
       <div id="helpDeskContent" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
   </div>
 
   <script>
-    (function () {
-      const STORAGE_KEY = 'partyhub_srevents_fixed_v18';
+    var STORAGE_KEY = 'partyhub_srevents_clean_v19';
 
-      const defaultData = {
-        settings: {
-          phone: '9398934021',
-          whatsapp: '919398934021',
-          email: 'partyhubsrevents@gmail.com',
-          upi: 'UPI: partyhubsrevents@okaxis | PartyHub - SR Events (Rayachoti & Madanapalle)'
+    var defaultData = {
+      settings: {
+        phone: '9398934021',
+        whatsapp: '919398934021',
+        email: 'partyhubsrevents@gmail.com',
+        upi: 'UPI: partyhubsrevents@okaxis | PartyHub - SR Events (Rayachoti & Madanapalle)'
+      },
+      services: [
+        {
+          id: 's1',
+          category: 'Decorations',
+          occasion: 'Birthday',
+          venue: 'Indoor',
+          title: 'Birthday Balloon Arch & Ring Backdrop',
+          price: 4500,
+          photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
+          details: '• 220 pastel & chrome balloons\n• 8x8 ft circular ring backdrop stand\n• Happy Birthday neon/foil signage\n• 2 warm LED focus par lights\n• Complete on-site setup & dismantling included'
         },
-        services: [
-          {
-            id: 's1',
-            category: 'Decorations',
-            occasion: 'Birthday',
-            venue: 'Indoor',
-            title: 'Birthday Balloon Arch & Ring Backdrop',
-            price: 4500,
-            photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
-            details: [
-              '• 220 pastel & chrome balloons',
-              '• 8x8 ft circular ring backdrop stand',
-              '• Happy Birthday neon/foil signage',
-              '• 2 warm LED focus par lights',
-              '• Complete on-site setup & dismantling included'
-            ].join('
-')
-          },
-          {
-            id: 's2',
-            category: 'Special Entries',
-            occasion: 'Wedding / Engagement',
-            venue: 'Indoor',
-            title: 'Grand Cold Pyro & Low-Fog Cloud Entry',
-            price: 6500,
-            photo: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85',
-            details: [
-              '• 6 smokeless cold pyro fountains',
-              '• MAX LED DMX512 low-fog cloud effect',
-              '• Mirror pathway / flower petal shower',
-              '• Dedicated operator on site'
-            ].join('
-')
-          },
-          {
-            id: 's3',
-            category: 'Activities',
-            occasion: 'Birthday',
-            venue: 'Outdoor',
-            title: 'Kids Bouncy Castle, Live Mascot & Water Tattoos',
-            price: 5500,
-            photo: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=85',
-            details: [
-              '• Inflatable Bouncy Castle (3 hours)',
-              '• 1 Live Cartoon Character Mascot',
-              '• Unlimited Kids Water Tattoos artist',
-              '• Power blower & attendant included'
-            ].join('
-')
-          },
-          {
-            id: 's4',
-            category: 'Makeup & Mehndi',
-            occasion: 'Wedding / Engagement',
-            venue: 'Indoor',
-            title: 'Bridal & Family Mehndi + Party Makeup Artist',
-            price: 4000,
-            photo: 'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85',
-            details: [
-              '• Organic dark-stain bridal/guest mehndi',
-              '• HD party makeup & hairstyling',
-              '• Home/venue visit across Rayachoti & Madanapalle'
-            ].join('
-')
-          }
-        ],
-        bookings: [
-          {
-            id: 'b1',
-            date: '2026-11-25',
-            city: 'Rayachoti',
-            venueAddress: 'Bose Nagar Function Hall, Rayachoti',
-            customerName: 'Karthik Reddy',
-            customerPhone: '9848011122',
-            slot: 'Morning',
-            exactTime: '10:15',
-            items: [
-              {
-                id: 's1',
-                title: 'Birthday Balloon Arch & Ring Backdrop',
-                price: 4500,
-                photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
-                details: [
-                  '• 220 pastel & chrome balloons',
-                  '• 8x8 ft circular ring backdrop stand',
-                  '• Happy Birthday neon/foil signage',
-                  '• 2 warm LED focus par lights',
-                  '• Complete on-site setup & dismantling included'
-                ].join('
-')
-              }
-            ],
-            totalPrice: 4500,
-            eSign: 'Karthik Reddy',
-            adminApproved: true
-          }
-        ]
-      };
-
-      function loadData() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            return {
-              settings: parsed.settings || defaultData.settings,
-              services: Array.isArray(parsed.services) && parsed.services.length ? parsed.services : defaultData.services,
-              bookings: Array.isArray(parsed.bookings) ? parsed.bookings : defaultData.bookings
-            };
-          }
-        } catch (e) {}
-        return JSON.parse(JSON.stringify(defaultData));
-      }
-
-      function saveData() {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({
-            settings: state.settings,
-            services: state.services,
-            bookings: state.bookings
-          }));
-        } catch (e) {}
-      }
-
-      const loaded = loadData();
-      const state = {
-        role: null,
-        customer: { name: '', phone: '' },
-        selectedCategory: 'All',
-        selectedSlot: '',
-        cart: [],
-        settings: loaded.settings,
-        services: loaded.services,
-        bookings: loaded.bookings
-      };
-
-      function showMsg(elId, text) {
-        const el = document.getElementById(elId);
-        if (!el) return;
-        if (!text) {
-          el.classList.add('hidden');
-          el.textContent = '';
-        } else {
-          el.textContent = text;
-          el.classList.remove('hidden');
+        {
+          id: 's2',
+          category: 'Special Entries',
+          occasion: 'Wedding / Engagement',
+          venue: 'Indoor',
+          title: 'Grand Cold Pyro & Low-Fog Cloud Entry',
+          price: 6500,
+          photo: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85',
+          details: '• 6 smokeless cold pyro fountains\n• MAX LED DMX512 low-fog cloud effect\n• Mirror pathway / flower petal shower\n• Dedicated operator on site'
+        },
+        {
+          id: 's3',
+          category: 'Activities',
+          occasion: 'Birthday',
+          venue: 'Outdoor',
+          title: 'Kids Bouncy Castle, Live Mascot & Water Tattoos',
+          price: 5500,
+          photo: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1200&q=85',
+          details: '• Inflatable Bouncy Castle (3 hours)\n• 1 Live Cartoon Character Mascot\n• Unlimited Kids Water Tattoos artist\n• Power blower & attendant included'
+        },
+        {
+          id: 's4',
+          category: 'Makeup & Mehndi',
+          occasion: 'Wedding / Engagement',
+          venue: 'Indoor',
+          title: 'Bridal & Family Mehndi + Party Makeup Artist',
+          price: 4000,
+          photo: 'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85',
+          details: '• Organic dark-stain bridal/guest mehndi\n• HD party makeup & hairstyling\n• Home/venue visit across Rayachoti & Madanapalle'
         }
-      }
-
-      function escapeHtml(str) {
-        return String(str || '')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
-      }
-
-      // Customer Login Flow
-      function handleSendOtp() {
-        const name = document.getElementById('custName').value.trim();
-        const phone = document.getElementById('custPhone').value.replace(/\D/g, '');
-        if (!name) {
-          showMsg('custLoginMsg', 'Please enter your full name.');
-          return;
-        }
-        if (phone.length < 10) {
-          showMsg('custLoginMsg', 'Please enter a valid 10-digit mobile number.');
-          return;
-        }
-        showMsg('custLoginMsg', '');
-        state.customer = { name, phone };
-        document.getElementById('otpSection').classList.remove('hidden');
-        document.getElementById('sendOtpBtn').classList.add('hidden');
-        document.getElementById('verifyOtpBtn').classList.remove('hidden');
-        document.getElementById('custOtp').value = '1234';
-      }
-
-      function handleVerifyOtp() {
-        const otp = document.getElementById('custOtp').value.trim();
-        if (otp !== '1234') {
-          showMsg('custLoginMsg', 'Invalid OTP. Enter 1234 to log in.');
-          return;
-        }
-        showMsg('custLoginMsg', '');
-        state.role = 'customer';
-        document.getElementById('customerLoginCard').classList.add('hidden');
-        document.getElementById('adminLoginCard').classList.add('hidden');
-        document.getElementById('customerView').classList.remove('hidden');
-        document.getElementById('logoutBtn').classList.remove('hidden');
-        document.getElementById('adminLoginBtn').classList.add('hidden');
-        document.getElementById('activeCustomerLabel').textContent = state.customer.name + ' (' + state.customer.phone + ')';
-        if (!document.getElementById('bookingDate').value) {
-          document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
-        }
-        renderCustomerPackages();
-        renderCart();
-        renderCustomerBookings();
-      }
-
-      // Slot & Custom Time
-      function selectSlot(slot) {
-        state.selectedSlot = slot;
-        document.getElementById('slotMorningBtn').classList.toggle('active', slot === 'Morning');
-        document.getElementById('slotAfternoonBtn').classList.toggle('active', slot === 'Afternoon');
-        const timeBox = document.getElementById('customTimeBox');
-        const timeInput = document.getElementById('customExactTime');
-        const timeLabel = document.getElementById('customTimeLabel');
-        timeBox.classList.remove('hidden');
-
-        if (slot === 'Morning') {
-          timeLabel.textContent = 'Customize Exact Morning Timing (06:00 AM - 11:59 AM)';
-          timeInput.min = '06:00';
-          timeInput.max = '11:59';
-          timeInput.value = '10:00';
-        } else {
-          timeLabel.textContent = 'Customize Exact Afternoon Timing (12:00 PM - 05:59 PM)';
-          timeInput.min = '12:00';
-          timeInput.max = '17:59';
-          timeInput.value = '14:30';
-        }
-      }
-
-      function renderCustomerPackages() {
-        const occ = document.getElementById('filterOccasion').value;
-        const venue = document.getElementById('filterVenue').value;
-        const maxPrice = Number(document.getElementById('filterMaxPrice').value) || Infinity;
-
-        const filtered = state.services.filter(function (s) {
-          if (state.selectedCategory !== 'All' && s.category !== state.selectedCategory) return false;
-          if (occ !== 'All' && s.occasion !== occ) return false;
-          if (venue !== 'All' && s.venue !== venue) return false;
-          if (Number(s.price) > maxPrice) return false;
-          return true;
-        });
-
-        const grid = document.getElementById('customerPackagesGrid');
-        if (!filtered.length) {
-          grid.innerHTML = '<p class="brand-sub">No packages match your current filter. Try clearing the price or category filter.</p>';
-          return;
-        }
-
-        grid.innerHTML = filtered.map(function (srv) {
-          return (
-            '<div class="package-card">' +
-              '<img src="' + srv.photo + '" alt="' + escapeHtml(srv.title) + '" data-open-srv="' + srv.id + '" title="Click to enlarge" />' +
-              '<div class="package-body">' +
-                '<div>' +
-                  '<span class="badge">' + escapeHtml(srv.category) + ' &bull; ' + escapeHtml(srv.venue || 'Indoor') + '</span>' +
-                  '<h4 style="margin-top:6px;">' + escapeHtml(srv.title) + '</h4>' +
-                  '<div class="price-tag">₹' + Number(srv.price).toLocaleString('en-IN') + '</div>' +
-                  '<div class="details-list">' + escapeHtml(srv.details) + '</div>' +
-                '</div>' +
-                '<button type="button" class="btn btn-primary" data-add-cart="' + srv.id + '">Add to Cart &amp; Book</button>' +
-              '</div>' +
-            '</div>'
-          );
-        }).join('');
-      }
-
-      function renderCart() {
-        const box = document.getElementById('cartItemsBox');
-        const checkout = document.getElementById('checkoutBox');
-        if (!state.cart.length) {
-          box.textContent = 'No services added to cart yet. Click "Add to Cart & Book" on any package above.';
-          checkout.classList.add('hidden');
-          return;
-        }
-
-        const total = state.cart.reduce(function (sum, item) { return sum + Number(item.price); }, 0);
-        const p20 = Math.round(total * 0.20);
-        const p70 = Math.round(total * 0.70);
-        const p10 = total - p20 - p70;
-
-        box.innerHTML = state.cart.map(function (item, idx) {
-          return (
-            '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#fff; border:1px solid var(--border); border-radius:10px; margin-bottom:6px;">' +
-              '<div><strong>' + escapeHtml(item.title) + '</strong> — ₹' + Number(item.price).toLocaleString('en-IN') + '</div>' +
-              '<button type="button" class="btn btn-danger btn-sm" data-rm-cart="' + idx + '">Remove</button>' +
-            '</div>'
-          );
-        }).join('');
-
-        document.getElementById('paymentSplitBox').innerHTML =
-          '<strong>Total Package Amount: ₹' + total.toLocaleString('en-IN') + '</strong>' +
-          '<div class="split-row"><span>1st Installment (20% Booking Advance):</span><strong>₹' + p20.toLocaleString('en-IN') + '</strong></div>' +
-          '<div class="split-row"><span>2nd Installment (70% On Setup Arrival):</span><strong>₹' + p70.toLocaleString('en-IN') + '</strong></div>' +
-          '<div class="split-row"><span>3rd Installment (10% After Completion):</span><strong>₹' + p10.toLocaleString('en-IN') + '</strong></div>';
-
-        document.getElementById('officialPaymentInfo').innerHTML = '<strong>Official Payment Details:</strong> ' + escapeHtml(state.settings.upi);
-        checkout.classList.remove('hidden');
-      }
-
-      function confirmBooking() {
-        const date = document.getElementById('bookingDate').value;
-        const city = document.getElementById('filterCity').value;
-        const venueAddress = document.getElementById('bookingVenueAddress').value.trim();
-        const exactTime = document.getElementById('customExactTime').value;
-        const eSign = document.getElementById('customerESign').value.trim();
-
-        if (!date) return alert('Please select an event date.');
-        if (!state.selectedSlot || !exactTime) return alert('Please select Morning or Afternoon slot and customize your exact time.');
-        if (!eSign) return alert('Please type your full name in the Customer Digital E-Sign field.');
-
-        const total = state.cart.reduce(function (sum, item) { return sum + Number(item.price); }, 0);
-        state.bookings.unshift({
-          id: 'b_' + Date.now(),
-          date: date,
-          city: city,
-          venueAddress: venueAddress || city,
-          customerName: state.customer.name,
-          customerPhone: state.customer.phone,
-          slot: state.selectedSlot,
-          exactTime: exactTime,
-          items: state.cart.slice(),
-          totalPrice: total,
-          eSign: eSign,
-          adminApproved: false
-        });
-        state.cart = [];
-        document.getElementById('customerESign').value = '';
-        saveData();
-        renderCart();
-        renderCustomerBookings();
-        alert('Booking confirmed & e-signed by ' + eSign + ' for ' + date + ' (' + state.selectedSlot + ' at ' + exactTime + ') in ' + city + '!');
-      }
-
-      function renderCustomerBookings() {
-        const mine = state.bookings.filter(function (b) { return b.customerPhone === state.customer.phone; });
-        const box = document.getElementById('customerMyBookings');
-        if (!mine.length) {
-          box.textContent = 'No confirmed bookings yet.';
-          return;
-        }
-        box.innerHTML = mine.map(function (b) {
-          return (
-            '<div style="padding:10px; border:1px solid var(--border); border-radius:10px; background:#fff; margin-bottom:8px;">' +
-              '<strong>' + b.items.map(function (i) { return escapeHtml(i.title); }).join(' + ') + '</strong> — Total: ₹' + Number(b.totalPrice).toLocaleString('en-IN') + '<br />' +
-              'Date: <strong>' + escapeHtml(b.date) + '</strong> | City: ' + escapeHtml(b.city) + ' (' + escapeHtml(b.venueAddress || b.city) + ') | Slot: <strong>' + escapeHtml(b.slot) + ' at ' + escapeHtml(b.exactTime) + '</strong><br />' +
-              'Customer E-Sign: <strong>' + escapeHtml(b.eSign) + '</strong> | Admin Agreement: <strong>' + (b.adminApproved ? 'Countersigned by PartyHub - SR Events' : 'Pending Admin Counter-Sign') + '</strong>' +
-            '</div>'
-          );
-        }).join('');
-      }
-
-      // Admin Login Flow
-      function openAdminLogin() {
-        showMsg('adminLoginMsg', '');
-        document.getElementById('customerLoginCard').classList.add('hidden');
-        document.getElementById('customerView').classList.add('hidden');
-        document.getElementById('adminLoginCard').classList.remove('hidden');
-        document.getElementById('adminPin').value = '';
-        document.getElementById('adminPin').focus();
-      }
-
-      function backToCustomerLogin() {
-        document.getElementById('adminLoginCard').classList.add('hidden');
-        document.getElementById('customerLoginCard').classList.remove('hidden');
-      }
-
-      function handleAdminLogin() {
-        const pin = document.getElementById('adminPin').value.trim();
-        if (pin !== '2026') {
-          showMsg('adminLoginMsg', 'Invalid passcode. Please enter 2026.');
-          return;
-        }
-        showMsg('adminLoginMsg', '');
-        state.role = 'admin';
-        document.getElementById('adminLoginCard').classList.add('hidden');
-        document.getElementById('customerLoginCard').classList.add('hidden');
-        document.getElementById('customerView').classList.add('hidden');
-        document.getElementById('adminView').classList.remove('hidden');
-        document.getElementById('logoutBtn').classList.remove('hidden');
-        document.getElementById('adminLoginBtn').classList.add('hidden');
-        populateSettingsForm();
-        renderAdminServices();
-        renderAdminBookings();
-      }
-
-      function switchAdminTab(tab) {
-        document.getElementById('adminTabBookings').classList.toggle('hidden', tab !== 'bookings');
-        document.getElementById('adminTabServices').classList.toggle('hidden', tab !== 'services');
-        document.getElementById('adminTabSettings').classList.toggle('hidden', tab !== 'settings');
-        document.getElementById('tabBookingsBtn').classList.toggle('active', tab === 'bookings');
-        document.getElementById('tabServicesBtn').classList.toggle('active', tab === 'services');
-        document.getElementById('tabSettingsBtn').classList.toggle('active', tab === 'settings');
-      }
-
-      function compressImageFile(file, callback) {
-        const reader = new FileReader();
-        reader.onload = function (ev) {
-          const img = new Image();
-          img.onload = function () {
-            const canvas = document.createElement('canvas');
-            const maxDim = 900;
-            let w = img.width;
-            let h = img.height;
-            if (w > maxDim || h > maxDim) {
-              if (w > h) {
-                h = Math.round((h * maxDim) / w);
-                w = maxDim;
-              } else {
-                w = Math.round((w * maxDim) / h);
-                h = maxDim;
-              }
+      ],
+      bookings: [
+        {
+          id: 'b1',
+          date: '2026-11-25',
+          city: 'Rayachoti',
+          venueAddress: 'Bose Nagar Function Hall, Rayachoti',
+          customerName: 'Karthik Reddy',
+          customerPhone: '9848011122',
+          slot: 'Morning',
+          exactTime: '10:15',
+          items: [
+            {
+              id: 's1',
+              title: 'Birthday Balloon Arch & Ring Backdrop',
+              price: 4500,
+              photo: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
+              details: '• 220 pastel & chrome balloons\n• 8x8 ft circular ring backdrop stand\n• Happy Birthday neon/foil signage\n• 2 warm LED focus par lights\n• Complete on-site setup & dismantling included'
             }
-            canvas.width = w;
-            canvas.height = h;
-            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-            callback(canvas.toDataURL('image/jpeg', 0.78));
+          ],
+          totalPrice: 4500,
+          eSign: 'Karthik Reddy',
+          adminApproved: true
+        }
+      ]
+    };
+
+    function phLoadData() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          return {
+            settings: parsed.settings || defaultData.settings,
+            services: Array.isArray(parsed.services) && parsed.services.length ? parsed.services : defaultData.services,
+            bookings: Array.isArray(parsed.bookings) ? parsed.bookings : defaultData.bookings
           };
-          img.src = ev.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-
-      function handleAddService(e) {
-        e.preventDefault();
-        const title = document.getElementById('srvTitle').value.trim();
-        const category = document.getElementById('srvCategory').value;
-        const occasion = document.getElementById('srvOccasion').value;
-        const venue = document.getElementById('srvVenue').value;
-        const price = Number(document.getElementById('srvPrice').value);
-        const urlInput = document.getElementById('srvPhoto').value.trim();
-        const fileInput = document.getElementById('srvPhotoFile');
-        const details = document.getElementById('srvDetails').value.trim();
-
-        const finalizeAdd = function (photoSrc) {
-          state.services.unshift({
-            id: 's_' + Date.now(),
-            category: category,
-            occasion: occasion,
-            venue: venue,
-            title: title,
-            price: price,
-            photo: photoSrc,
-            details: details
-          });
-          saveData();
-          e.target.reset();
-          renderAdminServices();
-        };
-
-        if (fileInput.files && fileInput.files[0]) {
-          compressImageFile(fileInput.files[0], finalizeAdd);
-        } else if (urlInput) {
-          finalizeAdd(urlInput);
-        } else {
-          alert('Please enter a Photo URL or upload an image from your device.');
         }
-      }
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(defaultData));
+    }
 
-      function renderAdminServices() {
-        const tbody = document.getElementById('adminServicesTableBody');
-        tbody.innerHTML = state.services.map(function (srv) {
-          return (
-            '<tr>' +
-              '<td><img src="' + srv.photo + '" alt="' + escapeHtml(srv.title) + '" data-open-srv="' + srv.id + '" style="width:76px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;" /></td>' +
-              '<td><span class="badge">' + escapeHtml(srv.category) + '</span><br /><strong>' + escapeHtml(srv.title) + '</strong></td>' +
-              '<td><strong>₹' + Number(srv.price).toLocaleString('en-IN') + '</strong></td>' +
-              '<td class="details-list" style="margin-bottom:0;">' + escapeHtml(srv.details) + '</td>' +
-              '<td><button type="button" class="btn btn-danger btn-sm" data-del-srv="' + srv.id + '">Delete</button></td>' +
-            '</tr>'
-          );
-        }).join('');
-      }
-
-      function renderAdminBookings() {
-        const selectedDate = document.getElementById('adminDateFilter').value;
-        const list = selectedDate
-          ? state.bookings.filter(function (b) { return b.date === selectedDate; })
-          : state.bookings;
-
-        const tbody = document.getElementById('adminBookingsTableBody');
-        if (!list.length) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#64748b;">No events scheduled for the selected date.</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = list.map(function (b) {
-          const total = Number(b.totalPrice);
-          const p20 = Math.round(total * 0.20);
-          const p70 = Math.round(total * 0.70);
-          const p10 = total - p20 - p70;
-          return (
-            '<tr>' +
-              '<td><strong>' + escapeHtml(b.date) + '</strong></td>' +
-              '<td>' +
-                '<button type="button" class="customer-link" data-open-booking="' + b.id + '">' + escapeHtml(b.customerName) + '</button>' +
-                '<div class="brand-sub">' + escapeHtml(b.customerPhone) + '</div>' +
-                '<div class="brand-sub">Cust E-Sign: ' + escapeHtml(b.eSign || b.customerName) + '</div>' +
-              '</td>' +
-              '<td>' +
-                '<strong>' + escapeHtml(b.city) + '</strong>' +
-                '<div class="brand-sub">' + escapeHtml(b.venueAddress || '') + '</div>' +
-                '<span class="badge">' + escapeHtml(b.slot) + ' &bull; ' + escapeHtml(b.exactTime) + '</span>' +
-              '</td>' +
-              '<td>' +
-                b.items.map(function (it) {
-                  return '<div style="margin-bottom:6px;"><strong>' + escapeHtml(it.title) + '</strong><div class="details-list" style="margin:2px 0 0;">' + escapeHtml(it.details) + '</div></div>';
-                }).join('') +
-              '</td>' +
-              '<td>' +
-                '<strong>₹' + total.toLocaleString('en-IN') + '</strong>' +
-                '<div class="brand-sub">20%: ₹' + p20 + ' | 70%: ₹' + p70 + ' | 10%: ₹' + p10 + '</div>' +
-              '</td>' +
-              '<td>' +
-                '<button type="button" class="btn ' + (b.adminApproved ? 'btn-primary' : 'btn-outline') + ' btn-sm" data-approve-booking="' + b.id + '">' +
-                  (b.adminApproved ? '✓ E-Signed' : 'Counter-Sign') +
-                '</button>' +
-              '</td>' +
-            '</tr>'
-          );
-        }).join('');
-      }
-
-      function openBookingPhoto(bookingId) {
-        const b = state.bookings.find(function (item) { return item.id === bookingId; });
-        if (!b || !b.items.length) return;
-        const first = b.items[0];
-        document.getElementById('modalTitle').textContent = b.customerName + ' — ' + b.items.map(function (i) { return i.title; }).join(' + ');
-        document.getElementById('modalMeta').textContent = 'Date: ' + b.date + ' | City: ' + b.city + ' (' + (b.venueAddress || b.city) + ') | Slot: ' + b.slot + ' at ' + b.exactTime + ' | Total: ₹' + Number(b.totalPrice).toLocaleString('en-IN');
-        document.getElementById('modalImage').src = first.photo;
-
-        const strip = document.getElementById('modalGalleryStrip');
-        if (b.items.length > 1) {
-          strip.innerHTML = b.items.map(function (it, i) {
-            return '<button type="button" class="btn btn-outline btn-sm" data-switch-photo="' + it.photo + '">Photo ' + (i + 1) + ': ' + escapeHtml(it.title) + '</button>';
-          }).join('');
-        } else {
-          strip.innerHTML = '';
-        }
-
-        document.getElementById('modalDetails').textContent = b.items.map(function (i) { return i.title + ':
-' + i.details; }).join('
-
-');
-        document.getElementById('photoModal').classList.add('open');
-      }
-
-      function openServiceModal(serviceId) {
-        const s = state.services.find(function (item) { return item.id === serviceId; });
-        if (!s) return;
-        document.getElementById('modalTitle').textContent = s.title;
-        document.getElementById('modalMeta').textContent = s.category + ' | Price: ₹' + Number(s.price).toLocaleString('en-IN');
-        document.getElementById('modalImage').src = s.photo;
-        document.getElementById('modalGalleryStrip').innerHTML = '';
-        document.getElementById('modalDetails').textContent = s.details;
-        document.getElementById('photoModal').classList.add('open');
-      }
-
-      function populateSettingsForm() {
-        document.getElementById('cfgPhone').value = state.settings.phone;
-        document.getElementById('cfgWhatsapp').value = state.settings.whatsapp;
-        document.getElementById('cfgEmail').value = state.settings.email;
-        document.getElementById('cfgUpi').value = state.settings.upi;
-      }
-
-      function logoutAll() {
-        state.role = null;
-        state.selectedSlot = '';
-        state.cart = [];
-        document.getElementById('adminView').classList.add('hidden');
-        document.getElementById('customerView').classList.add('hidden');
-        document.getElementById('adminLoginCard').classList.add('hidden');
-        document.getElementById('customerLoginCard').classList.remove('hidden');
-        document.getElementById('logoutBtn').classList.add('hidden');
-        document.getElementById('adminLoginBtn').classList.remove('hidden');
-        document.getElementById('otpSection').classList.add('hidden');
-        document.getElementById('sendOtpBtn').classList.remove('hidden');
-        document.getElementById('verifyOtpBtn').classList.add('hidden');
-      }
-
-      // Event Listeners
-      document.getElementById('sendOtpBtn').addEventListener('click', handleSendOtp);
-      document.getElementById('verifyOtpBtn').addEventListener('click', handleVerifyOtp);
-      document.getElementById('custPhone').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') handleSendOtp();
-      });
-      document.getElementById('custOtp').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') handleVerifyOtp();
-      });
-
-      document.getElementById('adminLoginBtn').addEventListener('click', openAdminLogin);
-      document.getElementById('backToCustBtn').addEventListener('click', backToCustomerLogin);
-      document.getElementById('doAdminLoginBtn').addEventListener('click', handleAdminLogin);
-      document.getElementById('adminPin').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') handleAdminLogin();
-      });
-      document.getElementById('logoutBtn').addEventListener('click', logoutAll);
-
-      document.getElementById('slotMorningBtn').addEventListener('click', function () { selectSlot('Morning'); });
-      document.getElementById('slotAfternoonBtn').addEventListener('click', function () { selectSlot('Afternoon'); });
-      document.getElementById('filterCity').addEventListener('change', renderCustomerPackages);
-      document.getElementById('filterOccasion').addEventListener('change', renderCustomerPackages);
-      document.getElementById('filterVenue').addEventListener('change', renderCustomerPackages);
-      document.getElementById('filterMaxPrice').addEventListener('input', renderCustomerPackages);
-
-      document.getElementById('categoryButtons').addEventListener('click', function (e) {
-        const btn = e.target.closest('.cat-btn');
-        if (!btn) return;
-        state.selectedCategory = btn.getAttribute('data-cat');
-        document.querySelectorAll('.cat-btn').forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        renderCustomerPackages();
-      });
-
-      document.getElementById('confirmBookingBtn').addEventListener('click', confirmBooking);
-
-      document.getElementById('tabBookingsBtn').addEventListener('click', function () { switchAdminTab('bookings'); });
-      document.getElementById('tabServicesBtn').addEventListener('click', function () { switchAdminTab('services'); });
-      document.getElementById('tabSettingsBtn').addEventListener('click', function () { switchAdminTab('settings'); });
-
-      document.getElementById('adminDateFilter').addEventListener('change', renderAdminBookings);
-      document.getElementById('clearAdminDateBtn').addEventListener('click', function () {
-        document.getElementById('adminDateFilter').value = '';
-        renderAdminBookings();
-      });
-
-      document.getElementById('addServiceForm').addEventListener('submit', handleAddService);
-
-      document.getElementById('saveSettingsBtn').addEventListener('click', function () {
-        state.settings.phone = document.getElementById('cfgPhone').value.trim();
-        state.settings.whatsapp = document.getElementById('cfgWhatsapp').value.trim();
-        state.settings.email = document.getElementById('cfgEmail').value.trim();
-        state.settings.upi = document.getElementById('cfgUpi').value.trim();
-        saveData();
-        alert('Help Desk & Payment settings saved.');
-      });
-
-      document.getElementById('exportBackupBtn').addEventListener('click', function () {
-        const blob = new Blob([JSON.stringify({
+    function phSaveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
           settings: state.settings,
           services: state.services,
           bookings: state.bookings
-        }, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'partyhub_srevents_backup_' + new Date().toISOString().slice(0, 10) + '.json';
-        a.click();
-        URL.revokeObjectURL(url);
+        }));
+      } catch (e) {}
+    }
+
+    var loaded = phLoadData();
+    var state = {
+      role: null,
+      customer: { name: '', phone: '' },
+      selectedCategory: 'All',
+      selectedSlot: '',
+      cart: [],
+      settings: loaded.settings,
+      services: loaded.services,
+      bookings: loaded.bookings
+    };
+
+    function phShowMsg(elId, text) {
+      var el = document.getElementById(elId);
+      if (!el) return;
+      if (!text) {
+        el.classList.add('hidden');
+        el.textContent = '';
+      } else {
+        el.textContent = text;
+        el.classList.remove('hidden');
+      }
+    }
+
+    function phEscape(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function phSendOtp() {
+      var name = document.getElementById('custName').value.trim();
+      var phone = document.getElementById('custPhone').value.replace(/\D/g, '');
+      if (!name) {
+        phShowMsg('custLoginMsg', 'Please enter your full name.');
+        return;
+      }
+      if (phone.length < 10) {
+        phShowMsg('custLoginMsg', 'Please enter a valid 10-digit mobile number.');
+        return;
+      }
+      phShowMsg('custLoginMsg', '');
+      state.customer = { name: name, phone: phone };
+      document.getElementById('otpSection').classList.remove('hidden');
+      document.getElementById('sendOtpBtn').classList.add('hidden');
+      document.getElementById('verifyOtpBtn').classList.remove('hidden');
+      document.getElementById('custOtp').value = '1234';
+    }
+
+    function phVerifyOtp() {
+      var otp = document.getElementById('custOtp').value.trim();
+      if (otp !== '1234') {
+        phShowMsg('custLoginMsg', 'Invalid OTP. Enter 1234 to log in.');
+        return;
+      }
+      phShowMsg('custLoginMsg', '');
+      state.role = 'customer';
+      document.getElementById('customerLoginCard').classList.add('hidden');
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerView').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.remove('hidden');
+      document.getElementById('adminLoginBtn').classList.add('hidden');
+      document.getElementById('activeCustomerLabel').textContent = state.customer.name + ' (' + state.customer.phone + ')';
+      if (!document.getElementById('bookingDate').value) {
+        document.getElementById('bookingDate').value = new Date().toISOString().split('T')[0];
+      }
+      phRenderCustomerPackages();
+      phRenderCart();
+      phRenderCustomerBookings();
+    }
+
+    function phSelectSlot(slot) {
+      state.selectedSlot = slot;
+      document.getElementById('slotMorningBtn').classList.toggle('active', slot === 'Morning');
+      document.getElementById('slotAfternoonBtn').classList.toggle('active', slot === 'Afternoon');
+      var timeBox = document.getElementById('customTimeBox');
+      var timeInput = document.getElementById('customExactTime');
+      var timeLabel = document.getElementById('customTimeLabel');
+      timeBox.classList.remove('hidden');
+
+      if (slot === 'Morning') {
+        timeLabel.textContent = 'Customize Exact Morning Timing (06:00 AM - 11:59 AM)';
+        timeInput.min = '06:00';
+        timeInput.max = '11:59';
+        timeInput.value = '10:00';
+      } else {
+        timeLabel.textContent = 'Customize Exact Afternoon Timing (12:00 PM - 05:59 PM)';
+        timeInput.min = '12:00';
+        timeInput.max = '17:59';
+        timeInput.value = '14:30';
+      }
+    }
+
+    function phSetCategory(cat, btnEl) {
+      state.selectedCategory = cat;
+      var all = document.querySelectorAll('.cat-btn');
+      for (var i = 0; i < all.length; i++) {
+        all[i].classList.remove('active');
+      }
+      if (btnEl) btnEl.classList.add('active');
+      phRenderCustomerPackages();
+    }
+
+    function phRenderCustomerPackages() {
+      var occ = document.getElementById('filterOccasion').value;
+      var venue = document.getElementById('filterVenue').value;
+      var maxPrice = Number(document.getElementById('filterMaxPrice').value) || Infinity;
+
+      var filtered = state.services.filter(function (s) {
+        if (state.selectedCategory !== 'All' && s.category !== state.selectedCategory) return false;
+        if (occ !== 'All' && s.occasion !== occ) return false;
+        if (venue !== 'All' && s.venue !== venue) return false;
+        if (Number(s.price) > maxPrice) return false;
+        return true;
       });
 
-      document.getElementById('importBackupInput').addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          try {
-            const parsed = JSON.parse(e.target.result);
-            if (parsed.services) state.services = parsed.services;
-            if (parsed.bookings) state.bookings = parsed.bookings;
-            if (parsed.settings) state.settings = parsed.settings;
-            saveData();
-            populateSettingsForm();
-            renderAdminServices();
-            renderAdminBookings();
-            alert('Backup restored successfully!');
-          } catch (err) {
-            alert('Invalid backup JSON file.');
+      var grid = document.getElementById('customerPackagesGrid');
+      if (!filtered.length) {
+        grid.innerHTML = '<p class="brand-sub">No packages match your current filter. Try clearing the price or category filter.</p>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(function (srv) {
+        return (
+          '<div class="package-card">' +
+            '<img src="' + srv.photo + '" alt="' + phEscape(srv.title) + '" onclick="phOpenServiceModal(\'' + srv.id + '\')" title="Click to enlarge" />' +
+            '<div class="package-body">' +
+              '<div>' +
+                '<span class="badge">' + phEscape(srv.category) + ' &bull; ' + phEscape(srv.venue || 'Indoor') + '</span>' +
+                '<h4 style="margin-top:6px;">' + phEscape(srv.title) + '</h4>' +
+                '<div class="price-tag">₹' + Number(srv.price).toLocaleString('en-IN') + '</div>' +
+                '<div class="details-list">' + phEscape(srv.details) + '</div>' +
+              '</div>' +
+              '<button type="button" class="btn btn-primary" onclick="phAddToCart(\'' + srv.id + '\')">Add to Cart &amp; Book</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function phAddToCart(serviceId) {
+      var srv = state.services.find(function (s) { return s.id === serviceId; });
+      if (!srv) return;
+      state.cart.push(srv);
+      phRenderCart();
+      document.getElementById('cartSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function phRemoveFromCart(idx) {
+      state.cart.splice(idx, 1);
+      phRenderCart();
+    }
+
+    function phRenderCart() {
+      var box = document.getElementById('cartItemsBox');
+      var checkout = document.getElementById('checkoutBox');
+      if (!state.cart.length) {
+        box.textContent = 'No services added to cart yet. Click "Add to Cart & Book" on any package above.';
+        checkout.classList.add('hidden');
+        return;
+      }
+
+      var total = state.cart.reduce(function (sum, item) { return sum + Number(item.price); }, 0);
+      var p20 = Math.round(total * 0.20);
+      var p70 = Math.round(total * 0.70);
+      var p10 = total - p20 - p70;
+
+      box.innerHTML = state.cart.map(function (item, idx) {
+        return (
+          '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#fff; border:1px solid var(--border); border-radius:10px; margin-bottom:6px;">' +
+            '<div><strong>' + phEscape(item.title) + '</strong> — ₹' + Number(item.price).toLocaleString('en-IN') + '</div>' +
+            '<button type="button" class="btn btn-danger btn-sm" onclick="phRemoveFromCart(' + idx + ')">Remove</button>' +
+          '</div>'
+        );
+      }).join('');
+
+      document.getElementById('paymentSplitBox').innerHTML =
+        '<strong>Total Package Amount: ₹' + total.toLocaleString('en-IN') + '</strong>' +
+        '<div class="split-row"><span>1st Installment (20% Booking Advance):</span><strong>₹' + p20.toLocaleString('en-IN') + '</strong></div>' +
+        '<div class="split-row"><span>2nd Installment (70% On Setup Arrival):</span><strong>₹' + p70.toLocaleString('en-IN') + '</strong></div>' +
+        '<div class="split-row"><span>3rd Installment (10% After Completion):</span><strong>₹' + p10.toLocaleString('en-IN') + '</strong></div>';
+
+      document.getElementById('officialPaymentInfo').innerHTML = '<strong>Official Payment Details:</strong> ' + phEscape(state.settings.upi);
+      checkout.classList.remove('hidden');
+    }
+
+    function phConfirmBooking() {
+      var date = document.getElementById('bookingDate').value;
+      var city = document.getElementById('filterCity').value;
+      var venueAddress = document.getElementById('bookingVenueAddress').value.trim();
+      var exactTime = document.getElementById('customExactTime').value;
+      var eSign = document.getElementById('customerESign').value.trim();
+
+      if (!date) return alert('Please select an event date.');
+      if (!state.selectedSlot || !exactTime) return alert('Please select Morning or Afternoon slot and customize your exact time.');
+      if (!eSign) return alert('Please type your full name in the Customer Digital E-Sign field.');
+
+      var total = state.cart.reduce(function (sum, item) { return sum + Number(item.price); }, 0);
+      state.bookings.unshift({
+        id: 'b_' + Date.now(),
+        date: date,
+        city: city,
+        venueAddress: venueAddress || city,
+        customerName: state.customer.name,
+        customerPhone: state.customer.phone,
+        slot: state.selectedSlot,
+        exactTime: exactTime,
+        items: state.cart.slice(),
+        totalPrice: total,
+        eSign: eSign,
+        adminApproved: false
+      });
+      state.cart = [];
+      document.getElementById('customerESign').value = '';
+      phSaveData();
+      phRenderCart();
+      phRenderCustomerBookings();
+      alert('Booking confirmed & e-signed by ' + eSign + ' for ' + date + ' (' + state.selectedSlot + ' at ' + exactTime + ') in ' + city + '!');
+    }
+
+    function phRenderCustomerBookings() {
+      var mine = state.bookings.filter(function (b) { return b.customerPhone === state.customer.phone; });
+      var box = document.getElementById('customerMyBookings');
+      if (!mine.length) {
+        box.textContent = 'No confirmed bookings yet.';
+        return;
+      }
+      box.innerHTML = mine.map(function (b) {
+        return (
+          '<div style="padding:10px; border:1px solid var(--border); border-radius:10px; background:#fff; margin-bottom:8px;">' +
+            '<strong>' + b.items.map(function (i) { return phEscape(i.title); }).join(' + ') + '</strong> — Total: ₹' + Number(b.totalPrice).toLocaleString('en-IN') + '<br />' +
+            'Date: <strong>' + phEscape(b.date) + '</strong> | City: ' + phEscape(b.city) + ' (' + phEscape(b.venueAddress || b.city) + ') | Slot: <strong>' + phEscape(b.slot) + ' at ' + phEscape(b.exactTime) + '</strong><br />' +
+            'Customer E-Sign: <strong>' + phEscape(b.eSign) + '</strong> | Admin Agreement: <strong>' + (b.adminApproved ? 'Countersigned by PartyHub - SR Events' : 'Pending Admin Counter-Sign') + '</strong>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function phOpenAdminLogin() {
+      phShowMsg('adminLoginMsg', '');
+      document.getElementById('customerLoginCard').classList.add('hidden');
+      document.getElementById('customerView').classList.add('hidden');
+      document.getElementById('adminLoginCard').classList.remove('hidden');
+      document.getElementById('adminPin').value = '';
+    }
+
+    function phBackToCustomerLogin() {
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerLoginCard').classList.remove('hidden');
+    }
+
+    function phAdminLogin() {
+      var pin = document.getElementById('adminPin').value.trim();
+      if (pin !== '2026') {
+        phShowMsg('adminLoginMsg', 'Invalid passcode. Please enter 2026.');
+        return;
+      }
+      phShowMsg('adminLoginMsg', '');
+      state.role = 'admin';
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerLoginCard').classList.add('hidden');
+      document.getElementById('customerView').classList.add('hidden');
+      document.getElementById('adminView').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.remove('hidden');
+      document.getElementById('adminLoginBtn').classList.add('hidden');
+      phPopulateSettingsForm();
+      phRenderAdminServices();
+      phRenderAdminBookings();
+    }
+
+    function phSwitchAdminTab(tab) {
+      document.getElementById('adminTabBookings').classList.toggle('hidden', tab !== 'bookings');
+      document.getElementById('adminTabServices').classList.toggle('hidden', tab !== 'services');
+      document.getElementById('adminTabSettings').classList.toggle('hidden', tab !== 'settings');
+      document.getElementById('tabBookingsBtn').classList.toggle('active', tab === 'bookings');
+      document.getElementById('tabServicesBtn').classList.toggle('active', tab === 'services');
+      document.getElementById('tabSettingsBtn').classList.toggle('active', tab === 'settings');
+    }
+
+    function phCompressImageFile(file, callback) {
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        var img = new Image();
+        img.onload = function () {
+          var canvas = document.createElement('canvas');
+          var maxDim = 900;
+          var w = img.width;
+          var h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
           }
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          callback(canvas.toDataURL('image/jpeg', 0.78));
         };
-        reader.readAsText(file);
-      });
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
 
-      document.getElementById('helpDeskBtn').addEventListener('click', function () {
-        document.getElementById('helpDeskContent').innerHTML =
-          '<a href="tel:' + escapeHtml(state.settings.phone) + '" class="btn btn-primary">Call Help Desk: ' + escapeHtml(state.settings.phone) + '</a>' +
-          '<a href="https://wa.me/' + escapeHtml(state.settings.whatsapp) + '" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp Support</a>' +
-          '<a href="mailto:' + escapeHtml(state.settings.email) + '" class="btn btn-outline">Email: ' + escapeHtml(state.settings.email) + '</a>';
-        document.getElementById('helpModal').classList.add('open');
-      });
+    function phAddService(e) {
+      e.preventDefault();
+      var title = document.getElementById('srvTitle').value.trim();
+      var category = document.getElementById('srvCategory').value;
+      var occasion = document.getElementById('srvOccasion').value;
+      var venue = document.getElementById('srvVenue').value;
+      var price = Number(document.getElementById('srvPrice').value);
+      var urlInput = document.getElementById('srvPhoto').value.trim();
+      var fileInput = document.getElementById('srvPhotoFile');
+      var details = document.getElementById('srvDetails').value.trim();
 
-      document.getElementById('closeHelpModalBtn').addEventListener('click', function () {
-        document.getElementById('helpModal').classList.remove('open');
-      });
-      document.getElementById('helpModal').addEventListener('click', function (e) {
-        if (e.target.id === 'helpModal') document.getElementById('helpModal').classList.remove('open');
-      });
+      var finalizeAdd = function (photoSrc) {
+        state.services.unshift({
+          id: 's_' + Date.now(),
+          category: category,
+          occasion: occasion,
+          venue: venue,
+          title: title,
+          price: price,
+          photo: photoSrc,
+          details: details
+        });
+        phSaveData();
+        document.getElementById('addServiceForm').reset();
+        phRenderAdminServices();
+      };
 
-      document.getElementById('closePhotoModalBtn').addEventListener('click', function () {
-        document.getElementById('photoModal').classList.remove('open');
-      });
-      document.getElementById('photoModal').addEventListener('click', function (e) {
-        if (e.target.id === 'photoModal') document.getElementById('photoModal').classList.remove('open');
-      });
+      if (fileInput.files && fileInput.files[0]) {
+        phCompressImageFile(fileInput.files[0], finalizeAdd);
+      } else if (urlInput) {
+        finalizeAdd(urlInput);
+      } else {
+        alert('Please enter a Photo URL or upload an image from your device.');
+      }
+    }
 
-      // Delegated clicks for dynamically generated cards & rows
-      document.addEventListener('click', function (e) {
-        const addBtn = e.target.closest('[data-add-cart]');
-        if (addBtn) {
-          const srv = state.services.find(function (s) { return s.id === addBtn.getAttribute('data-add-cart'); });
-          if (srv) {
-            state.cart.push(srv);
-            renderCart();
-            document.getElementById('cartSection').scrollIntoView({ behavior: 'smooth' });
-          }
-          return;
+    function phDeleteService(id) {
+      state.services = state.services.filter(function (s) { return s.id !== id; });
+      phSaveData();
+      phRenderAdminServices();
+    }
+
+    function phToggleAdminApproval(bookingId) {
+      var b = state.bookings.find(function (item) { return item.id === bookingId; });
+      if (!b) return;
+      b.adminApproved = !b.adminApproved;
+      phSaveData();
+      phRenderAdminBookings();
+    }
+
+    function phRenderAdminServices() {
+      var tbody = document.getElementById('adminServicesTableBody');
+      tbody.innerHTML = state.services.map(function (srv) {
+        return (
+          '<tr>' +
+            '<td><img src="' + srv.photo + '" alt="' + phEscape(srv.title) + '" onclick="phOpenServiceModal(\'' + srv.id + '\')" style="width:76px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;" /></td>' +
+            '<td><span class="badge">' + phEscape(srv.category) + '</span><br /><strong>' + phEscape(srv.title) + '</strong></td>' +
+            '<td><strong>₹' + Number(srv.price).toLocaleString('en-IN') + '</strong></td>' +
+            '<td class="details-list" style="margin-bottom:0;">' + phEscape(srv.details) + '</td>' +
+            '<td><button type="button" class="btn btn-danger btn-sm" onclick="phDeleteService(\'' + srv.id + '\')">Delete</button></td>' +
+          '</tr>'
+        );
+      }).join('');
+    }
+
+    function phRenderAdminBookings() {
+      var selectedDate = document.getElementById('adminDateFilter').value;
+      var list = selectedDate
+        ? state.bookings.filter(function (b) { return b.date === selectedDate; })
+        : state.bookings;
+
+      var tbody = document.getElementById('adminBookingsTableBody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#64748b;">No events scheduled for the selected date.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(function (b) {
+        var total = Number(b.totalPrice);
+        var p20 = Math.round(total * 0.20);
+        var p70 = Math.round(total * 0.70);
+        var p10 = total - p20 - p70;
+        return (
+          '<tr>' +
+            '<td><strong>' + phEscape(b.date) + '</strong></td>' +
+            '<td>' +
+              '<button type="button" class="customer-link" onclick="phOpenBookingPhoto(\'' + b.id + '\')">' + phEscape(b.customerName) + '</button>' +
+              '<div class="brand-sub">' + phEscape(b.customerPhone) + '</div>' +
+              '<div class="brand-sub">Cust E-Sign: ' + phEscape(b.eSign || b.customerName) + '</div>' +
+            '</td>' +
+            '<td>' +
+              '<strong>' + phEscape(b.city) + '</strong>' +
+              '<div class="brand-sub">' + phEscape(b.venueAddress || '') + '</div>' +
+              '<span class="badge">' + phEscape(b.slot) + ' &bull; ' + phEscape(b.exactTime) + '</span>' +
+            '</td>' +
+            '<td>' +
+              b.items.map(function (it) {
+                return '<div style="margin-bottom:6px;"><strong>' + phEscape(it.title) + '</strong><div class="details-list" style="margin:2px 0 0;">' + phEscape(it.details) + '</div></div>';
+              }).join('') +
+            '</td>' +
+            '<td>' +
+              '<strong>₹' + total.toLocaleString('en-IN') + '</strong>' +
+              '<div class="brand-sub">20%: ₹' + p20 + ' | 70%: ₹' + p70 + ' | 10%: ₹' + p10 + '</div>' +
+            '</td>' +
+            '<td>' +
+              '<button type="button" class="btn ' + (b.adminApproved ? 'btn-primary' : 'btn-outline') + ' btn-sm" onclick="phToggleAdminApproval(\'' + b.id + '\')">' +
+                (b.adminApproved ? '✓ E-Signed' : 'Counter-Sign') +
+              '</button>' +
+            '</td>' +
+          '</tr>'
+        );
+      }).join('');
+    }
+
+    function phClearAdminDate() {
+      document.getElementById('adminDateFilter').value = '';
+      phRenderAdminBookings();
+    }
+
+    function phOpenBookingPhoto(bookingId) {
+      var b = state.bookings.find(function (item) { return item.id === bookingId; });
+      if (!b || !b.items.length) return;
+      var first = b.items[0];
+      document.getElementById('modalTitle').textContent = b.customerName + ' — ' + b.items.map(function (i) { return i.title; }).join(' + ');
+      document.getElementById('modalMeta').textContent = 'Date: ' + b.date + ' | City: ' + b.city + ' (' + (b.venueAddress || b.city) + ') | Slot: ' + b.slot + ' at ' + b.exactTime + ' | Total: ₹' + Number(b.totalPrice).toLocaleString('en-IN');
+      document.getElementById('modalImage').src = first.photo;
+
+      var strip = document.getElementById('modalGalleryStrip');
+      if (b.items.length > 1) {
+        strip.innerHTML = b.items.map(function (it, i) {
+          return '<button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById(\'modalImage\').src=\'' + it.photo + '\'">Photo ' + (i + 1) + ': ' + phEscape(it.title) + '</button>';
+        }).join('');
+      } else {
+        strip.innerHTML = '';
+      }
+
+      document.getElementById('modalDetails').textContent = b.items.map(function (i) { return i.title + ':\n' + i.details; }).join('\n\n');
+      document.getElementById('photoModal').classList.add('open');
+    }
+
+    function phOpenServiceModal(serviceId) {
+      var s = state.services.find(function (item) { return item.id === serviceId; });
+      if (!s) return;
+      document.getElementById('modalTitle').textContent = s.title;
+      document.getElementById('modalMeta').textContent = s.category + ' | Price: ₹' + Number(s.price).toLocaleString('en-IN');
+      document.getElementById('modalImage').src = s.photo;
+      document.getElementById('modalGalleryStrip').innerHTML = '';
+      document.getElementById('modalDetails').textContent = s.details;
+      document.getElementById('photoModal').classList.add('open');
+    }
+
+    function phClosePhotoModal() {
+      document.getElementById('photoModal').classList.remove('open');
+    }
+
+    function phOpenHelpDesk() {
+      document.getElementById('helpDeskContent').innerHTML =
+        '<a href="tel:' + phEscape(state.settings.phone) + '" class="btn btn-primary">Call Help Desk: ' + phEscape(state.settings.phone) + '</a>' +
+        '<a href="https://wa.me/' + phEscape(state.settings.whatsapp) + '" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp Support</a>' +
+        '<a href="mailto:' + phEscape(state.settings.email) + '" class="btn btn-outline">Email: ' + phEscape(state.settings.email) + '</a>';
+      document.getElementById('helpModal').classList.add('open');
+    }
+
+    function phCloseHelpModal() {
+      document.getElementById('helpModal').classList.remove('open');
+    }
+
+    function phPopulateSettingsForm() {
+      document.getElementById('cfgPhone').value = state.settings.phone;
+      document.getElementById('cfgWhatsapp').value = state.settings.whatsapp;
+      document.getElementById('cfgEmail').value = state.settings.email;
+      document.getElementById('cfgUpi').value = state.settings.upi;
+    }
+
+    function phSaveSettings() {
+      state.settings.phone = document.getElementById('cfgPhone').value.trim();
+      state.settings.whatsapp = document.getElementById('cfgWhatsapp').value.trim();
+      state.settings.email = document.getElementById('cfgEmail').value.trim();
+      state.settings.upi = document.getElementById('cfgUpi').value.trim();
+      phSaveData();
+      alert('Help Desk & Payment settings saved.');
+    }
+
+    function phExportBackup() {
+      var blob = new Blob([JSON.stringify({
+        settings: state.settings,
+        services: state.services,
+        bookings: state.bookings
+      }, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'partyhub_srevents_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function phImportBackup(event) {
+      var file = event.target.files && event.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          var parsed = JSON.parse(e.target.result);
+          if (parsed.services) state.services = parsed.services;
+          if (parsed.bookings) state.bookings = parsed.bookings;
+          if (parsed.settings) state.settings = parsed.settings;
+          phSaveData();
+          phPopulateSettingsForm();
+          phRenderAdminServices();
+          phRenderAdminBookings();
+          alert('Backup restored successfully!');
+        } catch (err) {
+          alert('Invalid backup JSON file.');
         }
+      };
+      reader.readAsText(file);
+    }
 
-        const rmBtn = e.target.closest('[data-rm-cart]');
-        if (rmBtn) {
-          state.cart.splice(Number(rmBtn.getAttribute('data-rm-cart')), 1);
-          renderCart();
-          return;
-        }
-
-        const delSrvBtn = e.target.closest('[data-del-srv]');
-        if (delSrvBtn) {
-          const id = delSrvBtn.getAttribute('data-del-srv');
-          state.services = state.services.filter(function (s) { return s.id !== id; });
-          saveData();
-          renderAdminServices();
-          return;
-        }
-
-        const approveBtn = e.target.closest('[data-approve-booking]');
-        if (approveBtn) {
-          const b = state.bookings.find(function (item) { return item.id === approveBtn.getAttribute('data-approve-booking'); });
-          if (b) {
-            b.adminApproved = !b.adminApproved;
-            saveData();
-            renderAdminBookings();
-          }
-          return;
-        }
-
-        const openBookingBtn = e.target.closest('[data-open-booking]');
-        if (openBookingBtn) {
-          openBookingPhoto(openBookingBtn.getAttribute('data-open-booking'));
-          return;
-        }
-
-        const openSrvEl = e.target.closest('[data-open-srv]');
-        if (openSrvEl) {
-          openServiceModal(openSrvEl.getAttribute('data-open-srv'));
-          return;
-        }
-
-        const switchPhotoBtn = e.target.closest('[data-switch-photo]');
-        if (switchPhotoBtn) {
-          document.getElementById('modalImage').src = switchPhotoBtn.getAttribute('data-switch-photo');
-        }
-      });
-    })();
+    function phLogoutAll() {
+      state.role = null;
+      state.selectedSlot = '';
+      state.cart = [];
+      document.getElementById('adminView').classList.add('hidden');
+      document.getElementById('customerView').classList.add('hidden');
+      document.getElementById('adminLoginCard').classList.add('hidden');
+      document.getElementById('customerLoginCard').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.add('hidden');
+      document.getElementById('adminLoginBtn').classList.remove('hidden');
+      document.getElementById('otpSection').classList.add('hidden');
+      document.getElementById('sendOtpBtn').classList.remove('hidden');
+      document.getElementById('verifyOtpBtn').classList.add('hidden');
+    }
   </script>
 </body>
 </html>
