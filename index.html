@@ -641,6 +641,22 @@
       margin: 8px 0;
     }
 
+    .legal-links {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.75rem;
+    }
+
+    .legal-links a {
+      color: var(--primary-dark);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -692,6 +708,10 @@
           <button type="button" id="sendOtpBtn" class="btn btn-primary" style="width:100%;">Send OTP</button>
           <button type="button" id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;">Verify OTP &amp; Unlock App</button>
 
+          <button type="button" id="reviewerDemoBtn" class="btn btn-outline btn-xs" style="width:100%; margin-top:8px;">
+            Google Play Reviewer Demo Fill (9999999999 / OTP 1234)
+          </button>
+
           <div class="alert-danger">
             <strong>Payment Caution:</strong> Verify slot availability with Help Desk (9398934021) before transferring any advance. Pay only to official PartyHub - SR Events accounts shown inside the app.
           </div>
@@ -701,6 +721,10 @@
           <div class="section-title" style="margin-bottom:4px;">Our Branches (Andhra Pradesh)</div>
           <div>&bull; <strong>Rayachoti:</strong> PartyHub - SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269</div>
           <div style="margin-top:4px;">&bull; <strong>Madanapalle:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325</div>
+          <div class="legal-links">
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/delete-account.html">Delete Account &amp; Data</a>
+          </div>
         </div>
       </section>
 
@@ -1429,7 +1453,6 @@
       }
 
       var loaded = loadData();
-      // Persist immediately so initial defaults are guaranteed in storage
       try {
         if (!window.localStorage.getItem(STORAGE_KEY)) {
           window.localStorage.setItem(STORAGE_KEY, JSON.stringify(loaded));
@@ -1532,6 +1555,12 @@
         }
         if (tab === 'analytics') renderAnalytics();
         scrollTopPage();
+      }
+
+      function fillReviewerDemo() {
+        document.getElementById('custName').value = 'Google Play Reviewer';
+        document.getElementById('custPhone').value = '9999999999';
+        sendOtp();
       }
 
       function sendOtp() {
@@ -2275,6 +2304,7 @@
       }
 
       function initApp() {
+        document.getElementById('reviewerDemoBtn').addEventListener('click', fillReviewerDemo);
         document.getElementById('sendOtpBtn').addEventListener('click', sendOtp);
         document.getElementById('verifyOtpBtn').addEventListener('click', verifyOtp);
         document.getElementById('custPhone').addEventListener('keydown', function (e) { if (e.key === 'Enter') sendOtp(); });
@@ -2413,6 +2443,8 @@
             '<a href="tel:' + escapeHtml(state.settings.phone) + '" class="btn btn-primary">Call Help Desk: ' + escapeHtml(state.settings.phone) + '</a>' +
             '<a href="https://wa.me/' + escapeHtml(state.settings.whatsapp) + '" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp Support</a>' +
             '<a href="mailto:' + escapeHtml(state.settings.email) + '" class="btn btn-outline">Email: ' + escapeHtml(state.settings.email) + '</a>' +
+            '<a href="/privacy-policy.html" class="btn btn-outline">Privacy Policy</a>' +
+            '<a href="/delete-account.html" class="btn btn-outline">Delete Account &amp; Data</a>' +
             '<div class="alert-info" style="margin-bottom:0;"><strong>Official Payment:</strong> UPI ' + escapeHtml(state.settings.upi) + '<br />' + escapeHtml(state.settings.bank) + '</div>';
           document.getElementById('helpModal').classList.add('open');
         });
