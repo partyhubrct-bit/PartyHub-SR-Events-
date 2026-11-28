@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0284c7" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
   <title>PartyHub - SR Events | Rayachoti &amp; Madanapalle</title>
   <style>
     :root {
@@ -641,20 +645,88 @@
       margin: 8px 0;
     }
 
-    .legal-links {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #cbd5e1;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 0.75rem;
+
+    /* Floating AI Assistant Button & Drawer */
+    .ai-fab {
+      position: fixed;
+      bottom: 68px;
+      right: max(14px, calc(50% - 226px));
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(2, 132, 199, 0.35);
+      cursor: pointer;
+      z-index: 45;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .legal-links a {
+    .ai-fab:active {
+      transform: scale(0.96);
+    }
+
+    .ai-chat-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 46vh;
+      overflow-y: auto;
+      padding: 8px;
+      background: #f1f7fe;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .ai-msg {
+      padding: 8px 11px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      max-width: 88%;
+      white-space: pre-line;
+    }
+
+    .ai-msg.bot {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid #dbeafe;
+      align-self: flex-start;
+    }
+
+    .ai-msg.user {
+      background: var(--primary);
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    .ai-quick-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+      scrollbar-width: none;
+    }
+    .ai-quick-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ai-qchip {
+      flex-shrink: 0;
+      background: var(--primary-soft);
       color: var(--primary-dark);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.72rem;
       font-weight: 700;
-      text-decoration: underline;
+      cursor: pointer;
     }
 
     .hidden {
@@ -670,7 +742,7 @@
         <div class="brand-avatar">🎉</div>
         <div>
           <div class="brand-name">PartyHub - SR Events</div>
-          <div class="brand-loc">Andhra Pradesh &bull; Annamayya &amp; Kadapa</div>
+          <div class="brand-loc">Andhra Pradesh &bull; Annamayya &amp; Kadapa <span id="cloudSyncBadge" style="background:rgba(255,255,255,0.22);padding:1px 6px;border-radius:99px;font-size:0.62rem;margin-left:4px;">Local Mode</span></div>
         </div>
       </div>
       <div class="header-btns">
@@ -708,10 +780,6 @@
           <button type="button" id="sendOtpBtn" class="btn btn-primary" style="width:100%;">Send OTP</button>
           <button type="button" id="verifyOtpBtn" class="btn btn-primary hidden" style="width:100%;">Verify OTP &amp; Unlock App</button>
 
-          <button type="button" id="reviewerDemoBtn" class="btn btn-outline btn-xs" style="width:100%; margin-top:8px;">
-            Google Play Reviewer Demo Fill (9999999999 / OTP 1234)
-          </button>
-
           <div class="alert-danger">
             <strong>Payment Caution:</strong> Verify slot availability with Help Desk (9398934021) before transferring any advance. Pay only to official PartyHub - SR Events accounts shown inside the app.
           </div>
@@ -721,10 +789,6 @@
           <div class="section-title" style="margin-bottom:4px;">Our Branches (Andhra Pradesh)</div>
           <div>&bull; <strong>Rayachoti:</strong> PartyHub - SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269</div>
           <div style="margin-top:4px;">&bull; <strong>Madanapalle:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325</div>
-          <div class="legal-links">
-            <a href="/privacy-policy.html">Privacy Policy</a>
-            <a href="/delete-account.html">Delete Account &amp; Data</a>
-          </div>
         </div>
       </section>
 
@@ -1004,7 +1068,16 @@
             <label for="cfgBank">Bank &amp; Branch Payment Info</label>
             <input id="cfgBank" type="text" />
 
-            <button type="button" id="saveSettingsBtn" class="btn btn-primary" style="width:100%;">Save Settings</button>
+            <label for="cfgFirebaseUrl">Firebase Realtime Database URL (Live Multi-Phone Sync)</label>
+            <input id="cfgFirebaseUrl" type="url" placeholder="https://your-project-default-rtdb.firebaseio.com" />
+
+            <label for="cfgGeminiKey">Optional Gemini AI API Key (Google AI Studio)</label>
+            <input id="cfgGeminiKey" type="password" placeholder="Leave blank to use Built-In Smart AI Assistant" />
+            <div style="font-size:0.72rem; color:var(--muted); margin:-5px 0 9px; line-height:1.4;">
+              Paste your free Firebase Realtime Database URL so customer bookings on any phone sync live to your Admin phone.
+            </div>
+
+            <button type="button" id="saveSettingsBtn" class="btn btn-primary" style="width:100%;">Save Settings &amp; Sync Cloud</button>
           </div>
 
           <div class="card">
@@ -1109,6 +1182,40 @@
           <button type="button" id="closeHelpModalBtn" class="btn btn-outline btn-xs">✕</button>
         </div>
         <div id="helpDeskContent" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+    </div>
+
+    <!-- FLOATING AI EVENT ASSISTANT BUTTON -->
+    <button type="button" id="aiBotFab" class="ai-fab" title="Ask PartyHub AI Assistant">🤖 Ask AI</button>
+
+    <!-- AI EVENT ASSISTANT BOTTOM SHEET MODAL -->
+    <div id="aiBotModal" class="sheet-backdrop">
+      <div class="sheet-box" id="aiBotModalBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div>
+            <strong style="font-size:0.96rem;">🤖 PartyHub AI Event Assistant</strong>
+            <div style="font-size:0.7rem; color:var(--muted);">Ask about packages, prices, slots, branches &amp; payments</div>
+          </div>
+          <button type="button" id="closeAiBotBtn" class="btn btn-outline btn-xs">✕ Close</button>
+        </div>
+
+        <div class="ai-quick-row" id="aiQuickPrompts">
+          <button type="button" class="ai-qchip" data-ai-q="Show all birthday & theme packages with prices">🎈 Birthday Packages</button>
+          <button type="button" class="ai-qchip" data-ai-q="What is your 20% 70% 10% payment plan?">💳 Payment Plan</button>
+          <button type="button" class="ai-qchip" data-ai-q="Where are your branches and service areas?">📍 Branches &amp; Cities</button>
+          <button type="button" class="ai-qchip" data-ai-q="Show grand entry & special effects details">🎆 Grand Entries</button>
+        </div>
+
+        <div id="aiChatFeed" class="ai-chat-feed">
+          <div class="ai-msg bot">Namaste! 👋 Welcome to <strong>PartyHub - SR Events</strong>.
+
+Ask me anything about our decoration packages, exact inclusions, prices, morning/afternoon slots, or Rayachoti &amp; Madanapalle branches!</div>
+        </div>
+
+        <div style="display:flex; gap:6px; align-items:center;">
+          <input id="aiChatInput" type="text" placeholder="Type your question (e.g. Budget 6000 birthday decor)..." style="margin-bottom:0; flex:1;" />
+          <button type="button" id="aiChatSendBtn" class="btn btn-primary" style="padding:9px 14px;">Send</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1351,6 +1458,78 @@
         return JSON.parse(JSON.stringify(defaultData));
       }
 
+      function getFirebaseBaseUrl() {
+        var url = (state.settings && state.settings.firebaseUrl) ? String(state.settings.firebaseUrl).trim() : '';
+        if (!url) return '';
+        return url.replace(/\/+$/, '');
+      }
+
+      function updateCloudBadge(statusText) {
+        var b = document.getElementById('cloudSyncBadge');
+        if (b) b.textContent = statusText;
+      }
+
+      function pushToCloud() {
+        var base = getFirebaseBaseUrl();
+        if (!base) {
+          updateCloudBadge('Local Mode');
+          return;
+        }
+        updateCloudBadge('Syncing...');
+        fetch(base + '/partyhub_srevents.json', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            settings: state.settings,
+            services: state.services,
+            bookings: state.bookings,
+            updatedAt: Date.now()
+          })
+        }).then(function (res) {
+          if (res.ok) updateCloudBadge('● Cloud Live');
+          else updateCloudBadge('Sync Error');
+        }).catch(function () {
+          updateCloudBadge('Offline');
+        });
+      }
+
+      function pullFromCloud(onComplete) {
+        var base = getFirebaseBaseUrl();
+        if (!base) {
+          updateCloudBadge('Local Mode');
+          if (onComplete) onComplete(false);
+          return;
+        }
+        updateCloudBadge('Syncing...');
+        fetch(base + '/partyhub_srevents.json')
+          .then(function (res) { return res.ok ? res.json() : null; })
+          .then(function (cloud) {
+            if (cloud && typeof cloud === 'object') {
+              if (Array.isArray(cloud.services) && cloud.services.length) state.services = cloud.services;
+              if (Array.isArray(cloud.bookings)) state.bookings = cloud.bookings.map(normalizeBooking);
+              if (cloud.settings) {
+                var keepUrl = state.settings.firebaseUrl;
+                state.settings = Object.assign({}, state.settings, cloud.settings);
+                if (!state.settings.firebaseUrl && keepUrl) state.settings.firebaseUrl = keepUrl;
+              }
+              window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                settings: state.settings,
+                services: state.services,
+                bookings: state.bookings
+              }));
+              updateCloudBadge('● Cloud Live');
+              if (onComplete) onComplete(true);
+            } else {
+              pushToCloud();
+              if (onComplete) onComplete(false);
+            }
+          })
+          .catch(function () {
+            updateCloudBadge('Offline');
+            if (onComplete) onComplete(false);
+          });
+      }
+
       function saveData() {
         try {
           window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -1359,6 +1538,7 @@
             bookings: state.bookings
           }));
         } catch (e) {}
+        pushToCloud();
       }
 
       function saveFilters() {
@@ -1453,6 +1633,7 @@
       }
 
       var loaded = loadData();
+      // Persist immediately so initial defaults are guaranteed in storage
       try {
         if (!window.localStorage.getItem(STORAGE_KEY)) {
           window.localStorage.setItem(STORAGE_KEY, JSON.stringify(loaded));
@@ -1555,12 +1736,6 @@
         }
         if (tab === 'analytics') renderAnalytics();
         scrollTopPage();
-      }
-
-      function fillReviewerDemo() {
-        document.getElementById('custName').value = 'Google Play Reviewer';
-        document.getElementById('custPhone').value = '9999999999';
-        sendOtp();
       }
 
       function sendOtp() {
@@ -2277,6 +2452,8 @@
         document.getElementById('cfgEmail').value = state.settings.email;
         document.getElementById('cfgUpi').value = state.settings.upi;
         document.getElementById('cfgBank').value = state.settings.bank || '';
+        document.getElementById('cfgFirebaseUrl').value = state.settings.firebaseUrl || '';
+        document.getElementById('cfgGeminiKey').value = state.settings.geminiKey || '';
       }
 
       function logoutAll(isTimeout) {
@@ -2303,8 +2480,128 @@
         scrollTopPage();
       }
 
+
+      function appendAiMessage(sender, text) {
+        var feed = document.getElementById('aiChatFeed');
+        if (!feed) return;
+        var div = document.createElement('div');
+        div.className = 'ai-msg ' + sender;
+        div.textContent = text;
+        feed.appendChild(div);
+        feed.scrollTop = feed.scrollHeight;
+        return div;
+      }
+
+      function generateLocalAiReply(question) {
+        var q = String(question || '').toLowerCase();
+        var budgetMatch = q.match(/(\d{3,6})/);
+        var maxBudget = budgetMatch ? Number(budgetMatch[1]) : null;
+
+        if (q.indexOf('branch') !== -1 || q.indexOf('address') !== -1 || q.indexOf('location') !== -1 || q.indexOf('where') !== -1 || q.indexOf('city') !== -1 || q.indexOf('district') !== -1) {
+          return (
+            '📍 Our Branches & Service Coverage (Andhra Pradesh):\n' +
+            '1. Rayachoti Branch: PartyHub - SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269\n' +
+            '2. Madanapalle Branch: Dildar & SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325\n\n' +
+            'We serve all towns across Annamayya District (Rayachoti, Madanapalle, Rajampeta, Pileru, Galiveedu, Guvvalacheruvu, Kodur, etc.) and Kadapa District (Kadapa City, Proddatur, Pulivendula, Badvel, Mydukur, Jammalamadugu, etc.).\n' +
+            '📞 Help Desk: ' + state.settings.phone
+          );
+        }
+
+        if (q.indexOf('pay') !== -1 || q.indexOf('installment') !== -1 || q.indexOf('advance') !== -1 || q.indexOf('upi') !== -1 || q.indexOf('agreement') !== -1) {
+          return (
+            '💳 3-Stage Milestone Payment Plan & E-Agreement:\n' +
+            '• 1st Installment: 20% Booking Advance\n' +
+            '• 2nd Installment: 70% Upon Setup Arrival at Venue\n' +
+            '• 3rd Installment: 10% After Event Completion\n\n' +
+            'Accepted Methods: UPI (' + state.settings.upi + '), Bank Transfer (IMPS/NEFT), Card, or Cash at Branch/Venue.\n' +
+            'You can pay remaining balance anytime inside the "My Events" tab!'
+          );
+        }
+
+        if (q.indexOf('slot') !== -1 || q.indexOf('time') !== -1 || q.indexOf('morning') !== -1 || q.indexOf('afternoon') !== -1) {
+          return (
+            '⏰ Event Slots & Custom Timing:\n' +
+            '• Morning Slot: Customize any exact time between 06:00 AM – 11:59 AM\n' +
+            '• Afternoon Slot: Customize any exact time between 12:00 PM – 05:59 PM\n\n' +
+            'Select your date in the Explore tab to check live slot availability and set your exact event time.'
+          );
+        }
+
+        // Search services by keywords or budget
+        var matches = state.services.filter(function (s) {
+          var hay = (s.title + ' ' + s.category + ' ' + s.occasion + ' ' + s.details).toLowerCase();
+          if (maxBudget && Number(s.price) > maxBudget) return false;
+          if (q.indexOf('birthday') !== -1 && hay.indexOf('birthday') !== -1) return true;
+          if (q.indexOf('anniversary') !== -1 && hay.indexOf('anniversary') !== -1) return true;
+          if ((q.indexOf('wedding') !== -1 || q.indexOf('engagement') !== -1) && hay.indexOf('wedding') !== -1) return true;
+          if ((q.indexOf('entry') !== -1 || q.indexOf('pyro') !== -1 || q.indexOf('fog') !== -1) && hay.indexOf('entry') !== -1) return true;
+          if ((q.indexOf('bouncy') !== -1 || q.indexOf('mascot') !== -1 || q.indexOf('game') !== -1 || q.indexOf('activit') !== -1) && hay.indexOf('activit') !== -1) return true;
+          if ((q.indexOf('food') !== -1 || q.indexOf('stall') !== -1 || q.indexOf('catering') !== -1 || q.indexOf('popcorn') !== -1) && hay.indexOf('stalls') !== -1) return true;
+          if ((q.indexOf('photo') !== -1 || q.indexOf('rental') !== -1) && hay.indexOf('photo') !== -1) return true;
+          if ((q.indexOf('mehndi') !== -1 || q.indexOf('makeup') !== -1 || q.indexOf('haldi') !== -1) && hay.indexOf('mehndi') !== -1) return true;
+          if ((q.indexOf('cradle') !== -1 || q.indexOf('baby') !== -1) && hay.indexOf('cradle') !== -1) return true;
+          return maxBudget !== null;
+        });
+
+        if (!matches.length) matches = state.services.slice(0, 4);
+
+        var lines = matches.slice(0, 4).map(function (s, i) {
+          return (i + 1) + '. ' + s.title + ' — ₹' + Number(s.price).toLocaleString('en-IN') + ' (' + s.category + ')\n' + s.details;
+        });
+
+        return (
+          (maxBudget ? 'Here are packages within ₹' + maxBudget.toLocaleString('en-IN') + ':\n\n' : 'Here are our popular PartyHub - SR Events packages:\n\n') +
+          lines.join('\n\n') +
+          '\n\nTap any package photo in Explore to view full high-res images or add to cart!'
+        );
+      }
+
+      function handleAiQuestion(rawQuestion) {
+        var q = String(rawQuestion || '').trim();
+        if (!q) return;
+        appendAiMessage('user', q);
+        var input = document.getElementById('aiChatInput');
+        if (input) input.value = '';
+
+        var apiKey = (state.settings && state.settings.geminiKey) ? String(state.settings.geminiKey).trim() : '';
+        if (!apiKey) {
+          setTimeout(function () {
+            appendAiMessage('bot', generateLocalAiReply(q));
+          }, 250);
+          return;
+        }
+
+        var typingEl = appendAiMessage('bot', 'Thinking...');
+        var catalogSummary = state.services.map(function (s) {
+          return s.title + ' (' + s.category + ', ' + s.occasion + ', ₹' + s.price + '): ' + s.details.replace(/\n/g, '; ');
+        }).join('\n');
+
+        var sysPrompt =
+          'You are the helpful customer assistant for PartyHub - SR Events in Rayachoti & Madanapalle, Andhra Pradesh. ' +
+          'Service coverage is ONLY Annamayya District and Kadapa District, Andhra Pradesh. ' +
+          'Payment terms: 20% advance, 70% on setup arrival, 10% after completion. Help Desk phone/WhatsApp: ' + state.settings.phone + '. ' +
+          'Available Packages:\n' + catalogSummary + '\nAnswer concisely and politely in the customer language.';
+
+        fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(apiKey), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: sysPrompt + '\n\nCustomer Question: ' + q }] }]
+          })
+        })
+          .then(function (res) { return res.ok ? res.json() : null; })
+          .then(function (data) {
+            var reply = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]
+              ? data.candidates[0].content.parts[0].text
+              : generateLocalAiReply(q);
+            typingEl.textContent = reply;
+          })
+          .catch(function () {
+            typingEl.textContent = generateLocalAiReply(q);
+          });
+      }
+
       function initApp() {
-        document.getElementById('reviewerDemoBtn').addEventListener('click', fillReviewerDemo);
         document.getElementById('sendOtpBtn').addEventListener('click', sendOtp);
         document.getElementById('verifyOtpBtn').addEventListener('click', verifyOtp);
         document.getElementById('custPhone').addEventListener('keydown', function (e) { if (e.key === 'Enter') sendOtp(); });
@@ -2397,8 +2694,17 @@
           state.settings.email = document.getElementById('cfgEmail').value.trim();
           state.settings.upi = document.getElementById('cfgUpi').value.trim();
           state.settings.bank = document.getElementById('cfgBank').value.trim();
+          state.settings.firebaseUrl = document.getElementById('cfgFirebaseUrl').value.trim();
+          state.settings.geminiKey = document.getElementById('cfgGeminiKey').value.trim();
           saveData();
-          alert('Help Desk & Payment settings saved.');
+          pullFromCloud(function (updated) {
+            if (updated) {
+              renderAdminServices();
+              renderAdminBookings();
+              renderAnalytics();
+            }
+          });
+          alert('Help Desk, Payment & Cloud Sync settings saved!');
         });
 
         document.getElementById('exportBackupBtn').addEventListener('click', function () {
@@ -2438,13 +2744,31 @@
           reader.readAsText(file);
         });
 
+        document.getElementById('aiBotFab').addEventListener('click', function () {
+          document.getElementById('aiBotModal').classList.add('open');
+        });
+        document.getElementById('closeAiBotBtn').addEventListener('click', function () {
+          document.getElementById('aiBotModal').classList.remove('open');
+        });
+        document.getElementById('aiBotModal').addEventListener('click', function (e) {
+          if (e.target.id === 'aiBotModal') document.getElementById('aiBotModal').classList.remove('open');
+        });
+        document.getElementById('aiChatSendBtn').addEventListener('click', function () {
+          handleAiQuestion(document.getElementById('aiChatInput').value);
+        });
+        document.getElementById('aiChatInput').addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') handleAiQuestion(document.getElementById('aiChatInput').value);
+        });
+        document.getElementById('aiQuickPrompts').addEventListener('click', function (e) {
+          var chip = e.target.closest('[data-ai-q]');
+          if (chip) handleAiQuestion(chip.getAttribute('data-ai-q'));
+        });
+
         document.getElementById('helpDeskBtn').addEventListener('click', function () {
           document.getElementById('helpDeskContent').innerHTML =
             '<a href="tel:' + escapeHtml(state.settings.phone) + '" class="btn btn-primary">Call Help Desk: ' + escapeHtml(state.settings.phone) + '</a>' +
             '<a href="https://wa.me/' + escapeHtml(state.settings.whatsapp) + '" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp Support</a>' +
             '<a href="mailto:' + escapeHtml(state.settings.email) + '" class="btn btn-outline">Email: ' + escapeHtml(state.settings.email) + '</a>' +
-            '<a href="/privacy-policy.html" class="btn btn-outline">Privacy Policy</a>' +
-            '<a href="/delete-account.html" class="btn btn-outline">Delete Account &amp; Data</a>' +
             '<div class="alert-info" style="margin-bottom:0;"><strong>Official Payment:</strong> UPI ' + escapeHtml(state.settings.upi) + '<br />' + escapeHtml(state.settings.bank) + '</div>';
           document.getElementById('helpModal').classList.add('open');
         });
@@ -2608,14 +2932,47 @@
         }
       }
 
+      function startCloudSyncLoop() {
+        pullFromCloud(function (updated) {
+          if (updated) {
+            if (state.role === 'customer') {
+              checkSlotAvailability();
+              renderCustomerPackages();
+              renderCustomerBookings();
+            } else if (state.role === 'admin') {
+              renderAdminServices();
+              renderAdminBookings();
+              renderAnalytics();
+            }
+          }
+        });
+        setInterval(function () {
+          if (state.role) {
+            pullFromCloud(function (updated) {
+              if (updated) {
+                if (state.role === 'customer') {
+                  checkSlotAvailability();
+                  renderCustomerBookings();
+                } else if (state.role === 'admin') {
+                  renderAdminBookings();
+                  renderAnalytics();
+                }
+              }
+            });
+          }
+        }, 20000);
+      }
+
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function () {
           initApp();
           restoreActiveSession();
+          startCloudSyncLoop();
         });
       } else {
         initApp();
         restoreActiveSession();
+        startCloudSyncLoop();
       }
     })();
   </script>
