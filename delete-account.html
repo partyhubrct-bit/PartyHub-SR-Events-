@@ -3,28 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Delete Account - PartyHub -SR Events</title>
+  <title>Delete Account &amp; Data | PartyHub - SR Events</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1e293b; background: #f8fafc; margin: 0; padding: 20px; }
-    .card { max-width: 640px; margin: 0 auto; background: #ffffff; padding: 28px; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06); }
-    h1 { color: #0284c7; font-size: 1.5rem; margin-top: 0; }
-    label { display: block; font-weight: 600; margin-top: 14px; font-size: 0.92rem; }
-    input, textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; margin-top: 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; }
-    button { margin-top: 18px; background: #dc2626; color: #fff; border: none; padding: 12px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f4f9ff;
+      color: #0f172a;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #bae6fd;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.08);
+    }
+    h1 { color: #0369a1; font-size: 1.45rem; margin-bottom: 8px; }
+    h2 { color: #0284c7; font-size: 1.1rem; margin-top: 20px; margin-bottom: 6px; }
+    .box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 12px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+    }
+    button {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+    }
+    .msg {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 12px;
+      display: none;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Account &amp; Data Deletion Request</h1>
-    <p>Registered users of <strong>PartyHub -SR Events</strong> can request permanent deletion of their mobile number, profile details, and past booking history.</p>
-    <form onsubmit="event.preventDefault(); window.location.href='https://wa.me/919398934021?text=' + encodeURIComponent('Account Deletion Request - Registered Mobile: ' + document.getElementById('phone').value + ' | Reason: ' + document.getElementById('reason').value);">
-      <label for="phone">Registered Mobile Number</label>
-      <input type="tel" id="phone" placeholder="Enter 10-digit mobile number" required />
-      <label for="reason">Additional Notes (Optional)</label>
-      <textarea id="reason" rows="3" placeholder="Specify if you want all historical invoices/agreements removed"></textarea>
-      <button type="submit">Submit Deletion Request via Support Desk</button>
+  <div class="container">
+    <h1>Delete Your PartyHub - SR Events Account &amp; Data</h1>
+    <p><strong>Developer / Company:</strong> PartyHub - SR Events (Proprietor: Shaik Soniya)<br />
+    <strong>Branches:</strong> Rayachoti &amp; Madanapalle, Annamayya District, Andhra Pradesh</p>
+
+    <h2>Option 1: Delete Directly Inside the App (Instant)</h2>
+    <div class="box">
+      1. Open the <strong>PartyHub - SR Events</strong> mobile application.<br />
+      2. Log in with your mobile number and tap <strong>My Events</strong> in the bottom bar.<br />
+      3. Tap <strong>Delete My Account &amp; Data</strong> and confirm. Your local profile and booking history are permanently removed immediately.
+    </div>
+
+    <h2>Option 2: Request Account &amp; Data Deletion Online (Without Installing App)</h2>
+    <p>Submit your registered mobile number below or email <a href="mailto:partyhubsrevents@gmail.com">partyhubsrevents@gmail.com</a> with the subject <strong>"Delete My Account"</strong>. All personal profile data and cloud records are permanently deleted within <strong>15 business days</strong>.</p>
+
+    <form onsubmit="submitDelReq(event)">
+      <label for="delName">Registered Full Name</label>
+      <input id="delName" type="text" required placeholder="Enter your full name" />
+
+      <label for="delPhone">Registered 10-Digit Mobile Number</label>
+      <input id="delPhone" type="tel" maxlength="10" required placeholder="Enter registered mobile number" />
+
+      <label for="delReason">Additional Notes (Optional)</label>
+      <textarea id="delReason" rows="2" placeholder="Specify if you want partial booking data or full account deleted"></textarea>
+
+      <button type="submit">Submit Account Deletion Request</button>
     </form>
-    <p style="margin-top: 16px; font-size: 0.88rem; color: #475569;">Requests are verified via OTP/callback and processed within 7 working days. Direct support: <strong>+91 93989 34021</strong>.</p>
+    <div id="delStatus" class="msg"></div>
+
+    <h2>What Data Is Deleted vs. Retained</h2>
+    <ul>
+      <li><strong>Deleted Permanently:</strong> Customer name, mobile number, saved venue addresses, active session tokens, and event preferences within 15 days.</li>
+      <li><strong>Retained for Legal / Tax Compliance:</strong> GST invoice and financial transaction records required under Indian GST &amp; tax laws are retained securely for statutory audit periods only.</li>
+    </ul>
+
+    <p style="font-size:0.85rem; color:#475569; margin-top:18px;">
+      <strong>Contact Support:</strong> +91 9398934021 | partyhubsrevents@gmail.com<br />
+      <strong>Privacy Policy:</strong> <a href="privacy-policy.html">View Privacy Policy</a>
+    </p>
   </div>
+
+  <script>
+    function submitDelReq(e) {
+      e.preventDefault();
+      var name = document.getElementById('delName').value.trim();
+      var phone = document.getElementById('delPhone').value.trim();
+      var box = document.getElementById('delStatus');
+      box.style.display = 'block';
+      box.innerHTML = 'Deletion request recorded for <strong>' + name + ' (' + phone + ')</strong>. Your account and associated data will be permanently deleted within 15 days. For urgent confirmation, email <a href="mailto:partyhubsrevents@gmail.com?subject=Delete%20Account%20' + encodeURIComponent(phone) + '">partyhubsrevents@gmail.com</a>.';
+    }
+  </script>
 </body>
 </html>

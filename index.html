@@ -746,6 +746,7 @@
         </div>
       </div>
       <div class="header-btns">
+        <button type="button" id="aboutCompanyBtn" class="h-btn">About</button>
         <button type="button" id="helpDeskBtn" class="h-btn">Help</button>
         <button type="button" id="adminLoginBtn" class="h-btn">Admin</button>
         <button type="button" id="logoutBtn" class="h-btn hidden">Logout</button>
@@ -785,10 +786,24 @@
           </div>
         </div>
 
-        <div class="card" style="font-size:0.78rem; line-height:1.5; color:var(--muted);">
-          <div class="section-title" style="margin-bottom:4px;">Our Branches (Andhra Pradesh)</div>
-          <div>&bull; <strong>Rayachoti:</strong> PartyHub - SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269</div>
-          <div style="margin-top:4px;">&bull; <strong>Madanapalle:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325</div>
+        <div class="card" style="font-size:0.79rem; line-height:1.55; color:var(--text);">
+          <div class="section-title" style="margin-bottom:6px;">
+            <span>About PartyHub - SR Events</span>
+            <span class="badge">7+ Years Exp.</span>
+          </div>
+          <p style="color:var(--muted); margin-bottom:8px;">
+            <strong>PartyHub - SR Events</strong> (Proprietor: <strong>Shaik Soniya</strong>, GST Registered) is a premier event management and decoration company in Andhra Pradesh specializing in 2D/3D custom themes, birthday &amp; anniversary balloon styling, floral stages, grand entries (cold pyro, low fog, helium blast), food stalls, photography, makeup &amp; rentals across <strong>Annamayya &amp; Kadapa Districts</strong>.
+          </p>
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:9px; margin-bottom:8px;">
+            <div>📍 <strong>Rayachoti Branch:</strong> PartyHub - SR Events, Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269</div>
+            <div style="margin-top:4px;">📍 <strong>Madanapalle Branch:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325</div>
+            <div style="margin-top:4px;">📞 <strong>Contact:</strong> +91 9398934021 &bull; partyhubsrevents@gmail.com</div>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; font-size:0.75rem;">
+            <a href="privacy-policy.html" target="_blank" style="color:var(--primary-dark); font-weight:700;">Privacy Policy</a>
+            <span>&bull;</span>
+            <a href="delete-account.html" target="_blank" style="color:var(--danger); font-weight:700;">Delete Account &amp; Data</a>
+          </div>
         </div>
       </section>
 
@@ -928,6 +943,27 @@
           <div class="card">
             <div class="section-title">My Bookings, Balance Payment &amp; Reminders</div>
             <div id="customerMyBookings" style="font-size:0.82rem; color:var(--muted);">No confirmed bookings yet.</div>
+          </div>
+
+          <div class="card" style="font-size:0.78rem; line-height:1.5;">
+            <div class="section-title">About Company &amp; Branches</div>
+            <div><strong>PartyHub - SR Events</strong> &bull; Proprietor: Shaik Soniya</div>
+            <div style="color:var(--muted); margin-top:3px;">
+              &bull; <strong>Rayachoti:</strong> Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269<br />
+              &bull; <strong>Madanapalle:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325<br />
+              &bull; <strong>Help Desk:</strong> +91 9398934021 | partyhubsrevents@gmail.com
+            </div>
+          </div>
+
+          <div class="card" style="border-color:#fecaca; background:#fffafa;">
+            <div class="section-title" style="color:var(--danger);">Account &amp; Data Privacy Control</div>
+            <p style="font-size:0.76rem; color:var(--muted); margin-bottom:8px;">
+              You can permanently delete your customer profile and saved account data anytime in compliance with Google Play Data Safety rules.
+            </p>
+            <div class="row-2">
+              <button type="button" id="deleteMyAccountBtn" class="btn btn-danger btn-xs">🗑️ Delete My Account</button>
+              <a href="delete-account.html" target="_blank" class="btn btn-outline btn-xs">Web Deletion Page</a>
+            </div>
           </div>
         </div>
       </section>
@@ -1215,6 +1251,34 @@ Ask me anything about our decoration packages, exact inclusions, prices, morning
         <div style="display:flex; gap:6px; align-items:center;">
           <input id="aiChatInput" type="text" placeholder="Type your question (e.g. Budget 6000 birthday decor)..." style="margin-bottom:0; flex:1;" />
           <button type="button" id="aiChatSendBtn" class="btn btn-primary" style="padding:9px 14px;">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT COMPANY BOTTOM SHEET MODAL -->
+    <div id="aboutModal" class="sheet-backdrop">
+      <div class="sheet-box" id="aboutModalBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="font-size:0.98rem; color:var(--primary-dark);">About PartyHub - SR Events</strong>
+          <button type="button" id="closeAboutModalBtn" class="btn btn-outline btn-xs">✕ Close</button>
+        </div>
+        <div style="font-size:0.8rem; line-height:1.55; color:var(--text);">
+          <p style="margin-bottom:8px;">
+            <strong>PartyHub - SR Events</strong> is a trusted event planning, custom theme styling, and party rental brand with <strong>7+ years of hands-on experience</strong> across Andhra Pradesh.
+          </p>
+          <div class="split-box">
+            <div><strong>Registered Business:</strong> PartyHub - SR Events (GST Registered)</div>
+            <div><strong>Proprietor:</strong> Shaik Soniya</div>
+            <div><strong>Service Districts:</strong> Annamayya District &amp; YSR Kadapa District, Andhra Pradesh</div>
+            <div><strong>Rayachoti Branch:</strong> Bose Nagar, Opp. CR Reddy College, Rayachoti - 516269</div>
+            <div><strong>Madanapalle Branch:</strong> Dildar &amp; SR Events, Sameera Complex, Bus Stand Rd, Opp. ZP High School, Madanapalle - 517325</div>
+            <div><strong>Phone / WhatsApp:</strong> +91 9398934021</div>
+            <div><strong>Email:</strong> partyhubsrevents@gmail.com</div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <a href="privacy-policy.html" target="_blank" class="btn btn-outline btn-xs" style="flex:1;">Privacy Policy</a>
+            <a href="delete-account.html" target="_blank" class="btn btn-outline btn-xs" style="flex:1;">Delete Account URL</a>
+          </div>
         </div>
       </div>
     </div>
@@ -2742,6 +2806,28 @@ Ask me anything about our decoration packages, exact inclusions, prices, morning
             }
           };
           reader.readAsText(file);
+        });
+
+        document.getElementById('aboutCompanyBtn').addEventListener('click', function () {
+          document.getElementById('aboutModal').classList.add('open');
+        });
+        document.getElementById('closeAboutModalBtn').addEventListener('click', function () {
+          document.getElementById('aboutModal').classList.remove('open');
+        });
+        document.getElementById('aboutModal').addEventListener('click', function (e) {
+          if (e.target.id === 'aboutModal') document.getElementById('aboutModal').classList.remove('open');
+        });
+
+        document.getElementById('deleteMyAccountBtn').addEventListener('click', function () {
+          if (!state.customer || !state.customer.phone) return;
+          var ok = confirm('Permanently delete your account (' + state.customer.name + ' - ' + state.customer.phone + ') and clear your saved data from this app?');
+          if (!ok) return;
+          var delPhone = state.customer.phone;
+          state.bookings = state.bookings.filter(function (b) { return b.customerPhone !== delPhone; });
+          saveData();
+          try { window.localStorage.removeItem(FILTER_KEY); } catch (err) {}
+          logoutAll(false);
+          showMsg('custLoginMsg', 'Your account and personal booking data have been permanently deleted.');
         });
 
         document.getElementById('aiBotFab').addEventListener('click', function () {

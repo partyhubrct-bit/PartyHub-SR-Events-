@@ -1,0 +1,30 @@
+{
+  "name": "PartyHub - SR Events",
+  "short_name": "PartyHub SR",
+  "description": "Official event planning, 2D/3D theme & balloon decorations, grand entries, catering & party rentals app by PartyHub - SR Events (Rayachoti & Madanapalle, Andhra Pradesh).",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f9ff",
+  "theme_color": "#0284c7",
+  "categories": [
+    "lifestyle",
+    "shopping",
+    "events"
+  ],
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3159/3159066.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3159/3159066.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
